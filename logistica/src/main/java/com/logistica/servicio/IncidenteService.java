@@ -39,17 +39,17 @@ public class IncidenteService {
 
         Envio e = envioRepo.buscarPorId(envioId);
         if (e == null) {
-            throw new IllegalArgumentException("No existe un envío con id " + envioId + ".");
+            throw new IllegalArgumentException("No existe un envio con id " + envioId + ".");
         }
         if ("CANCELADO".equals(e.getEstado())) {
-            throw new IllegalArgumentException("El envío está CANCELADO.");
+            throw new IllegalArgumentException("El envio esta CANCELADO.");
         }
         validarTipo(tipo);
         if (!"ALTA".equals(severidad) && !"MEDIA".equals(severidad) && !"BAJA".equals(severidad)) {
             throw new IllegalArgumentException("La severidad no es correcta (ALTA, MEDIA, BAJA).");
         }
         if (descripcion == null || descripcion.isBlank()) {
-            throw new IllegalArgumentException("La descripción es obligatoria.");
+            throw new IllegalArgumentException("La descripcion es obligatoria.");
         }
         List<String> alertas = validarAlertas(envioId, alertaIds);
 
@@ -106,7 +106,7 @@ public class IncidenteService {
     public void sumarAlertas(String incidenteId, List<String> alertaIds) throws SQLException {
         Incidente i = buscarExistente(incidenteId);
         if (!"ABIERTO".equals(i.getEstado())) {
-            throw new IllegalArgumentException("El incidente no está abierto.");
+            throw new IllegalArgumentException("El incidente no esta abierto.");
         }
         List<String> alertas = validarAlertas(i.getEnvioId(), alertaIds);
         if (alertas.isEmpty()) {
@@ -120,10 +120,10 @@ public class IncidenteService {
     public void cerrar(String incidenteId, String resolucion) {
         Incidente i = buscarExistente(incidenteId);
         if (!"ABIERTO".equals(i.getEstado())) {
-            throw new IllegalArgumentException("El incidente ya está cerrado.");
+            throw new IllegalArgumentException("El incidente ya esta cerrado.");
         }
         if (resolucion == null || resolucion.isBlank()) {
-            throw new IllegalArgumentException("La resolución es obligatoria para cerrar el incidente.");
+            throw new IllegalArgumentException("La resolucion es obligatoria para cerrar el incidente.");
         }
         repo.cerrar(incidenteId, LocalDateTime.now(), resolucion.trim());
         for (String alertaId : i.getAlertaIds()) {
@@ -169,10 +169,10 @@ public class IncidenteService {
                 throw new IllegalArgumentException("No existe la alerta " + alertaId + ".");
             }
             if (a.getEnvioId() == null || a.getEnvioId() != envioId) {
-                throw new IllegalArgumentException("La alerta " + alertaId + " no es de este envío.");
+                throw new IllegalArgumentException("La alerta " + alertaId + " no es de este envio.");
             }
             if (a.getIncidenteId() != null) {
-                throw new IllegalArgumentException("La alerta " + alertaId + " ya está en otro incidente.");
+                throw new IllegalArgumentException("La alerta " + alertaId + " ya esta en otro incidente.");
             }
             alertas.add(alertaId);
         }

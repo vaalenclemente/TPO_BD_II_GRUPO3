@@ -8,17 +8,17 @@ public class MenuUbicaciones {
 
     public void mostrar() {
         while (true) {
-            int opcion = Consola.menu("Países y ciudades",
-                    "Listar países", "Alta de país", "Modificar país", "Eliminar país",
-                    "Listar ciudades de un país", "Alta de ciudad", "Modificar ciudad", "Eliminar ciudad");
+            int opcion = Consola.menu("Paises y ciudades",
+                    "Listar paises", "Alta de pais", "Modificar pais", "Eliminar pais",
+                    "Listar ciudades de un pais", "Alta de ciudad", "Modificar ciudad", "Eliminar ciudad");
             switch (opcion) {
                 case 0 -> {
                     return;
                 }
                 case 1 -> Consola.ejecutar(() -> Consola.listar(ubicaciones.listarPaises()));
                 case 2 -> Consola.ejecutar(() -> {
-                    int id = ubicaciones.altaPais(Consola.texto("Nombre del país"));
-                    Consola.mostrar("País creado con id " + id + ".");
+                    int id = ubicaciones.altaPais(Consola.texto("Nombre del pais"));
+                    Consola.mostrar("Pais creado con id " + id + ".");
                 });
                 case 3 -> Consola.ejecutar(() -> {
                     int id = Selector.pais();

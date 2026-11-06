@@ -43,7 +43,7 @@ public class MensajeService {
         Grupo g = grupoService.buscarActivo(grupoId);
         buscarUsuarioActivo(remitenteId);
         if (!g.getIntegrantes().contains(remitenteId)) {
-            throw new IllegalArgumentException("Solo los integrantes del grupo pueden escribir en él.");
+            throw new IllegalArgumentException("Solo los integrantes del grupo pueden escribir en el.");
         }
 
         Mensaje m = new Mensaje();
@@ -70,7 +70,7 @@ public class MensajeService {
 
     private String guardar(Mensaje m, int remitenteId, String contenido) {
         if (contenido == null || contenido.isBlank()) {
-            throw new IllegalArgumentException("El mensaje está vacío.");
+            throw new IllegalArgumentException("El mensaje esta vacio.");
         }
         if (contenido.length() > LARGO_MAXIMO) {
             throw new IllegalArgumentException("El mensaje no puede superar los " + LARGO_MAXIMO + " caracteres.");
@@ -90,11 +90,11 @@ public class MensajeService {
             return;
         }
         if (u.getParteId() == null || u.getParteId() != parteId) {
-            throw new IllegalArgumentException("Un usuario externo solo accede a la conversación de su empresa.");
+            throw new IllegalArgumentException("Un usuario externo solo accede a la conversacion de su empresa.");
         }
         Parte p = parteRepo.buscarPorId(parteId);
         if (p == null || !"ACTIVO".equals(p.getEstado())) {
-            throw new IllegalArgumentException("La empresa del usuario está dada de baja.");
+            throw new IllegalArgumentException("La empresa del usuario esta dada de baja.");
         }
     }
 
@@ -104,7 +104,7 @@ public class MensajeService {
             throw new IllegalArgumentException("No existe un usuario con id " + usuarioId + ".");
         }
         if (!"ACTIVO".equals(u.getEstado())) {
-            throw new IllegalArgumentException("El usuario está dado de baja.");
+            throw new IllegalArgumentException("El usuario esta dado de baja.");
         }
         return u;
     }

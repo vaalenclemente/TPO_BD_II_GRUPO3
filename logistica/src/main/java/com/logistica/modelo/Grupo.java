@@ -11,7 +11,7 @@ public class Grupo {
     private List<Integer> integrantes;
     private Integer creadoPor;
     private LocalDateTime fechaCreacion;
-    private String estado; // ACTIVO | INACTIVO
+    private String estado; // activo | inactivo
 
     public Grupo() {
 

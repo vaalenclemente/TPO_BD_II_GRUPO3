@@ -17,7 +17,7 @@ public class MenuUsuarios {
             int opcion = Consola.menu("Usuarios, roles y sesiones",
                     "Listar usuarios", "Alta de usuario", "Modificar usuario", "Dar de baja usuario",
                     "Reactivar usuario", "Listar roles", "Alta de rol", "Modificar rol", "Eliminar rol",
-                    "Sesiones activas", "Cerrar una sesión");
+                    "Sesiones activas", "Cerrar una sesion");
             switch (opcion) {
                 case 0 -> {
                     return;
@@ -35,7 +35,7 @@ public class MenuUsuarios {
                 });
                 case 6 -> Consola.ejecutar(() -> Consola.listar(roles.listar()));
                 case 7 -> Consola.ejecutar(() -> {
-                    int id = roles.alta(new Rol(null, Consola.texto("Descripción"), Consola.entero("Nivel de permisos")));
+                    int id = roles.alta(new Rol(null, Consola.texto("Descripcion"), Consola.entero("Nivel de permisos")));
                     Consola.mostrar("Rol creado con id " + id + ".");
                 });
                 case 8 -> Consola.ejecutar(() -> {
@@ -43,7 +43,7 @@ public class MenuUsuarios {
                     if (r == null) {
                         throw new IllegalArgumentException("No existe ese rol.");
                     }
-                    r.setDescripcion(Consola.texto("Descripción", r.getDescripcion()));
+                    r.setDescripcion(Consola.texto("Descripcion", r.getDescripcion()));
                     r.setNivelPermisos(Integer.valueOf(Consola.texto("Nivel de permisos", String.valueOf(r.getNivelPermisos()))));
                     roles.modificar(r);
                     Consola.mostrar("Modificado.");
@@ -55,8 +55,8 @@ public class MenuUsuarios {
                 case 10 -> Consola.ejecutar(() -> Consola.listar(sesiones.listarActivas()));
                 case 11 -> Consola.ejecutar(() -> {
                     Consola.listar(sesiones.listarActivas());
-                    sesiones.forzarCierre(Consola.entero("Id de la sesión"));
-                    Consola.mostrar("Sesión cerrada.");
+                    sesiones.forzarCierre(Consola.entero("Id de la sesion"));
+                    Consola.mostrar("Sesion cerrada.");
                 });
             }
         }

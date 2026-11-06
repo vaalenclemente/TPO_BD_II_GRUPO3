@@ -18,19 +18,19 @@ public class UbicacionService {
     }
 
     public int altaPais(String nombre) throws SQLException {
-        String limpio = validarNombre(nombre, "del país");
+        String limpio = validarNombre(nombre, "del pais");
         if (paisRepo.buscarPorNombre(limpio) != null) {
-            throw new IllegalArgumentException("Ya existe el país " + limpio + ".");
+            throw new IllegalArgumentException("Ya existe el pais " + limpio + ".");
         }
         return paisRepo.guardar(new Pais(null, limpio));
     }
 
     public void modificarPais(int id, String nombre) throws SQLException {
         buscarPais(id);
-        String limpio = validarNombre(nombre, "del país");
+        String limpio = validarNombre(nombre, "del pais");
         Pais otro = paisRepo.buscarPorNombre(limpio);
         if (otro != null && otro.getId() != id) {
-            throw new IllegalArgumentException("Ya existe el país " + limpio + ".");
+            throw new IllegalArgumentException("Ya existe el pais " + limpio + ".");
         }
         paisRepo.actualizar(new Pais(id, limpio));
     }
@@ -38,7 +38,7 @@ public class UbicacionService {
     public void eliminarPais(int id) throws SQLException {
         buscarPais(id);
         if (paisRepo.contarUsos(id) > 0) {
-            throw new IllegalArgumentException("El país tiene ciudades o partes: no se puede eliminar.");
+            throw new IllegalArgumentException("El pais tiene ciudades o partes: no se puede eliminar.");
         }
         paisRepo.borrar(id);
     }
@@ -51,7 +51,7 @@ public class UbicacionService {
         buscarPais(paisId);
         String limpio = validarNombre(nombre, "de la ciudad");
         if (ciudadRepo.buscarPorNombre(limpio, paisId) != null) {
-            throw new IllegalArgumentException("Ya existe la ciudad " + limpio + " en ese país.");
+            throw new IllegalArgumentException("Ya existe la ciudad " + limpio + " en ese pais.");
         }
         return ciudadRepo.guardar(new Ciudad(null, limpio, paisId));
     }
@@ -61,7 +61,7 @@ public class UbicacionService {
         String limpio = validarNombre(nombre, "de la ciudad");
         Ciudad otra = ciudadRepo.buscarPorNombre(limpio, c.getPaisId());
         if (otra != null && otra.getId() != id) {
-            throw new IllegalArgumentException("Ya existe la ciudad " + limpio + " en ese país.");
+            throw new IllegalArgumentException("Ya existe la ciudad " + limpio + " en ese pais.");
         }
         c.setNombre(limpio);
         ciudadRepo.actualizar(c);
@@ -70,7 +70,7 @@ public class UbicacionService {
     public void eliminarCiudad(int id) throws SQLException {
         buscarCiudad(id);
         if (ciudadRepo.contarUsos(id) > 0) {
-            throw new IllegalArgumentException("La ciudad está usada en envíos o tramos: no se puede eliminar.");
+            throw new IllegalArgumentException("La ciudad esta usada en envios o tramos: no se puede eliminar.");
         }
         ciudadRepo.borrar(id);
     }
@@ -85,7 +85,7 @@ public class UbicacionService {
     private Pais buscarPais(int id) throws SQLException {
         Pais p = paisRepo.buscarPorId(id);
         if (p == null) {
-            throw new IllegalArgumentException("No existe un país con id " + id + ".");
+            throw new IllegalArgumentException("No existe un pais con id " + id + ".");
         }
         return p;
     }

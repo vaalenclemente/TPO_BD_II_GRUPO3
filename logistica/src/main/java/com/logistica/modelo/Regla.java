@@ -6,10 +6,10 @@ public class Regla {
 
     private Integer id;
     private String nombre;
-    private String metrica; // TEMPERATURA | HUMEDAD | VIBRACION | BATERIA | INACTIVIDAD
-    private String operador; // MAYOR | MENOR
+    private String metrica; // temperatura | humedad | vibracion | bateria | inactividad
+    private String operador; // mayor | menor
     private BigDecimal valor; // limite
-    private String severidad; // ALTA | MEDIA | BAJA
+    private String severidad; // alta | media | baja
     private Integer envioId;
     private Boolean activa;
 
@@ -93,7 +93,7 @@ public class Regla {
 
     @Override
     public String toString() {
-        String alcance = (envioId == null) ? "general" : "envío " + envioId;
+        String alcance = (envioId == null) ? "general" : "envio " + envioId;
         return id + " - " + nombre + ": " + metrica + " " + operador + " " + valor
                 + " (" + severidad + ", " + alcance + ")" + (Boolean.TRUE.equals(activa) ? "" : " [inactiva]");
     }

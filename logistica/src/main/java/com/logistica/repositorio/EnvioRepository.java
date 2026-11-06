@@ -227,7 +227,7 @@ public class EnvioRepository {
         }
     }
 
-    // Compensacion de incrementarIncidentes (saga de apertura de incidente).
+    // compensacion de incrementarincidentes (saga de apertura de incidente).
     public void decrementarIncidentes(int id) throws SQLException {
         String sql = """
                 UPDATE envio SET cantidad_incidentes = cantidad_incidentes - 1 WHERE id = ? AND cantidad_incidentes > 0

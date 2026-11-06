@@ -8,7 +8,7 @@ public class Tramo {
     private Integer id;
     private Integer envioId;
     private Integer orden;
-    private String medioTransporte; // BARCO | AVION | TREN | CAMION
+    private String medioTransporte; // barco | avion | tren | camion
     private Integer origenCiudadId;
     private Integer destinoCiudadId;
     private Integer vehiculoId;
@@ -16,7 +16,7 @@ public class Tramo {
     private LocalDateTime fechaLlegadaEstimada;
     private LocalDateTime fechaLlegadaReal;
     private BigDecimal costo;
-    private String estado; // PENDIENTE | EN_CURSO | COMPLETADO | CANCELADO
+    private String estado; // pendiente | en_curso | completado | cancelado
 
     public Tramo() {
 
@@ -132,7 +132,7 @@ public class Tramo {
 
     @Override
     public String toString() {
-        return id + " - envío " + envioId + " tramo " + orden + ": " + medioTransporte + " " + origenCiudadId + " -> "
+        return id + " - envio " + envioId + " tramo " + orden + ": " + medioTransporte + " " + origenCiudadId + " -> "
                 + destinoCiudadId + " - " + estado;
     }
 

@@ -7,13 +7,13 @@ public class RegistroAuditoria {
     private String id;
     private LocalDateTime fecha;
     private Integer usuarioId;
-    private String accion; // CREAR_ENVIO, CONFIRMAR_PAGO, LOGIN
+    private String accion; // crear_envio, confirmar_pago, login
     private String entidad;
     private String entidadId;
     private String campo;
     private String antes;
     private String despues;
-    private String resultado; // OK | COMPENSADA | ERROR
+    private String resultado; // ok | compensada | error
     private String sagaId;
 
     public RegistroAuditoria() {

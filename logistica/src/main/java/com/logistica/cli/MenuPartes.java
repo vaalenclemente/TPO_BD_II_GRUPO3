@@ -8,7 +8,7 @@ public class MenuPartes {
     private final ParteService partes = new ParteService();
 
     public void mostrar() {
-        String tipo = Consola.elegir("¿Qué partes?", "CLIENTE", "PROVEEDOR", "OPERADOR");
+        String tipo = Consola.elegir("¿Que partes?", "CLIENTE", "PROVEEDOR", "OPERADOR");
         while (true) {
             int opcion = Consola.menu("ABM " + tipo, "Listar", "Alta", "Modificar", "Dar de baja", "Reactivar");
             switch (opcion) {
@@ -31,12 +31,12 @@ public class MenuPartes {
     }
 
     private void alta(String tipo) throws Exception {
-        String razonSocial = Consola.texto("Razón social");
+        String razonSocial = Consola.texto("Razon social");
         String cuit = Consola.texto("CUIT");
         String email = Consola.texto("Email");
-        String telefono = Consola.textoOpcional("Teléfono");
-        String direccion = Consola.textoOpcional("Dirección");
-        Consola.mostrar("País:");
+        String telefono = Consola.textoOpcional("Telefono");
+        String direccion = Consola.textoOpcional("Direccion");
+        Consola.mostrar("Pais:");
         int paisId = Selector.pais();
         String rubro = "PROVEEDOR".equals(tipo) ? Consola.textoOpcional("Rubro") : null;
 
@@ -49,11 +49,11 @@ public class MenuPartes {
         if (p == null) {
             throw new IllegalArgumentException("No existe esa parte.");
         }
-        p.setRazonSocial(Consola.texto("Razón social", p.getRazonSocial()));
+        p.setRazonSocial(Consola.texto("Razon social", p.getRazonSocial()));
         p.setEmail(Consola.texto("Email", p.getEmail()));
-        p.setTelefono(Consola.texto("Teléfono", p.getTelefono()));
-        p.setDireccion(Consola.texto("Dirección", p.getDireccion()));
-        if (Consola.confirmar("¿Cambiar el país?")) {
+        p.setTelefono(Consola.texto("Telefono", p.getTelefono()));
+        p.setDireccion(Consola.texto("Direccion", p.getDireccion()));
+        if (Consola.confirmar("¿Cambiar el pais?")) {
             p.setPaisId(Selector.pais());
         }
         if ("PROVEEDOR".equals(tipo)) {

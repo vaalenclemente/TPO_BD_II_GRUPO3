@@ -42,7 +42,7 @@ public class EnvioService {
             throw new IllegalArgumentException("La parte elegida no es un cliente.");
         }
         if (!"ACTIVO".equals(cliente.getEstado())) {
-            throw new IllegalArgumentException("El cliente está dado de baja.");
+            throw new IllegalArgumentException("El cliente esta dado de baja.");
         }
 
         Ciudad origen = buscarCiudad(e.getOrigenCiudadId(), "la ciudad de origen");
@@ -66,7 +66,7 @@ public class EnvioService {
         String origenPais = paisRepo.buscarPorId(origen.getPaisId()).getNombre();
         String destinoPais = paisRepo.buscarPorId(destino.getPaisId()).getNombre();
 
-        // c) saga: MySQL + Neo4j (envío y cada contenedor)
+        // c) saga: mysql + neo4j (envio y cada contenedor)
         Saga saga = new Saga("CREAR_ENVIO", "envio");
         try {
             int id = repo.guardar(e);
@@ -85,7 +85,7 @@ public class EnvioService {
             }
 
             String eventoId = eventos.registrar(id, "CREADO", origen.getId(),
-                    "Envío creado: " + origen.getNombre() + " → " + destino.getNombre());
+                    "Envio creado: " + origen.getNombre() + " → " + destino.getNombre());
             saga.paso("MONGO_EVENTO_CREADO", () -> eventos.borrar(eventoId));
 
             saga.completar();
@@ -101,7 +101,7 @@ public class EnvioService {
         Envio anterior = buscarExistente(e.getId());
 
         if (!"CREADO".equals(anterior.getEstado()) && !"EN_PREPARACION".equals(anterior.getEstado())) {
-            throw new IllegalArgumentException("Solo se puede modificar un envío que todavía no salió.");
+            throw new IllegalArgumentException("Solo se puede modificar un envio que todavia no salio.");
         }
 
         validarDatosCarga(e, anterior.getFechaCreacion());
@@ -163,7 +163,7 @@ public class EnvioService {
 
         Envio e = buscarExistente(envioId);
         if (!"CREADO".equals(e.getEstado()) && !"EN_PREPARACION".equals(e.getEstado())) {
-            throw new IllegalArgumentException("Solo se asignan contenedores antes de que el envío salga.");
+            throw new IllegalArgumentException("Solo se asignan contenedores antes de que el envio salga.");
         }
 
         Contenedor c = contenedorRepo.buscarPorId(contenedorId);
@@ -171,10 +171,10 @@ public class EnvioService {
             throw new IllegalArgumentException("No existe un contenedor con id " + contenedorId + ".");
         }
         if (!"DISPONIBLE".equals(c.getEstado())) {
-            throw new IllegalArgumentException("El contenedor no está disponible.");
+            throw new IllegalArgumentException("El contenedor no esta disponible.");
         }
         if (ecRepo.buscar(envioId, contenedorId) != null) {
-            throw new IllegalArgumentException("Ese contenedor ya fue asignado a este envío.");
+            throw new IllegalArgumentException("Ese contenedor ya fue asignado a este envio.");
         }
 
         Saga saga = new Saga("ASIGNAR_CONTENEDOR", "envio");
@@ -194,17 +194,17 @@ public class EnvioService {
 
         Envio e = buscarExistente(envioId);
         if (!"CREADO".equals(e.getEstado()) && !"EN_PREPARACION".equals(e.getEstado())) {
-            throw new IllegalArgumentException("Solo se quitan contenedores antes de que el envío salga.");
+            throw new IllegalArgumentException("Solo se quitan contenedores antes de que el envio salga.");
         }
 
         EnvioContenedor ec = ecRepo.buscar(envioId, contenedorId);
         if (ec == null || ec.getFechaLiberacion() != null) {
-            throw new IllegalArgumentException("Ese contenedor no está asignado a este envío.");
+            throw new IllegalArgumentException("Ese contenedor no esta asignado a este envio.");
         }
 
         if (ecRepo.listarAsignados(envioId).size() == 1) {
-            throw new IllegalArgumentException("Un envío tiene que tener al menos un contenedor: "
-                    + "asigne otro antes de quitar este, o cancele el envío.");
+            throw new IllegalArgumentException("Un envio tiene que tener al menos un contenedor: "
+                    + "asigne otro antes de quitar este, o cancele el envio.");
         }
 
         ecRepo.actualizarLiberacion(envioId, contenedorId, LocalDateTime.now());
@@ -219,7 +219,7 @@ public class EnvioService {
 
         Envio e = buscarExistente(envioId);
         if (!"EN_TRANSITO".equals(e.getEstado()) && !"EN_ADUANA".equals(e.getEstado())) {
-            throw new IllegalArgumentException("Solo se entrega un envío que está en viaje.");
+            throw new IllegalArgumentException("Solo se entrega un envio que esta en viaje.");
         }
         if (fecha == null || (e.getFechaSalida() != null && fecha.isBefore(e.getFechaSalida()))) {
             throw new IllegalArgumentException("La fecha de entrega no puede ser anterior a la salida.");
@@ -231,12 +231,12 @@ public class EnvioService {
                 continue;
             }
             if (!"COMPLETADO".equals(t.getEstado())) {
-                throw new IllegalArgumentException("Hay tramos que todavía no llegaron.");
+                throw new IllegalArgumentException("Hay tramos que todavia no llegaron.");
             }
             ultimo = t;
         }
         if (ultimo == null || !ultimo.getDestinoCiudadId().equals(e.getDestinoCiudadId())) {
-            throw new IllegalArgumentException("El último tramo no llega al destino del envío.");
+            throw new IllegalArgumentException("El ultimo tramo no llega al destino del envio.");
         }
 
         String estadoAnterior = e.getEstado();
@@ -253,8 +253,8 @@ public class EnvioService {
             saga.paso("NEO4J_ENVIO_ENTREGADO", () -> grafo.actualizarEnvio(envioId, estadoAnterior,
                     e.getPesoKg().doubleValue()));
 
-            // Antes de liberar los contenedores, para que el evento los incluya.
-            String eventoId = eventos.registrar(envioId, "ENTREGADO", e.getDestinoCiudadId(), "Envío entregado");
+            // antes de liberar los contenedores, para que el evento los incluya.
+            String eventoId = eventos.registrar(envioId, "ENTREGADO", e.getDestinoCiudadId(), "Envio entregado");
             saga.paso("MONGO_EVENTO_ENTREGADO", () -> eventos.borrar(eventoId));
 
             liberarContenedores(saga, envioId, fecha);
@@ -270,7 +270,7 @@ public class EnvioService {
 
         Envio e = buscarExistente(envioId);
         if ("ENTREGADO".equals(e.getEstado()) || "CANCELADO".equals(e.getEstado())) {
-            throw new IllegalArgumentException("El envío ya está " + e.getEstado() + ".");
+            throw new IllegalArgumentException("El envio ya esta " + e.getEstado() + ".");
         }
 
         String estadoAnterior = e.getEstado();
@@ -302,7 +302,7 @@ public class EnvioService {
             }
 
             String eventoId = eventos.registrar(envioId, "CANCELADO", eventos.ciudadActual(e),
-                    "Envío cancelado (estaba " + estadoAnterior + ")");
+                    "Envio cancelado (estaba " + estadoAnterior + ")");
             saga.paso("MONGO_EVENTO_CANCELADO", () -> eventos.borrar(eventoId));
 
             liberarContenedores(saga, envioId, ahora);
@@ -352,7 +352,7 @@ public class EnvioService {
     private List<Contenedor> validarContenedoresNuevos(List<Integer> contenedorIds) throws SQLException {
 
         if (contenedorIds == null || contenedorIds.isEmpty()) {
-            throw new IllegalArgumentException("Un envío tiene que llevar al menos un contenedor.");
+            throw new IllegalArgumentException("Un envio tiene que llevar al menos un contenedor.");
         }
 
         if (new HashSet<>(contenedorIds).size() != contenedorIds.size()) {
@@ -367,7 +367,7 @@ public class EnvioService {
             }
             if (!"DISPONIBLE".equals(c.getEstado())) {
                 throw new IllegalArgumentException("El contenedor " + c.getCodigoInternacional()
-                        + " no está disponible.");
+                        + " no esta disponible.");
             }
             contenedores.add(c);
         }
@@ -396,7 +396,7 @@ public class EnvioService {
         }
 
         if (e.getFechaEntregaEstimada() == null || !e.getFechaEntregaEstimada().isAfter(fechaCreacion)) {
-            throw new IllegalArgumentException("La fecha estimada de entrega tiene que ser posterior a la creación.");
+            throw new IllegalArgumentException("La fecha estimada de entrega tiene que ser posterior a la creacion.");
         }
 
         if (e.getPesoKg() == null || e.getPesoKg().compareTo(BigDecimal.ZERO) <= 0) {
@@ -408,7 +408,7 @@ public class EnvioService {
         }
 
         if (e.getDescripcionCarga() == null || e.getDescripcionCarga().isBlank()) {
-            throw new IllegalArgumentException("La descripción de la carga es obligatoria.");
+            throw new IllegalArgumentException("La descripcion de la carga es obligatoria.");
         }
     }
 
@@ -428,9 +428,9 @@ public class EnvioService {
     }
 
     private Envio buscarExistente(Integer id) throws SQLException {
-        Envio e = repo.buscarPorId(validarObligatorio(id, "el id del envío"));
+        Envio e = repo.buscarPorId(validarObligatorio(id, "el id del envio"));
         if (e == null) {
-            throw new IllegalArgumentException("No existe un envío con id " + id + ".");
+            throw new IllegalArgumentException("No existe un envio con id " + id + ".");
         }
         return e;
     }

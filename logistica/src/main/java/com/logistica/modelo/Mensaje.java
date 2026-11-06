@@ -5,10 +5,10 @@ import java.time.LocalDateTime;
 public class Mensaje {
 
     private String id;
-    private String tipoConversacion; // PARTE | GRUPO
+    private String tipoConversacion; // parte | grupo
     private Integer parteId;
     private String parteTipo;
-    private String direccion; // SALIENTE (interno → parte) ENTRANTE (parte → interno)
+    private String direccion; // saliente (interno → parte) entrante (parte → interno)
     private String grupoId;
     private Integer remitenteId;
     private String contenido;

@@ -21,7 +21,7 @@ public class GrafoService {
 
     public List<ParadaRuta> rutaEnvio(int envioId) throws SQLException {
         if (envioRepo.buscarPorId(envioId) == null) {
-            throw new IllegalArgumentException("No existe un envío con id " + envioId + ".");
+            throw new IllegalArgumentException("No existe un envio con id " + envioId + ".");
         }
         return ruta(envioId);
     }
@@ -47,7 +47,7 @@ public class GrafoService {
     private List<ParadaRuta> ruta(int envioId) {
         ParadaRuta origen = repo.buscarOrigen(envioId);
         if (origen == null) {
-            throw new IllegalStateException("El envío " + envioId + " no está en Neo4j.");
+            throw new IllegalStateException("El envio " + envioId + " no esta en Neo4j.");
         }
 
         List<ParadaRuta> ruta = new ArrayList<>();

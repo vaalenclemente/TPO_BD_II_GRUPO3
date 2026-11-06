@@ -56,12 +56,12 @@ public class MensajeRepository {
         return aTexto(doc.getObjectId("_id"));
     }
 
-    // indice { parteId: 1, fechaHora: 1 }
+    // indice { parteid: 1, fechahora: 1 }
     public List<Mensaje> listarPorParte(int parteId) {
         return listar(and(eq("tipoConversacion", "PARTE"), eq("parteId", parteId)));
     }
 
-    // indice { grupoId: 1, fechaHora: 1 }
+    // indice { grupoid: 1, fechahora: 1 }
     public List<Mensaje> listarPorGrupo(String grupoId) {
         return listar(and(eq("tipoConversacion", "GRUPO"), eq("grupoId", grupoId)));
     }

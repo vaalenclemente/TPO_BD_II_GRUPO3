@@ -44,7 +44,7 @@ public class MenuPrincipal {
     private Sesion login() {
         while (true) {
             Consola.mostrar("");
-            Consola.mostrar("=== INICIAR SESIÓN (Enter en el email para salir) ===");
+            Consola.mostrar("=== INICIAR SESION (Enter en el email para salir) ===");
             String email = Consola.leer("Email");
             if (email.isEmpty()) {
                 return null;
@@ -67,12 +67,13 @@ public class MenuPrincipal {
 
     private boolean menu(Sesion sesion) {
         while (true) {
-            int opcion = Consola.menu("MENÚ PRINCIPAL",
+            int opcion = Consola.menu("MENU PRINCIPAL",
                     "Clientes / proveedores / operadores", "Usuarios, roles y sesiones",
-                    "Activos (contenedores, sensores, vehículos)", "Envíos y tramos", "Monitoreo y alertas",
+                    "Activos (contenedores, sensores, vehiculos)", "Envios y tramos", "Monitoreo y alertas",
                     "Reglas e incidentes", "Comercial (facturas, cobros, pagos, cuentas)", "Reportes facturables",
-                    "Análisis y predicción", "Red y recorridos (Neo4j)", "Mensajería", "Auditoría",
-                    "Países y ciudades", "Cerrar sesión");
+                    "Analisis y prediccion", "Red y recorridos (Neo4j)", "Mensajeria", "Auditoria",
+                    "Paises y ciudades", "Cerrar sesion");
+            System.out.println("");
             if (opcion == 0) {
                 return true;
             }
@@ -121,8 +122,9 @@ public class MenuPrincipal {
             rolId = roles.alta(new Rol(null, "ADMIN", 10));
         }
 
-        usuarios.alta(new Usuario("Administrador", "Sistema", EMAIL_ADMIN, null, rolId, "INTERNO", null), PASSWORD_ADMIN);
-        Consola.mostrar("No había usuarios: se creó " + EMAIL_ADMIN + " con contraseña " + PASSWORD_ADMIN + ".");
+        usuarios.alta(new Usuario("Administrador", "Sistema", EMAIL_ADMIN, null, rolId, "INTERNO", null),
+                PASSWORD_ADMIN);
+        Consola.mostrar("No habia usuarios: se creo " + EMAIL_ADMIN + " con contraseña " + PASSWORD_ADMIN + ".");
     }
 
 }

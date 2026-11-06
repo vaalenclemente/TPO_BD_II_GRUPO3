@@ -65,7 +65,7 @@ public class ResultadoAgrupado {
 
     @Override
     public String toString() {
-        return etiqueta + ": " + cantidad + (total == null ? "" : " | total " + total) + (promedio == null ? "" : " | promedio " + promedio) + (minimo == null ? "" : " | mín " + minimo) + (maximo == null ? "" : " | máx " + maximo);
+        return etiqueta + ": " + cantidad + (total == null ? "" : " | total " + total) + (promedio == null ? "" : " | promedio " + promedio) + (minimo == null ? "" : " | min " + minimo) + (maximo == null ? "" : " | max " + maximo);
     }
 
 }

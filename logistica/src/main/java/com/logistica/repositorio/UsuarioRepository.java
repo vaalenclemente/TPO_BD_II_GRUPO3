@@ -15,7 +15,7 @@ import com.logistica.modelo.Usuario;
 
 public class UsuarioRepository {
 
-    private Usuario mapear(ResultSet rs) throws SQLException { // sin parteId
+    private Usuario mapear(ResultSet rs) throws SQLException { // sin parteid
         Usuario u = new Usuario();
         u.setId(rs.getInt("id"));
         u.setNombre(rs.getString("nombre"));

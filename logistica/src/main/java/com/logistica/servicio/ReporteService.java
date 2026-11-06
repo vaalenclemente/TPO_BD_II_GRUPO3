@@ -52,21 +52,21 @@ public class ReporteService {
             throw new IllegalArgumentException("Los reportes los pide un cliente.");
         }
         if (!"ACTIVO".equals(cliente.getEstado())) {
-            throw new IllegalArgumentException("El cliente está dado de baja.");
+            throw new IllegalArgumentException("El cliente esta dado de baja.");
         }
         if (r.getNombreSolicitante() == null || r.getNombreSolicitante().isBlank()) {
             throw new IllegalArgumentException("El nombre de quien lo pide es obligatorio.");
         }
         TipoReporte tipo = (r.getTipoReporteId() == null) ? null : tipoRepo.buscarPorId(r.getTipoReporteId());
         if (tipo == null || !Boolean.TRUE.equals(tipo.getActivo())) {
-            throw new IllegalArgumentException("El tipo de reporte no existe o no está activo.");
+            throw new IllegalArgumentException("El tipo de reporte no existe o no esta activo.");
         }
         if (!CODIGOS.contains(tipo.getCodigo())) {
-            throw new IllegalArgumentException("El reporte " + tipo.getCodigo() + " todavía no se puede generar.");
+            throw new IllegalArgumentException("El reporte " + tipo.getCodigo() + " todavia no se puede generar.");
         }
         if (r.getDesde() == null || r.getHasta() == null || r.getHasta().isBefore(r.getDesde())) {
             throw new IllegalArgumentException(
-                    "El período (desde - hasta) es obligatorio y desde no puede ser posterior a hasta.");
+                    "El periodo (desde - hasta) es obligatorio y desde no puede ser posterior a hasta.");
         }
 
         r.setNombreSolicitante(r.getNombreSolicitante().trim());
@@ -126,7 +126,7 @@ public class ReporteService {
     private String enviosAgrupados(List<ResultadoAgrupado> filas) {
         String texto = "";
         for (ResultadoAgrupado f : filas) {
-            texto += f.getEtiqueta() + ": " + f.getCantidad() + " envíos (" + f.getTotal() + " kg)\n";
+            texto += f.getEtiqueta() + ": " + f.getCantidad() + " envios (" + f.getTotal() + " kg)\n";
         }
         return conDatos(texto);
     }
@@ -139,7 +139,7 @@ public class ReporteService {
                 continue;
             }
             cantidad++;
-            texto += "Envío " + e.getId() + " | " + e.getEstado() + " | prioridad " + e.getPrioridad()
+            texto += "Envio " + e.getId() + " | " + e.getEstado() + " | prioridad " + e.getPrioridad()
                     + " | creado " + e.getFechaCreacion().format(FECHA)
                     + " | entrega estimada " + e.getFechaEntregaEstimada().format(FECHA)
                     + (e.getFechaEntregaReal() == null ? "" : " | entregado " + e.getFechaEntregaReal().format(FECHA))
@@ -152,7 +152,7 @@ public class ReporteService {
         String texto = "";
         List<EnvioDemorado> demorados = estadisticaRepo.enviosDemorados(clienteId, desde, hasta, LocalDateTime.now());
         for (EnvioDemorado d : demorados) {
-            texto += "Envío " + d.getEnvioId() + " → " + d.getDestino() + " | " + d.getEstado()
+            texto += "Envio " + d.getEnvioId() + " → " + d.getDestino() + " | " + d.getEstado()
                     + " | estimada " + d.getFechaEntregaEstimada().format(FECHA_HORA)
                     + (d.getFechaEntregaReal() == null ? " | sin entregar" : " | entregado " + d.getFechaEntregaReal().format(FECHA_HORA))
                     + " | " + d.getHorasDemora() + " h de demora\n";
@@ -163,33 +163,33 @@ public class ReporteService {
     private String tiemposEntrega(int clienteId, LocalDateTime desde, LocalDateTime hasta) throws SQLException {
         ResultadoAgrupado t = estadisticaRepo.tiempoPromedioEntrega(clienteId, desde, hasta);
         if (t.getCantidad() == 0) {
-            return "Sin entregas en el período.\n";
+            return "Sin entregas en el periodo.\n";
         }
         return "Entregas: " + t.getCantidad() + "\n"
-                + "Tiempo mínimo: " + t.getMinimo() + " h\n"
-                + "Tiempo máximo: " + t.getMaximo() + " h\n"
+                + "Tiempo minimo: " + t.getMinimo() + " h\n"
+                + "Tiempo maximo: " + t.getMaximo() + " h\n"
                 + "Tiempo promedio: " + t.getPromedio() + " h\n";
     }
 
     private String promedioIncidentes(int clienteId, LocalDateTime desde, LocalDateTime hasta) throws SQLException {
         String porPais = "";
         for (ResultadoAgrupado f : estadisticaRepo.promedioIncidentesPorPais(clienteId, desde, hasta)) {
-            porPais += f.getEtiqueta() + ": " + f.getPromedio() + " incidentes por envío (" + f.getCantidad()
-                    + " envíos, " + f.getTotal() + " incidentes)\n";
+            porPais += f.getEtiqueta() + ": " + f.getPromedio() + " incidentes por envio (" + f.getCantidad()
+                    + " envios, " + f.getTotal() + " incidentes)\n";
         }
         String porEstado = "";
         for (ResultadoAgrupado f : estadisticaRepo.promedioIncidentesPorEstado(clienteId, desde, hasta)) {
-            porEstado += f.getEtiqueta() + ": " + f.getPromedio() + " incidentes por envío (" + f.getCantidad()
-                    + " envíos, " + f.getTotal() + " incidentes)\n";
+            porEstado += f.getEtiqueta() + ": " + f.getPromedio() + " incidentes por envio (" + f.getCantidad()
+                    + " envios, " + f.getTotal() + " incidentes)\n";
         }
-        return "Por país de destino:\n" + conDatos(porPais) + "Por estado del envío:\n" + conDatos(porEstado);
+        return "Por pais de destino:\n" + conDatos(porPais) + "Por estado del envio:\n" + conDatos(porEstado);
     }
 
     private String costosPorTransporte(int clienteId, LocalDateTime desde, LocalDateTime hasta) throws SQLException {
         String texto = "";
         for (ResultadoAgrupado f : estadisticaRepo.costosPorTransporte(clienteId, desde, hasta)) {
             texto += f.getEtiqueta() + ": " + f.getCantidad() + " tramos | total $" + f.getTotal()
-                    + " | promedio $" + f.getPromedio() + " | mín $" + f.getMinimo() + " | máx $" + f.getMaximo() + "\n";
+                    + " | promedio $" + f.getPromedio() + " | min $" + f.getMinimo() + " | max $" + f.getMaximo() + "\n";
         }
         return conDatos(texto);
     }
@@ -203,7 +203,7 @@ public class ReporteService {
     }
 
     private String conDatos(String texto) {
-        return texto.isEmpty() ? "Sin datos en el período.\n" : texto;
+        return texto.isEmpty() ? "Sin datos en el periodo.\n" : texto;
     }
 
     private String incidentesAbiertos(int clienteId, LocalDateTime desde, LocalDateTime hasta) {
@@ -214,7 +214,7 @@ public class ReporteService {
                 continue;
             }
             cantidad++;
-            texto += i.getFechaApertura().format(FECHA_HORA) + " | envío " + i.getEnvioId() + " | " + i.getTipo()
+            texto += i.getFechaApertura().format(FECHA_HORA) + " | envio " + i.getEnvioId() + " | " + i.getTipo()
                     + " (" + i.getSeveridad() + ")"
                     + (i.getTramoId() == null ? "" : " | tramo " + i.getTramoOrigen() + " → " + i.getTramoDestino())
                     + " | " + i.getDescripcion() + "\n";
@@ -229,7 +229,7 @@ public class ReporteService {
             texto += puesto + ". " + ruta + "\n";
             puesto++;
         }
-        return texto.isEmpty() ? "Sin incidentes en el período.\n" : texto;
+        return texto.isEmpty() ? "Sin incidentes en el periodo.\n" : texto;
     }
 
     private String anomaliasTemperatura(int clienteId, LocalDateTime desde, LocalDateTime hasta)
@@ -239,8 +239,8 @@ public class ReporteService {
         int cantidad = 0;
         for (LecturaSensor l : lecturaRepo.listarAnomalias("TEMPERATURA", envioIds, desde, hasta)) {
             cantidad++;
-            texto += l.getFechaHora().format(FECHA_HORA) + " | envío " + l.getEnvioId() + " | contenedor "
-                    + l.getContenedorId() + " | " + l.getTemperatura() + " °C (límite " + l.getAnomaliaLimite()
+            texto += l.getFechaHora().format(FECHA_HORA) + " | envio " + l.getEnvioId() + " | contenedor "
+                    + l.getContenedorId() + " | " + l.getTemperatura() + " °C (limite " + l.getAnomaliaLimite()
                     + ", exceso " + l.getAnomaliaExceso() + ")\n";
         }
         return texto + "Total: " + cantidad + "\n";
@@ -254,7 +254,7 @@ public class ReporteService {
                 texto += p + " - calculado " + p.getFechaCalculo().format(FECHA_HORA) + "\n";
             }
         }
-        return texto.isEmpty() ? "No hay predicciones para los envíos en curso.\n" : texto;
+        return texto.isEmpty() ? "No hay predicciones para los envios en curso.\n" : texto;
     }
 
     private List<Integer> idsDeEnvios(int clienteId) throws SQLException {
@@ -268,17 +268,17 @@ public class ReporteService {
     private String tituloDe(String codigo) {
         return switch (codigo) {
             case "INCIDENTES_ABIERTOS" -> "INCIDENTES ABIERTOS";
-            case "RANKING_RUTAS_INCIDENTES" -> "RUTAS CON MÁS INCIDENTES";
-            case "ANOMALIAS_TEMPERATURA" -> "ANOMALÍAS DE TEMPERATURA";
-            case "PREDICCION_DEMORAS" -> "PREDICCIÓN DE DEMORAS";
-            case "ENVIOS_POR_PAIS" -> "ENVÍOS POR PAÍS DE DESTINO";
-            case "ENVIOS_POR_ESTADO" -> "ENVÍOS POR ESTADO";
-            case "ENVIOS_DEL_CLIENTE" -> "ENVÍOS DEL CLIENTE";
-            case "ENVIOS_DEMORADOS" -> "ENVÍOS DEMORADOS";
+            case "RANKING_RUTAS_INCIDENTES" -> "RUTAS CON MAS INCIDENTES";
+            case "ANOMALIAS_TEMPERATURA" -> "ANOMALIAS DE TEMPERATURA";
+            case "PREDICCION_DEMORAS" -> "PREDICCION DE DEMORAS";
+            case "ENVIOS_POR_PAIS" -> "ENVIOS POR PAIS DE DESTINO";
+            case "ENVIOS_POR_ESTADO" -> "ENVIOS POR ESTADO";
+            case "ENVIOS_DEL_CLIENTE" -> "ENVIOS DEL CLIENTE";
+            case "ENVIOS_DEMORADOS" -> "ENVIOS DEMORADOS";
             case "TIEMPOS_ENTREGA" -> "TIEMPOS DE ENTREGA";
             case "PROMEDIO_INCIDENTES" -> "PROMEDIO DE INCIDENTES";
             case "COSTOS_POR_TRANSPORTE" -> "COSTOS POR TIPO DE TRANSPORTE";
-            default -> "DESEMPEÑO HISTÓRICO";
+            default -> "DESEMPEÑO HISTORICO";
         };
     }
 

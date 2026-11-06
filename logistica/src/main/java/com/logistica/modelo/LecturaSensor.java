@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class LecturaSensor {
 
-    private String id; // _id de Mongo
+    private String id; // _id de mongo
     private LocalDateTime fechaHora;
     private Integer sensorId;
     private String sensorTipo;
@@ -177,7 +177,7 @@ public class LecturaSensor {
     public String toString() {
         return fechaHora + " - sensor " + sensorId + " | T " + temperatura + " °C, H " + humedad + " %, V " + vibracion
                 + ", bat " + nivelBateria + " %"
-                + (anomaliaReglaId == null ? "" : " [ANOMALÍA " + anomaliaMetrica + " límite " + anomaliaLimite + "]");
+                + (anomaliaReglaId == null ? "" : " [ANOMALIA " + anomaliaMetrica + " limite " + anomaliaLimite + "]");
     }
 
 }

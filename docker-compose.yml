@@ -1,15 +1,15 @@
-# Levanta los cuatro motores de db
+# levanta los cuatro motores de db
 # comando: docker compose up -d
 
 services:
 
-  # ---------- MySQL----------
+  # ---------- mysql----------
   mysql:
     image: mysql:8.4
     container_name: logistica-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: logistica      # se crea automáticamente
+      MYSQL_DATABASE: logistica      # se crea automaticamente
       MYSQL_USER: logistica
       MYSQL_PASSWORD: logistica
     ports:
@@ -22,7 +22,7 @@ services:
       timeout: 5s
       retries: 10
 
-  # ---------- MongoDB----------
+  # ---------- mongodb----------
   mongo:
     image: mongo:7
     container_name: logistica-mongo
@@ -36,15 +36,15 @@ services:
       timeout: 5s
       retries: 10
 
-  # ---------- Neo4j----------
+  # ---------- neo4j----------
   neo4j:
     image: neo4j:5
     container_name: logistica-neo4j
     environment:
-      NEO4J_AUTH: neo4j/logistica123   # usuario/contraseña (mínimo 8 caracteres)
+      NEO4J_AUTH: neo4j/logistica123   # usuario/contraseña (minimo 8 caracteres)
     ports:
       - "7474:7474"   # navegador web para inspeccionar
-      - "7687:7687"   # protocolo Bolt (el que usa Java)
+      - "7687:7687"   # protocolo bolt (el que usa java)
     volumes:
       - neo4j_data:/data
     healthcheck:
@@ -53,7 +53,7 @@ services:
       timeout: 10s
       retries: 15
 
-  # ---------- Redis----------
+  # ---------- redis----------
   redis:
     image: redis:7
     container_name: logistica-redis
@@ -65,8 +65,8 @@ services:
       timeout: 5s
       retries: 10
 
-# Volúmenes: los datos sobreviven aunque se detengan los contenedores.
-# Redis no tiene volumen a propósito: no es fuente de verdad, se reconstruye.
+# volumenes: los datos sobreviven aunque se detengan los contenedores.
+# redis no tiene volumen a proposito: no es fuente de verdad, se reconstruye.
 volumes:
   mysql_data:
   mongo_data:

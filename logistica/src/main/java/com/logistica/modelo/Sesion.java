@@ -9,8 +9,8 @@ public class Sesion {
     private String token;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaUltimaActividad;
-    private LocalDateTime fechaFin; // null mientras la sesión está ACTIVA
-    private String estado;          // ACTIVA | CERRADA | EXPIRADA
+    private LocalDateTime fechaFin; // null mientras la sesion esta activa
+    private String estado;          // activa | cerrada | expirada
 
     public Sesion() {
 

@@ -10,7 +10,7 @@ import com.logistica.database.Neo4jConexion;
 
 public class EnvioGrafoRepository {
 
-    // Nodo Envio + relaciones TIENE, ORIGEN y DESTINO.
+    // nodo envio + relaciones tiene, origen y destino.
     public void crearEnvio(int envioId, String estado, LocalDateTime fechaCreacion, double pesoKg, int clienteId,
             String clienteNombre,
             int origenId, String origenNombre, String origenPais, int destinoId, String destinoNombre,
@@ -91,8 +91,8 @@ public class EnvioGrafoRepository {
         }
     }
 
-    // Relaciones PASA_POR (envío → ciudad destino del tramo) y GESTIONADO_POR
-    // (envío → operador).
+    // relaciones pasa_por (envio → ciudad destino del tramo) y gestionado_por
+    // (envio → operador).
     public void agregarTramo(int envioId, int tramoId, int orden, String medio,
             int destinoId, String destinoNombre, String destinoPais,
             int operadorId, String operadorNombre,
@@ -144,7 +144,7 @@ public class EnvioGrafoRepository {
 
     private void verificarQueExiste(Result r, int envioId) {
         if (!r.hasNext()) {
-            throw new IllegalStateException("El envío " + envioId + " no existe en Neo4j.");
+            throw new IllegalStateException("El envio " + envioId + " no existe en Neo4j.");
         }
         r.consume();
     }

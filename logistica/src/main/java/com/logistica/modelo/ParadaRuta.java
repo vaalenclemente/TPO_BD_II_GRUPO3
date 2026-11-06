@@ -102,9 +102,9 @@ public class ParadaRuta {
     @Override
     public String toString() {
         if (tramoId == null) {
-            return "envío " + envioId + " - origen: " + ciudad + ", " + pais;
+            return "envio " + envioId + " - origen: " + ciudad + ", " + pais;
         }
-        return "envío " + envioId + " - " + orden + ". " + ciudad + ", " + pais + " (" + medio + ", " + operador
+        return "envio " + envioId + " - " + orden + ". " + ciudad + ", " + pais + " (" + medio + ", " + operador
                 + ") salida " + fechaSalida + " / llegada " + fechaLlegada + " - " + estado;
     }
 

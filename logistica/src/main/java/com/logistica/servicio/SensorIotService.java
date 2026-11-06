@@ -75,7 +75,7 @@ public class SensorIotService {
         }
 
         if ("BAJA".equals(s.getEstado())) {
-            throw new IllegalArgumentException("El sensor está dado de baja.");
+            throw new IllegalArgumentException("El sensor esta dado de baja.");
         }
 
         repo.cambiarEstado(id, estado);
@@ -107,11 +107,11 @@ public class SensorIotService {
         }
 
         if (s.getFechaInstalacion() == null) {
-            throw new IllegalArgumentException("La fecha de instalación es obligatoria.");
+            throw new IllegalArgumentException("La fecha de instalacion es obligatoria.");
         }
 
         if (s.getFechaInstalacion().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de instalación no puede ser futura.");
+            throw new IllegalArgumentException("La fecha de instalacion no puede ser futura.");
         }
     }
 
@@ -123,7 +123,7 @@ public class SensorIotService {
         }
 
         if ("BAJA".equals(c.getEstado())) {
-            throw new IllegalArgumentException("El contenedor está dado de baja.");
+            throw new IllegalArgumentException("El contenedor esta dado de baja.");
         }
     }
 

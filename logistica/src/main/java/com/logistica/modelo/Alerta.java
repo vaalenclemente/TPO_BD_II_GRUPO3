@@ -9,12 +9,12 @@ public class Alerta {
     private Integer envioId;
     private Integer reglaId;
     private LocalDateTime fechaLectura;
-    private String tipo; // TEMP_FUERA_DE_RANGO | HUMEDAD | VIBRACION | BATERIA_BAJA | SENSOR_INACTIVO
+    private String tipo; // temp_fuera_de_rango | humedad | vibracion | bateria_baja | sensor_inactivo
     private Double valor;
-    private Double umbral; // límite de la regla
-    private String severidad; // ALTA | MEDIA | BAJA
+    private Double umbral; // limite de la regla
+    private String severidad; // alta | media | baja
     private LocalDateTime fecha;
-    private String estado; // ACTIVA | RECONOCIDA | CERRADA
+    private String estado; // activa | reconocida | cerrada
     private String incidenteId;
 
     public Alerta() {
@@ -120,7 +120,7 @@ public class Alerta {
     @Override
     public String toString() {
         return id + " - " + tipo + " (" + severidad + ") sensor " + sensorId
-                + (envioId == null ? "" : ", envío " + envioId) + ": " + valor + " / límite " + umbral + " - " + estado;
+                + (envioId == null ? "" : ", envio " + envioId) + ": " + valor + " / limite " + umbral + " - " + estado;
     }
 
 }

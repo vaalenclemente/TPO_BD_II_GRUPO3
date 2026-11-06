@@ -18,7 +18,7 @@ import com.logistica.repositorio.ParteRepository;
 import com.logistica.repositorio.TramoRepository;
 import com.logistica.repositorio.VehiculoRepository;
 
-// Escribe en MySQL (tramo, envio) y en Neo4j (PASA_POR, GESTIONADO_POR)
+// escribe en mysql (tramo, envio) y en neo4j (pasa_por, gestionado_por)
 public class TramoService {
 
     private final TramoRepository repo = new TramoRepository();
@@ -34,14 +34,14 @@ public class TramoService {
 
         // a) validaciones
         if (t.getEnvioId() == null) {
-            throw new IllegalArgumentException("Falta indicar el envío.");
+            throw new IllegalArgumentException("Falta indicar el envio.");
         }
         Envio envio = envioRepo.buscarPorId(t.getEnvioId());
         if (envio == null) {
-            throw new IllegalArgumentException("No existe un envío con id " + t.getEnvioId() + ".");
+            throw new IllegalArgumentException("No existe un envio con id " + t.getEnvioId() + ".");
         }
         if ("ENTREGADO".equals(envio.getEstado()) || "CANCELADO".equals(envio.getEstado())) {
-            throw new IllegalArgumentException("El envío ya está " + envio.getEstado() + ".");
+            throw new IllegalArgumentException("El envio ya esta " + envio.getEstado() + ".");
         }
 
         if (!"BARCO".equals(t.getMedioTransporte()) && !"AVION".equals(t.getMedioTransporte())
@@ -50,17 +50,17 @@ public class TramoService {
         }
 
         if (t.getVehiculoId() == null) {
-            throw new IllegalArgumentException("Falta indicar el vehículo.");
+            throw new IllegalArgumentException("Falta indicar el vehiculo.");
         }
         Vehiculo vehiculo = vehiculoRepo.buscarPorId(t.getVehiculoId());
         if (vehiculo == null) {
-            throw new IllegalArgumentException("No existe un vehículo con id " + t.getVehiculoId() + ".");
+            throw new IllegalArgumentException("No existe un vehiculo con id " + t.getVehiculoId() + ".");
         }
         if (!"ACTIVO".equals(vehiculo.getEstado())) {
-            throw new IllegalArgumentException("El vehículo no está activo.");
+            throw new IllegalArgumentException("El vehiculo no esta activo.");
         }
         if (!vehiculo.getTipo().equals(t.getMedioTransporte())) {
-            throw new IllegalArgumentException("El vehículo es " + vehiculo.getTipo()
+            throw new IllegalArgumentException("El vehiculo es " + vehiculo.getTipo()
                     + " y el tramo es " + t.getMedioTransporte() + ".");
         }
 
@@ -75,7 +75,7 @@ public class TramoService {
         int origenEsperado = (anterior == null) ? envio.getOrigenCiudadId() : anterior.getDestinoCiudadId();
         if (origen.getId() != origenEsperado) {
             throw new IllegalArgumentException("El tramo tiene que salir de la ciudad " + origenEsperado
-                    + (anterior == null ? " (origen del envío)." : " (destino del tramo anterior)."));
+                    + (anterior == null ? " (origen del envio)." : " (destino del tramo anterior)."));
         }
 
         if (t.getFechaSalida() == null || t.getFechaLlegadaEstimada() == null) {
@@ -97,7 +97,7 @@ public class TramoService {
         Parte operador = parteRepo.buscarPorId(vehiculo.getOperadorId());
         String destinoPais = paisRepo.buscarPorId(destino.getPaisId()).getNombre();
 
-        // c) saga: MySQL + Neo4j
+        // c) saga: mysql + neo4j
         Saga saga = new Saga("AGREGAR_TRAMO", "tramo");
         try {
             int id = repo.guardar(t);
@@ -123,7 +123,7 @@ public class TramoService {
 
         Tramo t = buscarExistente(tramoId);
         if (!"PENDIENTE".equals(t.getEstado())) {
-            throw new IllegalArgumentException("Solo sale un tramo PENDIENTE (este está " + t.getEstado() + ").");
+            throw new IllegalArgumentException("Solo sale un tramo PENDIENTE (este esta " + t.getEstado() + ").");
         }
         if (fecha == null) {
             throw new IllegalArgumentException("Falta la fecha de salida.");
@@ -131,13 +131,13 @@ public class TramoService {
 
         Envio envio = envioRepo.buscarPorId(t.getEnvioId());
         if ("ENTREGADO".equals(envio.getEstado()) || "CANCELADO".equals(envio.getEstado())) {
-            throw new IllegalArgumentException("El envío ya está " + envio.getEstado() + ".");
+            throw new IllegalArgumentException("El envio ya esta " + envio.getEstado() + ".");
         }
 
         for (Tramo otro : repo.listarPorEnvio(t.getEnvioId())) {
             if (otro.getOrden() < t.getOrden() && !"COMPLETADO".equals(otro.getEstado())
                     && !"CANCELADO".equals(otro.getEstado())) {
-                throw new IllegalArgumentException("El tramo " + otro.getOrden() + " todavía no llegó.");
+                throw new IllegalArgumentException("El tramo " + otro.getOrden() + " todavia no llego.");
             }
         }
 
@@ -166,7 +166,7 @@ public class TramoService {
                     estadoEnvioAnterior, pesoKg));
 
             String eventoId = eventos.registrar(envio.getId(), "SALIDA_TRAMO", t.getOrigenCiudadId(),
-                    "Salió el tramo " + t.getOrden() + " (" + t.getMedioTransporte() + ")");
+                    "Salio el tramo " + t.getOrden() + " (" + t.getMedioTransporte() + ")");
             saga.paso("MONGO_EVENTO_SALIDA", () -> eventos.borrar(eventoId));
 
             saga.completar();
@@ -180,7 +180,7 @@ public class TramoService {
 
         Tramo t = buscarExistente(tramoId);
         if (!"EN_CURSO".equals(t.getEstado())) {
-            throw new IllegalArgumentException("Solo llega un tramo EN_CURSO (este está " + t.getEstado() + ").");
+            throw new IllegalArgumentException("Solo llega un tramo EN_CURSO (este esta " + t.getEstado() + ").");
         }
         if (fecha == null || fecha.isBefore(t.getFechaSalida())) {
             throw new IllegalArgumentException("La fecha de llegada no puede ser anterior a la salida.");
@@ -199,7 +199,7 @@ public class TramoService {
                     t.getFechaSalida(), t.getFechaLlegadaEstimada()));
 
             String eventoId = eventos.registrar(t.getEnvioId(), "LLEGADA_TRAMO", t.getDestinoCiudadId(),
-                    "Llegó el tramo " + t.getOrden() + " (" + t.getMedioTransporte() + ")");
+                    "Llego el tramo " + t.getOrden() + " (" + t.getMedioTransporte() + ")");
             saga.paso("MONGO_EVENTO_LLEGADA", () -> eventos.borrar(eventoId));
 
             saga.completar();

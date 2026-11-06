@@ -52,7 +52,7 @@ public class EnvioContenedor {
 
     @Override
     public String toString() {
-        return "envío " + envioId + " - contenedor " + contenedorId
+        return "envio " + envioId + " - contenedor " + contenedorId
                 + (fechaLiberacion == null ? " (asignado)" : " (liberado " + fechaLiberacion + ")");
     }
 

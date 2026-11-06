@@ -19,7 +19,8 @@ public class Saga {
     private Object objetoId;
     private final Deque<Accion> compensaciones = new ArrayDeque<>();
 
-    // tipo = qué operación es (CREAR_ENVIO); entidad = sobre qué (envio), para la auditoría.
+    // tipo = que operacion es (crear_envio); entidad = sobre que (envio), para la
+    // auditoria.
     public Saga(String tipo, String entidad) {
         this.tipo = tipo;
         this.entidad = entidad;
@@ -61,11 +62,10 @@ public class Saga {
             auditar("ERROR");
         }
 
-        return new IllegalStateException("No se pudo completar la operación: " + mensaje, causa);
+        return new IllegalStateException("No se pudo completar la operacion: " + mensaje, causa);
     }
 
-    // Toda saga queda en la auditoría con su resultado. Si la auditoría falla, la operación
-    // ya está hecha (o deshecha): no se la hace fallar por eso.
+    // toda saga queda en la auditoria con su resultado.
     private void auditar(String resultado) {
         try {
             auditoria.registrarCambio(tipo, entidad, objetoId, null, null, null, resultado, id);

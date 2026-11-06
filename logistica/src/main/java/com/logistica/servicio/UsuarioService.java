@@ -115,7 +115,7 @@ public class UsuarioService {
                 throw new IllegalArgumentException("La parte elegida no existe.");
             }
             if (!"ACTIVO".equals(parte.getEstado())) {
-                throw new IllegalArgumentException("La parte elegida está dada de baja.");
+                throw new IllegalArgumentException("La parte elegida esta dada de baja.");
             }
 
         } else if (u.getParteId() != null) {
@@ -141,7 +141,7 @@ public class UsuarioService {
             byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
             return HexFormat.of().formatHex(hash);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("SHA-256 no está disponible.", e);
+            throw new IllegalStateException("SHA-256 no esta disponible.", e);
         }
     }
 

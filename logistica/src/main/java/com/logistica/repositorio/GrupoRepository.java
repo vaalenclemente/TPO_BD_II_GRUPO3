@@ -72,7 +72,7 @@ public class GrupoRepository {
                 combine(set("nombre", g.getNombre()), set("descripcion", g.getDescripcion())));
     }
 
-    // $addToSet no agrega si ya esta; $pull lo saca.
+    // $addtoset no agrega si ya esta; $pull lo saca.
     public void agregarIntegrante(String id, int usuarioId) {
         coleccion().updateOne(eq("_id", new ObjectId(id)), addToSet("integrantes", usuarioId));
     }

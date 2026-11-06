@@ -10,10 +10,10 @@ import org.bson.Document;
 import org.bson.types.Decimal128;
 import org.bson.types.ObjectId;
 
-// Conversiones entre los tipos de Java que usan los modelos y los que guarda Mongo.
-//   LocalDateTime / LocalDate  <->  Date (ISODate)
-//   BigDecimal (importes)      <->  Decimal128 (decimal exacto, como DECIMAL de MySQL)
-//   String (id del modelo)     <->  ObjectId (_id)
+// conversiones entre los tipos de java que usan los modelos y los que guarda mongo.
+//   localdatetime / localdate  <->  date (isodate)
+//   bigdecimal (importes)      <->  decimal128 (decimal exacto, como decimal de mysql)
+//   string (id del modelo)     <->  objectid (_id)
 class MongoConversion {
 
     private static final ZoneId ZONA = ZoneId.systemDefault();
@@ -48,7 +48,7 @@ class MongoConversion {
         return new BigDecimal(valor.toString());
     }
 
-    // Lee un numero aunque se haya guardado como int o double.
+    // lee un numero aunque se haya guardado como int o double.
     static Double aDouble(Object valor) {
         return (valor == null) ? null : ((Number) valor).doubleValue();
     }
@@ -61,7 +61,7 @@ class MongoConversion {
         return (id == null) ? null : id.toHexString();
     }
 
-    // Un id mal escrito no es un error de base: simplemente no existe.
+    // un id mal escrito no es un error de base: simplemente no existe.
     static ObjectId aObjectId(String id) {
         if (id == null || !ObjectId.isValid(id)) {
             return null;

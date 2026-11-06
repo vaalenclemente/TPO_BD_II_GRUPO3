@@ -8,8 +8,8 @@ public class Evento {
     private String id;
     private Integer envioId;
     private List<Integer> contenedorIds;
-    private String tipo; // CREADO | EN_PREPARACION | SALIDA_TRAMO | LLEGADA_TRAMO | EN_ADUANA |
-                         // EN_TRANSITO | ENTREGADO | CANCELADO | INCIDENTE | OTRO
+    private String tipo; // creado | en_preparacion | salida_tramo | llegada_tramo | en_aduana |
+                         // en_transito | entregado | cancelado | incidente | otro
     private LocalDateTime fechaHora;
     private Integer ciudadId;
     private String ciudad;

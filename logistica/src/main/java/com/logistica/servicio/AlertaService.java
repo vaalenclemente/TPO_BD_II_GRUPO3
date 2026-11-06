@@ -34,7 +34,7 @@ public class AlertaService {
     public void reconocer(String id) {
         Alerta a = buscarExistente(id);
         if (!"ACTIVA".equals(a.getEstado())) {
-            throw new IllegalArgumentException("Solo se reconoce una alerta ACTIVA (esta está " + a.getEstado() + ").");
+            throw new IllegalArgumentException("Solo se reconoce una alerta ACTIVA (esta esta " + a.getEstado() + ").");
         }
         repo.cambiarEstado(id, "RECONOCIDA");
         RedisOpcional.escribir("las alertas activas", () -> redis.guardar(repo.buscarPorId(id)));
@@ -43,7 +43,7 @@ public class AlertaService {
     public void cerrar(String id) {
         Alerta a = buscarExistente(id);
         if ("CERRADA".equals(a.getEstado())) {
-            throw new IllegalArgumentException("La alerta ya está cerrada.");
+            throw new IllegalArgumentException("La alerta ya esta cerrada.");
         }
         repo.cambiarEstado(id, "CERRADA");
         RedisOpcional.escribir("las alertas activas", () -> redis.quitar(id));

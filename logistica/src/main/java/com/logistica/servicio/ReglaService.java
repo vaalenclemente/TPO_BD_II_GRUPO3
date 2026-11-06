@@ -14,7 +14,7 @@ public class ReglaService {
     private final ReglaRepository repo = new ReglaRepository();
     private final EnvioRepository envioRepo = new EnvioRepository();
 
-    // ---------- Alta ----------
+    // ---------- alta ----------
 
     public int alta(Regla r) throws SQLException {
 
@@ -24,10 +24,10 @@ public class ReglaService {
         if (r.getEnvioId() != null) {
             Envio e = envioRepo.buscarPorId(r.getEnvioId());
             if (e == null) {
-                throw new IllegalArgumentException("No existe un envío con id " + r.getEnvioId() + ".");
+                throw new IllegalArgumentException("No existe un envio con id " + r.getEnvioId() + ".");
             }
             if ("ENTREGADO".equals(e.getEstado()) || "CANCELADO".equals(e.getEstado())) {
-                throw new IllegalArgumentException("El envío ya está " + e.getEstado() + ".");
+                throw new IllegalArgumentException("El envio ya esta " + e.getEstado() + ".");
             }
         }
 
@@ -40,14 +40,13 @@ public class ReglaService {
         return id;
     }
 
-    // ---------- Modificación ----------
+    // ---------- modificacion ----------
 
     public void modificar(Regla r) throws SQLException {
         buscarExistente(r.getId());
         validarDatos(r);
         repo.actualizar(r);
     }
-
 
     public void desactivar(int id) throws SQLException {
         buscarExistente(id);
@@ -58,7 +57,6 @@ public class ReglaService {
         buscarExistente(id);
         repo.cambiarActiva(id, true);
     }
-
 
     public List<Regla> listar() throws SQLException {
         return repo.listar();
@@ -97,7 +95,7 @@ public class ReglaService {
         if (!"TEMPERATURA".equals(m) && !"HUMEDAD".equals(m) && !"VIBRACION".equals(m)
                 && !"BATERIA".equals(m) && !"INACTIVIDAD".equals(m)) {
             throw new IllegalArgumentException(
-                    "La métrica no es correcta (TEMPERATURA, HUMEDAD, VIBRACION, BATERIA, INACTIVIDAD).");
+                    "La metrica no es correcta (TEMPERATURA, HUMEDAD, VIBRACION, BATERIA, INACTIVIDAD).");
         }
 
         if (!"MAYOR".equals(r.getOperador()) && !"MENOR".equals(r.getOperador())) {
@@ -105,10 +103,10 @@ public class ReglaService {
         }
 
         if (r.getValor() == null) {
-            throw new IllegalArgumentException("El valor límite es obligatorio.");
+            throw new IllegalArgumentException("El valor limite es obligatorio.");
         }
 
-        // Batería y humedad son porcentajes; inactividad son minutos.
+        // bateria y humedad son porcentajes; inactividad son minutos.
         if (("BATERIA".equals(m) || "HUMEDAD".equals(m))
                 && (r.getValor().compareTo(BigDecimal.ZERO) < 0
                         || r.getValor().compareTo(new BigDecimal("100")) > 0)) {
@@ -119,7 +117,7 @@ public class ReglaService {
                 throw new IllegalArgumentException("Los minutos de inactividad tienen que ser mayores a 0.");
             }
             if (!"MAYOR".equals(r.getOperador())) {
-                throw new IllegalArgumentException("Una regla de inactividad es siempre MAYOR (más de X minutos).");
+                throw new IllegalArgumentException("Una regla de inactividad es siempre MAYOR (mas de X minutos).");
             }
         }
 

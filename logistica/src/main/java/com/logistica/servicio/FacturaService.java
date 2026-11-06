@@ -28,12 +28,11 @@ import com.logistica.repositorio.ReporteRepository;
 import com.logistica.repositorio.TramoRepository;
 import com.logistica.repositorio.VehiculoRepository;
 
-//   EMITIDA  (a un cliente)            -> DEBITO  en su cuenta (nos debe)
-//   RECIBIDA (de proveedor u operador) -> CREDITO en su cuenta (le debemos)
 public class FacturaService {
 
     private static final int DIAS_VENCIMIENTO = 30;
 
+    // costo
     private static final BigDecimal MARGEN_ENVIO = new BigDecimal("1.30");
 
     private final FacturaRepository repo = new FacturaRepository();
@@ -44,27 +43,34 @@ public class FacturaService {
     private final CuentaCorrienteService cuentaService = new CuentaCorrienteService();
     private final ReporteRepository reporteRepo = new ReporteRepository();
 
-    // ---------- Facturacion automatica ----------
-
+    // factura todo lo pendiente de un mes
     public List<Factura> facturacionAutomatica(String periodo) throws SQLException {
 
         YearMonth mes = validarPeriodo(periodo);
+
         LocalDateTime desde = mes.atDay(1).atStartOfDay();
         LocalDateTime hasta = mes.plusMonths(1).atDay(1).atStartOfDay();
-        LocalDate hoy = LocalDate.now();
 
+        // primero facturas a clientes y despues operadores
         List<Factura> generadas = new ArrayList<>();
+        generadas.addAll(facturarClientes(mes, desde, hasta));
+        generadas.addAll(facturarOperadores(mes, desde, hasta));
+        return generadas;
+    }
 
-        // a) Envios entregados -> una factura EMITIDA por cliente
-        Map<Integer, List<FacturaDetalle>> porCliente = new LinkedHashMap<>();
+    private List<Factura> facturarClientes(YearMonth mes, LocalDateTime desde, LocalDateTime hasta)
+            throws SQLException {
+
+        Map<Integer, List<FacturaDetalle>> lineasPorCliente = new LinkedHashMap<>();
+
+        // una linea por cada envio entregado en el mes y sin facturar
         for (Envio e : envioRepo.listarEntregadosSinFacturar(desde, hasta)) {
-            FacturaDetalle d = new FacturaDetalle("Envío N° " + e.getId(), tarifaEnvio(e.getId()));
+            FacturaDetalle d = new FacturaDetalle("Envio N° " + e.getId(), tarifaEnvio(e.getId()));
             d.setEnvioId(e.getId());
-            porCliente.computeIfAbsent(e.getClienteId(), k -> new ArrayList<>()).add(d);
+            agregarLinea(lineasPorCliente, e.getClienteId(), d);
         }
-        // a2) Reportes GENERADO en el mes (Mongo) -> en la misma factura del cliente.
-        //     Lo que manda es MySQL: un reporte está facturado si tiene una línea en factura_detalle (UQ).
-        //     reportes.facturaId en Mongo es una copia de referencia que se completa después.
+
+        // una linea por cada reporte generado en el mes
         for (Reporte r : reporteRepo.listarGeneradosEntre(desde, hasta)) {
             if (r.getCosto() == null || r.getCosto().signum() <= 0 || repo.reporteFacturado(r.getId())) {
                 continue;
@@ -72,34 +78,52 @@ public class FacturaService {
             FacturaDetalle d = new FacturaDetalle("Reporte " + r.getCodigo() + " (" + r.getDesde() + " a "
                     + r.getHasta() + ")", r.getCosto());
             d.setReporteId(r.getId());
-            porCliente.computeIfAbsent(r.getParteId(), k -> new ArrayList<>()).add(d);
+            agregarLinea(lineasPorCliente, r.getParteId(), d);
         }
 
-        for (Map.Entry<Integer, List<FacturaDetalle>> item : porCliente.entrySet()) {
+        List<Factura> facturas = new ArrayList<>();
+        for (Integer clienteId : lineasPorCliente.keySet()) {
+            List<FacturaDetalle> lineas = lineasPorCliente.get(clienteId);
             String numero = String.format("FE-%08d", repo.contarPorTipo("EMITIDA") + 1);
-            Factura f = emitir(item.getKey(), "EMITIDA", numero, mes.toString(), hoy, item.getValue());
-            generadas.add(f);
-            marcarReportes(item.getValue(), f.getId());
+            Factura f = emitir(clienteId, "EMITIDA", numero, mes.toString(), LocalDate.now(), lineas);
+            marcarReportes(lineas, f.getId());
+            facturas.add(f);
         }
-
-        // b) Tramos completados -> una factura RECIBIDA por operador
-        Map<Integer, List<FacturaDetalle>> porOperador = new LinkedHashMap<>();
-        for (Tramo t : tramoRepo.listarCompletadosSinFacturar(desde, hasta)) {
-            Vehiculo v = vehiculoRepo.buscarPorId(t.getVehiculoId());
-            FacturaDetalle d = new FacturaDetalle("Tramo " + t.getOrden() + " del envío N° " + t.getEnvioId()
-                    + " (" + t.getMedioTransporte() + ")", t.getCosto());
-            d.setTramoId(t.getId());
-            porOperador.computeIfAbsent(v.getOperadorId(), k -> new ArrayList<>()).add(d);
-        }
-        for (Map.Entry<Integer, List<FacturaDetalle>> item : porOperador.entrySet()) {
-            String numero = String.format("FR-%08d", repo.contarPorTipo("RECIBIDA") + 1);
-            generadas.add(emitir(item.getKey(), "RECIBIDA", numero, mes.toString(), hoy, item.getValue()));
-        }
-
-        return generadas;
+        return facturas;
     }
 
-    // ---------- Factura de un proveedor (carga manual) ----------
+    // b) una factura recibida por operador con los tramos compltos
+    private List<Factura> facturarOperadores(YearMonth mes, LocalDateTime desde, LocalDateTime hasta)
+            throws SQLException {
+
+        Map<Integer, List<FacturaDetalle>> lineasPorOperador = new LinkedHashMap<>();
+
+        for (Tramo t : tramoRepo.listarCompletadosSinFacturar(desde, hasta)) {
+            Vehiculo v = vehiculoRepo.buscarPorId(t.getVehiculoId());
+            FacturaDetalle d = new FacturaDetalle("Tramo " + t.getOrden() + " del envio N° " + t.getEnvioId()
+                    + " (" + t.getMedioTransporte() + ")", t.getCosto());
+            d.setTramoId(t.getId());
+            agregarLinea(lineasPorOperador, v.getOperadorId(), d);
+        }
+        List<Factura> facturas = new ArrayList<>();
+        for (Integer operadorId : lineasPorOperador.keySet()) {
+            String numero = String.format("FR-%08d", repo.contarPorTipo("RECIBIDA") + 1);
+            facturas.add(emitir(operadorId, "RECIBIDA", numero, mes.toString(), LocalDate.now(),
+                    lineasPorOperador.get(operadorId)));
+        }
+        return facturas;
+    }
+
+    // agrega la linea a la lista de esa parte
+    private void agregarLinea(Map<Integer, List<FacturaDetalle>> lineasPorParte, int parteId, FacturaDetalle d) {
+        List<FacturaDetalle> lineas = lineasPorParte.get(parteId);
+        if (lineas == null) {
+            lineas = new ArrayList<>();
+            lineasPorParte.put(parteId, lineas);
+        }
+        lineas.add(d);
+    }
+
     public Factura registrarFacturaProveedor(int proveedorId, String numeroProveedor,
             LocalDate fechaEmision, List<FacturaDetalle> lineas) throws SQLException {
 
@@ -108,20 +132,20 @@ public class FacturaService {
             throw new IllegalArgumentException("La parte elegida no es un proveedor.");
         }
         if (numeroProveedor == null || numeroProveedor.isBlank()) {
-            throw new IllegalArgumentException("El número de la factura del proveedor es obligatorio.");
+            throw new IllegalArgumentException("El numero de la factura del proveedor es obligatorio.");
         }
         if (fechaEmision == null || fechaEmision.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de emisión es obligatoria y no puede ser futura.");
+            throw new IllegalArgumentException("La fecha de emision es obligatoria y no puede ser futura.");
         }
         if (lineas == null || lineas.isEmpty()) {
-            throw new IllegalArgumentException("La factura tiene que tener al menos una línea.");
+            throw new IllegalArgumentException("La factura tiene que tener al menos una linea.");
         }
         for (FacturaDetalle d : lineas) {
             if (d.getConcepto() == null || d.getConcepto().isBlank()) {
-                throw new IllegalArgumentException("Cada línea tiene que tener un concepto.");
+                throw new IllegalArgumentException("Cada linea tiene que tener un concepto.");
             }
             if (d.getImporte() == null || d.getImporte().compareTo(BigDecimal.ZERO) <= 0) {
-                throw new IllegalArgumentException("El importe de cada línea tiene que ser mayor a 0.");
+                throw new IllegalArgumentException("El importe de cada linea tiene que ser mayor a 0.");
             }
             d.setEnvioId(null);
             d.setTramoId(null);
@@ -130,7 +154,7 @@ public class FacturaService {
 
         String numero = "FP-" + proveedorId + "-" + numeroProveedor.trim();
         if (repo.buscarPorNumero(numero) != null) {
-            throw new IllegalArgumentException("Esa factura del proveedor ya está cargada.");
+            throw new IllegalArgumentException("Esa factura del proveedor ya esta cargada.");
         }
 
         return emitir(proveedorId, "RECIBIDA", numero, YearMonth.from(fechaEmision).toString(),
@@ -144,24 +168,24 @@ public class FacturaService {
             throw new IllegalArgumentException("No existe una factura con id " + facturaId + ".");
         }
         if (!"PENDIENTE".equals(f.getEstado())) {
-            throw new IllegalArgumentException("Solo se anula una factura PENDIENTE (esta está "
+            throw new IllegalArgumentException("Solo se anula una factura PENDIENTE (esta esta "
                     + f.getEstado() + ").");
         }
 
         List<FacturaDetalle> lineas = repo.listarDetalle(facturaId);
         CuentaCorriente cuenta = cuentaService.obtenerCuenta(f.getParteId());
 
+        // arma un movimiento contrario
         String tipoContrario = "EMITIDA".equals(f.getTipo()) ? "CREDITO" : "DEBITO";
         MovimientoCuenta contra = new MovimientoCuenta(cuenta.getId(), tipoContrario, f.getImporteTotal(),
-                "Anulación de la factura " + f.getNumero(), f.getId(), null);
+                "Anulacion de la factura " + f.getNumero(), f.getId(), null);
         contra.setFecha(LocalDateTime.now());
 
         repo.anular(facturaId, contra);
-
-        // Los reportes de la factura quedan otra vez sin facturar (también la copia en Mongo).
         marcarReportes(lineas, null);
     }
 
+    // consultas sql
     public Factura buscarPorId(int id) throws SQLException {
         return repo.buscarPorId(id);
     }
@@ -199,13 +223,12 @@ public class FacturaService {
                 "Factura " + numero, null, null);
         m.setFecha(LocalDateTime.now());
 
+        // la transaccion de mysql
         int id = repo.guardar(f, lineas, m);
         f.setId(id);
         return f;
     }
 
-    // Copia en Mongo (reportes.facturaId). Si falla no se deshace la factura: MySQL es la fuente
-    // de verdad y la copia se puede volver a completar.
     private void marcarReportes(List<FacturaDetalle> lineas, Integer facturaId) {
         for (FacturaDetalle d : lineas) {
             if (d.getReporteId() != null) {
@@ -233,7 +256,7 @@ public class FacturaService {
         try {
             return YearMonth.parse(periodo);
         } catch (DateTimeParseException | NullPointerException e) {
-            throw new IllegalArgumentException("El período tiene que tener el formato AAAA-MM (ej. 2026-10).");
+            throw new IllegalArgumentException("El periodo tiene que tener el formato AAAA-MM (ej. 2026-10).");
         }
     }
 

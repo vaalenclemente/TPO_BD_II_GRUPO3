@@ -104,7 +104,7 @@ public class EnvioContenedorRepository {
         }
     }
 
-    // Envio en el que viaja un contenedor (asignacion sin liberar), o null si esta
+    // envio en el que viaja un contenedor (asignacion sin liberar), o null si esta
     // libre.
     public Integer buscarEnvioActivo(int contenedorId) throws SQLException {
         String sql = """

@@ -45,7 +45,8 @@ public class MonitoreoService {
             try {
                 sensores = redis.listarSinLatidoDesde(ahora.minusMinutes(r.getValor().longValue()));
             } catch (JedisException e) {
-                throw new IllegalStateException("Redis no está disponible: sin el heartbeat no se pueden detectar sensores inactivos.");
+                throw new IllegalStateException(
+                        "Redis no esta disponible: sin el heartbeat no se pueden detectar sensores inactivos.");
             }
 
             for (Integer sensorId : sensores) {

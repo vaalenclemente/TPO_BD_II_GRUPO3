@@ -21,7 +21,7 @@ public class SesionService {
     private final ParteRepository parteRepo = new ParteRepository();
     private final UsuarioService usuarioService = new UsuarioService();
 
-    // ---------- Login ----------
+    // ---------- login ----------
 
     public Sesion iniciarSesion(String email, String password) throws SQLException {
 
@@ -36,13 +36,13 @@ public class SesionService {
         }
 
         if (!"ACTIVO".equals(u.getEstado())) {
-            throw new IllegalArgumentException("El usuario está dado de baja.");
+            throw new IllegalArgumentException("El usuario esta dado de baja.");
         }
 
         if ("EXTERNO".equals(u.getTipoUsuario())) {
             Parte p = parteRepo.buscarPorId(u.getParteId());
             if (p == null || !"ACTIVO".equals(p.getEstado())) {
-                throw new IllegalArgumentException("La empresa del usuario está dada de baja.");
+                throw new IllegalArgumentException("La empresa del usuario esta dada de baja.");
             }
         }
 
@@ -58,27 +58,27 @@ public class SesionService {
         return s;
     }
 
-    // ---------- Uso de la sesión ----------
+    // ---------- uso de la sesion ----------
 
     public void validar(String token) throws SQLException {
 
         Sesion s = repo.buscarPorToken(token);
 
         if (s == null || !"ACTIVA".equals(s.getEstado())) {
-            throw new IllegalArgumentException("La sesión no está activa. Vuelva a iniciar sesión.");
+            throw new IllegalArgumentException("La sesion no esta activa. Vuelva a iniciar sesion.");
         }
 
         LocalDateTime ahora = LocalDateTime.now();
 
         if (s.getFechaUltimaActividad().isBefore(ahora.minusMinutes(MINUTOS_EXPIRACION))) {
             repo.finalizar(s.getId(), "EXPIRADA", ahora);
-            throw new IllegalArgumentException("La sesión expiró por inactividad. Vuelva a iniciar sesión.");
+            throw new IllegalArgumentException("La sesion expiro por inactividad. Vuelva a iniciar sesion.");
         }
 
         repo.actualizarActividad(s.getId(), ahora);
     }
 
-    // ---------- Logout ----------
+    // ---------- logout ----------
 
     public void cerrarSesion(String token) throws SQLException {
 
@@ -99,10 +99,10 @@ public class SesionService {
         Sesion s = repo.buscarPorId(id);
 
         if (s == null) {
-            throw new IllegalArgumentException("No existe una sesión con id " + id + ".");
+            throw new IllegalArgumentException("No existe una sesion con id " + id + ".");
         }
         if (!"ACTIVA".equals(s.getEstado())) {
-            throw new IllegalArgumentException("La sesión ya no está activa.");
+            throw new IllegalArgumentException("La sesion ya no esta activa.");
         }
 
         repo.finalizar(id, "CERRADA", LocalDateTime.now());

@@ -13,7 +13,7 @@ public class Factura {
     private LocalDate fechaEmision;
     private LocalDate fechaVencimiento;
     private BigDecimal importeTotal;
-    private String estado; // PENDIENTE | PAGADA | ANULADA
+    private String estado; // pendiente | pagada | anulada
 
     public Factura() {
 

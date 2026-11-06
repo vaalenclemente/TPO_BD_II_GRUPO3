@@ -122,9 +122,9 @@ public class CuentaCorrienteRepository {
         return registrarMovimiento(m, facturaPagada, "PAGADA");
     }
 
-    // Movimiento + saldo + estado de la factura en una sola transaccion.
-    // Lo usa el cobro/pago (factura -> PAGADA) y la anulacion de un pago (factura
-    // -> PENDIENTE).
+    // movimiento + saldo + estado de la factura en una sola transaccion.
+    // lo usa el cobro/pago (factura -> pagada) y la anulacion de un pago (factura
+    // -> pendiente).
     public int registrarMovimiento(MovimientoCuenta m, Integer facturaId, String estadoFactura) throws SQLException {
         try (Connection c = MySQLConexion.getConexion()) {
             c.setAutoCommit(false);

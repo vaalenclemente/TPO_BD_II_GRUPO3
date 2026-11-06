@@ -13,8 +13,8 @@ public class Envio {
     private LocalDateTime fechaSalida;
     private LocalDateTime fechaEntregaEstimada;
     private LocalDateTime fechaEntregaReal;
-    private String estado; // CREADO | EN_PREPARACION | EN_TRANSITO | EN_ADUANA | ENTREGADO | CANCELADO
-    private String prioridad; // ALTA | MEDIA | BAJA
+    private String estado; // creado | en_preparacion | en_transito | en_aduana | entregado | cancelado
+    private String prioridad; // alta | media | baja
     private BigDecimal pesoKg;
     private BigDecimal volumenM3;
     private String descripcionCarga;

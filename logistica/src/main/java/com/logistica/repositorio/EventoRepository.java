@@ -60,12 +60,12 @@ public class EventoRepository {
         return aTexto(doc.getObjectId("_id"));
     }
 
-    // indice { envioId: 1, fechaHora: 1 }
+    // indice { envioid: 1, fechahora: 1 }
     public List<Evento> listarPorEnvio(int envioId) {
         return listar(eq("envioId", envioId));
     }
 
-    // indice { contenedorIds: 1, fechaHora: 1 }
+    // indice { contenedorids: 1, fechahora: 1 }
     public List<Evento> listarPorContenedor(int contenedorId) {
         return listar(eq("contenedorIds", contenedorId));
     }

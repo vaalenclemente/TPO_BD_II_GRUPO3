@@ -59,13 +59,13 @@ public class ParteService {
         Parte p = buscarExistente(id);
 
         if ("INACTIVO".equals(p.getEstado())) {
-            throw new IllegalArgumentException("La parte ya está dada de baja.");
+            throw new IllegalArgumentException("La parte ya esta dada de baja.");
         }
 
         if ("CLIENTE".equals(p.getTipo())) {
             for (Envio e : envioRepo.listarPorCliente(id)) {
                 if (!"ENTREGADO".equals(e.getEstado()) && !"CANCELADO".equals(e.getEstado())) {
-                    throw new IllegalArgumentException("El cliente tiene envíos en curso (envío " + e.getId() + ").");
+                    throw new IllegalArgumentException("El cliente tiene envios en curso (envio " + e.getId() + ").");
                 }
             }
         }
@@ -73,7 +73,7 @@ public class ParteService {
         if ("OPERADOR".equals(p.getTipo())) {
             for (Vehiculo v : vehiculoRepo.listarPorOperador(id)) {
                 if (!"INACTIVO".equals(v.getEstado())) {
-                    throw new IllegalArgumentException("El operador tiene vehículos sin dar de baja (vehículo "
+                    throw new IllegalArgumentException("El operador tiene vehiculos sin dar de baja (vehiculo "
                             + v.getIdentificacion() + ").");
                 }
             }
@@ -86,7 +86,7 @@ public class ParteService {
         Parte p = buscarExistente(id);
 
         if ("ACTIVO".equals(p.getEstado())) {
-            throw new IllegalArgumentException("La parte ya está activa.");
+            throw new IllegalArgumentException("La parte ya esta activa.");
         }
 
         repo.cambiarEstado(id, "ACTIVO");
@@ -110,7 +110,7 @@ public class ParteService {
     private void validarDatos(Parte p) throws SQLException {
 
         if (p.getRazonSocial() == null || p.getRazonSocial().isBlank()) {
-            throw new IllegalArgumentException("La razón social es obligatoria.");
+            throw new IllegalArgumentException("La razon social es obligatoria.");
         }
 
         if (p.getEmail() == null || p.getEmail().isBlank()) {
@@ -122,7 +122,7 @@ public class ParteService {
         }
 
         if (paisRepo.buscarPorId(p.getPaisId()) == null) {
-            throw new IllegalArgumentException("No existe un país con id " + p.getPaisId() + ".");
+            throw new IllegalArgumentException("No existe un pais con id " + p.getPaisId() + ".");
         }
 
         if (p.getRubro() != null && !"PROVEEDOR".equals(p.getTipo())) {

@@ -25,7 +25,7 @@ public class Selector {
 
     public static int pais() throws SQLException {
         Consola.listar(ubicaciones.listarPaises());
-        return Consola.entero("Id del país");
+        return Consola.entero("Id del pais");
     }
 
     public static int ciudad(String etiqueta) throws SQLException {
@@ -33,7 +33,7 @@ public class Selector {
         int paisId = pais();
         List<Ciudad> ciudades = ubicaciones.listarCiudades(paisId);
         if (ciudades.isEmpty()) {
-            throw new IllegalArgumentException("Ese país no tiene ciudades cargadas.");
+            throw new IllegalArgumentException("Ese pais no tiene ciudades cargadas.");
         }
         Consola.listar(ciudades);
         while (true) {
@@ -81,11 +81,11 @@ public class Selector {
 
     public static int envio() throws SQLException {
         Consola.listar(envios.listar());
-        return Consola.entero("Id del envío");
+        return Consola.entero("Id del envio");
     }
 
     public static Integer envioOpcional() throws SQLException {
-        if (!Consola.confirmar("¿Es de un envío en particular?")) {
+        if (!Consola.confirmar("¿Es de un envio en particular?")) {
             return null;
         }
         return envio();
@@ -111,7 +111,7 @@ public class Selector {
 
     public static String periodo() {
         while (true) {
-            String valor = Consola.texto("Período (AAAA-MM)");
+            String valor = Consola.texto("Periodo (AAAA-MM)");
             if (valor.matches("\\d{4}-\\d{2}")) {
                 return valor;
             }

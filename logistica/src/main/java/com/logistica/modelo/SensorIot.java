@@ -8,8 +8,8 @@ public class SensorIot {
     private String tipo;
     private String fabricante;
     private LocalDate fechaInstalacion;
-    private String estado; // ACTIVO | INACTIVO | FALLA | BAJA
-    private Integer contenedorId; // null si no está instalado
+    private String estado; // activo | inactivo | falla | baja
+    private Integer contenedorId; // null si no esta instalado
 
     public SensorIot() {
 

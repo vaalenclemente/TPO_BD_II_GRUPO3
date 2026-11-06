@@ -18,7 +18,6 @@ public class GrupoService {
 
     public String crear(Grupo g) throws SQLException {
 
-        // a) validaciones
         validarNombre(g);
         if (g.getCreadoPor() == null) {
             g.setCreadoPor(UsuarioActual.get());
@@ -37,12 +36,12 @@ public class GrupoService {
             throw new IllegalArgumentException("Un grupo necesita al menos dos integrantes.");
         }
 
-        // b) valores del sistema
+        // valores
         g.setIntegrantes(new ArrayList<>(integrantes));
         g.setFechaCreacion(LocalDateTime.now());
         g.setEstado("ACTIVO");
 
-        // c) guardar
+        // guardo
         String id = repo.guardar(g);
         g.setId(id);
         return id;
@@ -58,7 +57,7 @@ public class GrupoService {
         Grupo g = buscarActivo(grupoId);
         validarInterno(usuarioId);
         if (g.getIntegrantes().contains(usuarioId)) {
-            throw new IllegalArgumentException("El usuario ya está en el grupo.");
+            throw new IllegalArgumentException("El usuario ya esta en el grupo.");
         }
         repo.agregarIntegrante(grupoId, usuarioId);
     }
@@ -66,10 +65,10 @@ public class GrupoService {
     public void quitarIntegrante(String grupoId, int usuarioId) {
         Grupo g = buscarActivo(grupoId);
         if (!g.getIntegrantes().contains(usuarioId)) {
-            throw new IllegalArgumentException("El usuario no está en el grupo.");
+            throw new IllegalArgumentException("El usuario no esta en el grupo.");
         }
         if (g.getIntegrantes().size() <= 2) {
-            throw new IllegalArgumentException("Un grupo necesita al menos dos integrantes: dé de baja el grupo.");
+            throw new IllegalArgumentException("Un grupo necesita al menos dos integrantes: de de baja el grupo.");
         }
         repo.quitarIntegrante(grupoId, usuarioId);
     }
@@ -99,7 +98,7 @@ public class GrupoService {
     Grupo buscarActivo(String id) {
         Grupo g = buscarExistente(id);
         if (!"ACTIVO".equals(g.getEstado())) {
-            throw new IllegalArgumentException("El grupo está dado de baja.");
+            throw new IllegalArgumentException("El grupo esta dado de baja.");
         }
         return g;
     }
@@ -124,7 +123,7 @@ public class GrupoService {
                     "El usuario " + usuarioId + " no es interno: los grupos son solo internos.");
         }
         if (!"ACTIVO".equals(u.getEstado())) {
-            throw new IllegalArgumentException("El usuario " + usuarioId + " está dado de baja.");
+            throw new IllegalArgumentException("El usuario " + usuarioId + " esta dado de baja.");
         }
     }
 

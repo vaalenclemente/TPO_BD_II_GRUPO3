@@ -9,9 +9,9 @@ public class MenuRed {
     public void mostrar() {
         while (true) {
             int opcion = Consola.menu("Red y recorridos (Neo4j)",
-                    "Ruta completa de un envío (seguimiento de trayectos)",
-                    "Reconstrucción del recorrido de un contenedor",
-                    "Red de relaciones clientes - operadores - envíos");
+                    "Ruta completa de un envio (seguimiento de trayectos)",
+                    "Reconstruccion del recorrido de un contenedor",
+                    "Red de relaciones clientes - operadores - envios");
             switch (opcion) {
                 case 0 -> {
                     return;

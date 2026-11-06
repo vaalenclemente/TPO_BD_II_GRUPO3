@@ -1,6 +1,6 @@
 package com.logistica.modelo;
 
-//fila del ranking de rutas con más incidentes .
+//fila del ranking de rutas con mas incidentes .
 public class RutaIncidentes {
 
     private String origen;

@@ -14,9 +14,9 @@ public class MenuMensajeria {
 
     public void mostrar() {
         while (true) {
-            int opcion = Consola.menu("Mensajería",
-                    "Ver la conversación con una parte", "Escribir a una parte", "Mis grupos", "Todos los grupos",
-                    "Crear grupo", "Ver la conversación de un grupo", "Escribir en un grupo",
+            int opcion = Consola.menu("Mensajeria",
+                    "Ver la conversacion con una parte", "Escribir a una parte", "Mis grupos", "Todos los grupos",
+                    "Crear grupo", "Ver la conversacion de un grupo", "Escribir en un grupo",
                     "Agregar integrante a un grupo", "Quitar integrante de un grupo", "Dar de baja un grupo");
             int yo = UsuarioActual.get();
             switch (opcion) {
@@ -33,7 +33,7 @@ public class MenuMensajeria {
                 case 4 -> Consola.ejecutar(() -> Consola.listar(grupos.listar()));
                 case 5 -> Consola.ejecutar(() -> {
                     String nombre = Consola.texto("Nombre del grupo");
-                    String descripcion = Consola.textoOpcional("Descripción");
+                    String descripcion = Consola.textoOpcional("Descripcion");
                     Consola.listar(usuarios.listar());
                     var integrantes = Consola.enteros("Ids de los integrantes (usted se agrega solo)");
                     String id = grupos.crear(new Grupo(nombre, descripcion, integrantes, yo));

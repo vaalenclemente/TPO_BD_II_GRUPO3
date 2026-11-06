@@ -87,7 +87,7 @@ public class CierreCuentaService {
         try {
             return YearMonth.parse(periodo);
         } catch (DateTimeParseException | NullPointerException e) {
-            throw new IllegalArgumentException("El período tiene que tener el formato AAAA-MM (ej. 2026-10).");
+            throw new IllegalArgumentException("El periodo tiene que tener el formato AAAA-MM (ej. 2026-10).");
         }
     }
 

@@ -20,11 +20,11 @@ public class VehiculoService {
         validarDatos(v);
 
         if (v.getIdentificacion() == null || v.getIdentificacion().isBlank()) {
-            throw new IllegalArgumentException("La identificación es obligatoria.");
+            throw new IllegalArgumentException("La identificacion es obligatoria.");
         }
 
         if (repo.buscarPorIdentificacion(v.getIdentificacion()) != null) {
-            throw new IllegalArgumentException("Ya existe un vehículo con esa identificación.");
+            throw new IllegalArgumentException("Ya existe un vehiculo con esa identificacion.");
         }
 
         // b) valores del sistema
@@ -81,28 +81,28 @@ public class VehiculoService {
         }
 
         if (v.getOperadorId() == null) {
-            throw new IllegalArgumentException("El operador logístico es obligatorio.");
+            throw new IllegalArgumentException("El operador logistico es obligatorio.");
         }
 
         Parte operador = parteRepo.buscarPorId(v.getOperadorId());
 
         if (operador == null || !"OPERADOR".equals(operador.getTipo())) {
-            throw new IllegalArgumentException("La parte elegida no es un operador logístico.");
+            throw new IllegalArgumentException("La parte elegida no es un operador logistico.");
         }
 
         if (!"ACTIVO".equals(operador.getEstado())) {
-            throw new IllegalArgumentException("El operador está dado de baja.");
+            throw new IllegalArgumentException("El operador esta dado de baja.");
         }
     }
 
     private Vehiculo buscarExistente(Integer id) throws SQLException {
         if (id == null) {
-            throw new IllegalArgumentException("Falta el id del vehículo.");
+            throw new IllegalArgumentException("Falta el id del vehiculo.");
         }
 
         Vehiculo v = repo.buscarPorId(id);
         if (v == null) {
-            throw new IllegalArgumentException("No existe un vehículo con id " + id + ".");
+            throw new IllegalArgumentException("No existe un vehiculo con id " + id + ".");
         }
         return v;
     }

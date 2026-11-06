@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 public class Vehiculo {
 
     private Integer id;
-    private String tipo; // BARCO | AVION | TREN | CAMION
+    private String tipo; // barco | avion | tren | camion
     private String identificacion;
     private BigDecimal capacidadKg;
-    private String estado; // ACTIVO | INACTIVO | EN_MANTENIMIENTO
-    private Integer operadorId; // parte de tipo OPERADOR
+    private String estado; // activo | inactivo | en_mantenimiento
+    private Integer operadorId; // parte de tipo operador
 
     public Vehiculo() {
 

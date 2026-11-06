@@ -1,24 +1,30 @@
 package com.logistica.servicio;
 
-import java.util.function.Supplier;
-
 import redis.clients.jedis.exceptions.JedisException;
 
 class RedisOpcional {
 
-    static void escribir(String que, Runnable accion) {
+    interface Escritura {
+        void ejecutar();
+    }
+
+    interface Lectura<T> {
+        T ejecutar();
+    }
+
+    static void escribir(String que, Escritura escritura) {
         try {
-            accion.run();
+            escritura.ejecutar();
         } catch (JedisException e) {
-            System.out.println("Aviso: Redis no está disponible, no se actualizó " + que + ".");
+            System.out.println("Aviso: Redis no esta disponible, no se actualizo " + que + ".");
         }
     }
 
-    static <T> T leer(Supplier<T> consulta) {
+    static <T> T leer(Lectura<T> lectura) {
         try {
-            return consulta.get();
+            return lectura.ejecutar();
         } catch (JedisException e) {
-            System.out.println("Aviso: Redis no está disponible, se consulta MongoDB.");
+            System.out.println("Aviso: Redis no esta disponible, se consulta MongoDB.");
             return null;
         }
     }

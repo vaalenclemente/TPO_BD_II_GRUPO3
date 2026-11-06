@@ -8,7 +8,7 @@ public class Contenedor {
     private String codigoInternacional;
     private String tipo;
     private BigDecimal capacidadKg;
-    private String estado; // DISPONIBLE | EN_USO | BAJA
+    private String estado; // disponible | en_uso | baja
 
     public Contenedor() {
 

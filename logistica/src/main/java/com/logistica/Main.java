@@ -26,36 +26,36 @@ public class Main {
 
         // verifico coneccion con mysql
         try (Connection c = MySQLConexion.getConexion()) {
-            System.out.println("Conexión a MySQL exitosa.");
+            System.out.println("Conexion a MySQL exitosa.");
         } catch (SQLException e) {
-            System.out.println("Falló la conexión MySQL: " + e.getMessage());
+            System.out.println("Fallo la conexion MySQL: " + e.getMessage());
             return;
         }
 
         // verifico coneccion con mongo
         try {
             MongodbConexion.getDatabase().runCommand(new Document("ping", 1));
-            System.out.println("Conexión a MongoDB exitosa.");
+            System.out.println("Conexion a MongoDB exitosa.");
         } catch (MongoException e) {
-            System.out.println("Falló la conexión MongoDB: " + e.getMessage());
+            System.out.println("Fallo la conexion MongoDB: " + e.getMessage());
             return;
         }
 
         // verifico coneccion con neo4j
         try {
             Neo4jConexion.getDriver().verifyConnectivity();
-            System.out.println("Conexión a neo4j exitosa.");
+            System.out.println("Conexion a neo4j exitosa.");
         } catch (Neo4jException e) {
-            System.out.println("Falló la conexión neo4j: " + e.getMessage());
+            System.out.println("Fallo la conexion neo4j: " + e.getMessage());
             return;
         }
 
         // verifico coneccion con redis
         try (Jedis j = RedisConexion.getConexion()) {
             j.ping();
-            System.out.println("Conexión a Redis exitosa.");
+            System.out.println("Conexion a Redis exitosa.");
         } catch (JedisException e) {
-            System.out.println("Falló la conexión Redis: " + e.getMessage());
+            System.out.println("Fallo la conexion Redis: " + e.getMessage());
         }
 
         // creo estructuras en db
@@ -63,7 +63,7 @@ public class Main {
             MySQLInicializacion.inicializar();
             System.out.println("Estructura MySQL lista.");
         } catch (SQLException e) {
-            System.out.println("Falló la creación de tablas MySQL: " + e.getMessage());
+            System.out.println("Fallo la creacion de tablas MySQL: " + e.getMessage());
             return;
         }
 
@@ -71,7 +71,7 @@ public class Main {
             MongoInicializacion.inicializar();
             System.out.println("Estructura Mongo lista.");
         } catch (MongoException e) {
-            System.out.println("Falló la creación de índices Mongo: " + e.getMessage());
+            System.out.println("Fallo la creacion de indices Mongo: " + e.getMessage());
             return;
         }
 
@@ -79,7 +79,7 @@ public class Main {
             Neo4jInicializacion.inicializar();
             System.out.println("Estructura Neo4j lista.");
         } catch (Neo4jException e) {
-            System.out.println("Falló la creación de índices Neo4j: " + e.getMessage());
+            System.out.println("Fallo la creacion de indices Neo4j: " + e.getMessage());
             return;
         }
 

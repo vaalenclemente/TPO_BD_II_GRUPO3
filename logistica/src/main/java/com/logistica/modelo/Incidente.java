@@ -15,9 +15,9 @@ public class Incidente {
     private String tramoMedio;
     private String tramoOrigen;
     private String tramoDestino;
-    private String tipo; // TEMPERATURA | HUMEDAD | VIBRACION | BATERIA | DEMORA | DANIO | ROBO | ADUANA
-    private String severidad; // ALTA | MEDIA | BAJA
-    private String estado; // ABIERTO | CERRADO
+    private String tipo; // temperatura | humedad | vibracion | bateria | demora | danio | robo | aduana
+    private String severidad; // alta | media | baja
+    private String estado; // abierto | cerrado
     private String descripcion;
     private List<String> alertaIds;
     private LocalDateTime fechaApertura;
@@ -181,7 +181,7 @@ public class Incidente {
 
     @Override
     public String toString() {
-        return id + " - envío " + envioId + " (" + clienteNombre + ") " + tipo + " " + severidad + " - " + estado
+        return id + " - envio " + envioId + " (" + clienteNombre + ") " + tipo + " " + severidad + " - " + estado
                 + (tramoId == null ? "" : " | tramo " + tramoOrigen + " → " + tramoDestino + " (" + tramoMedio + ")");
     }
 

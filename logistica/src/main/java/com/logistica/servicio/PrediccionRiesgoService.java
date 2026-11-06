@@ -16,13 +16,12 @@ import com.logistica.repositorio.LecturaSensorRepository;
 import com.logistica.repositorio.PrediccionRiesgoRepository;
 import com.logistica.repositorio.TramoRepository;
 
-//   factorDemora      = horas de atraso / 48 (tope 1)
-//   riesgoOperativo   = 0,20 × incidentes del envío + 0,05 × incidentes históricos en sus rutas
-//                       + 0,05 × anomalías de sus sensores (tope 1)
-//   riesgoClimatico   = exposición al clima del medio del tramo actual o próximo
-//                       (BARCO 0,5 · AVION 0,3 · CAMION 0,2 · TREN 0,1)
-//   probabilidadDemora = 0,5 × factorDemora + 0,3 × riesgoOperativo + 0,2 × riesgoClimatico
-//   nivelRiesgo        = ALTO ≥ 0,6 · MEDIO ≥ 0,3 · BAJO
+//   factordemora      = horas de atraso / 48 (tope 1)
+//   riesgooperativo   = 0,20 × incidentes del envio + 0,05 × incidentes historicos en sus rutas
+//                       + 0,05 × anomalias de sus sensores (tope 1)
+//   riesgoclimatico   = (barco 0,5 · avion 0,3 · camion 0,2 · tren 0,1)
+//   probabilidaddemora = 0,5 × factordemora + 0,3 × riesgooperativo + 0,2 × riesgoclimatico
+//   nivelriesgo        = alto ≥ 0,6 · medio ≥ 0,3 · bajo
 public class PrediccionRiesgoService {
 
     private static final List<String> ESTADOS_EN_CURSO = List.of("CREADO", "EN_PREPARACION", "EN_TRANSITO",
@@ -65,7 +64,7 @@ public class PrediccionRiesgoService {
 
         List<Tramo> tramos = tramoRepo.listarPorEnvio(e.getId());
 
-        // 1) Demora
+        // demora
         double demoraEnvio = horasDeAtraso(e.getFechaEntregaEstimada(), ahora);
         double demoraTramos = 0;
         String medioActual = null;
@@ -82,17 +81,17 @@ public class PrediccionRiesgoService {
                     demoraTramos += horasDeAtraso(t.getFechaLlegadaEstimada(), ahora);
                 }
                 if (medioActual == null) {
-                    medioActual = t.getMedioTransporte(); // el primero que no terminó = el actual o el próximo
+                    medioActual = t.getMedioTransporte();
                 }
             }
-            // 2) Historial de incidentes en la misma ruta
+            // historial de incidentes en la misma ruta
             String origen = ciudadRepo.buscarPorId(t.getOrigenCiudadId()).getNombre();
             String destino = ciudadRepo.buscarPorId(t.getDestinoCiudadId()).getNombre();
             incidentesRuta += (int) incidenteRepo.contarPorRuta(origen, destino);
         }
         double demora = Math.max(demoraEnvio, demoraTramos);
 
-        // 3) Anomalias de los sensores del envio
+        // anomalias de los sensores
         int anomalias = (int) lecturaRepo.contarAnomaliasPorEnvio(e.getId(), e.getFechaCreacion());
 
         int incidentesEnvio = (e.getCantidadIncidentes() == null) ? 0 : e.getCantidadIncidentes();
@@ -115,7 +114,7 @@ public class PrediccionRiesgoService {
         return p;
     }
 
-    // Horas que "real" paso a "estimada" (0 si llego a tiempo o todavia no vencio).
+    // horas que "real" paso a "estimada" ,0 si llego a tiempo
     private double horasDeAtraso(LocalDateTime estimada, LocalDateTime real) {
         if (estimada == null || real == null || !real.isAfter(estimada)) {
             return 0;
@@ -131,7 +130,7 @@ public class PrediccionRiesgoService {
             case "BARCO" -> 0.5;
             case "AVION" -> 0.3;
             case "CAMION" -> 0.2;
-            default -> 0.1; // TREN
+            default -> 0.1;
         };
     }
 

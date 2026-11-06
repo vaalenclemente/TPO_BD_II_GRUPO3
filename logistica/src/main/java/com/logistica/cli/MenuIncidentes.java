@@ -13,7 +13,7 @@ public class MenuIncidentes {
         while (true) {
             int opcion = Consola.menu("Reglas e incidentes",
                     "Listar reglas", "Alta de regla", "Modificar regla", "Activar regla", "Desactivar regla",
-                    "Incidentes abiertos", "Incidentes de un envío", "Abrir incidente",
+                    "Incidentes abiertos", "Incidentes de un envio", "Abrir incidente",
                     "Sumar alertas a un incidente", "Cerrar incidente");
             switch (opcion) {
                 case 0 -> {
@@ -37,7 +37,7 @@ public class MenuIncidentes {
                     String tipo = Consola.elegir("Tipo", "TEMPERATURA", "HUMEDAD", "VIBRACION", "BATERIA", "DEMORA",
                             "DANIO", "ROBO", "ADUANA", "OTRO");
                     String severidad = Selector.severidad();
-                    String descripcion = Consola.texto("Descripción");
+                    String descripcion = Consola.texto("Descripcion");
                     String id = incidentes.abrir(envioId, tipo, severidad, descripcion, Consola.textos("Ids de alertas"));
                     Consola.mostrar("Incidente abierto con id " + id + ".");
                 });
@@ -48,7 +48,7 @@ public class MenuIncidentes {
                 });
                 case 10 -> Consola.ejecutar(() -> {
                     String id = elegirIncidente();
-                    incidentes.cerrar(id, Consola.texto("Resolución"));
+                    incidentes.cerrar(id, Consola.texto("Resolucion"));
                     Consola.mostrar("Incidente cerrado.");
                 });
             }
@@ -57,9 +57,9 @@ public class MenuIncidentes {
 
     private void altaRegla() throws Exception {
         String nombre = Consola.texto("Nombre");
-        String metrica = Consola.elegir("Métrica", "TEMPERATURA", "HUMEDAD", "VIBRACION", "BATERIA", "INACTIVIDAD");
+        String metrica = Consola.elegir("Metrica", "TEMPERATURA", "HUMEDAD", "VIBRACION", "BATERIA", "INACTIVIDAD");
         String operador = Consola.elegir("Se dispara cuando el valor es", "MAYOR", "MENOR");
-        var valor = Consola.decimal("Valor límite" + ("INACTIVIDAD".equals(metrica) ? " (minutos)" : ""));
+        var valor = Consola.decimal("Valor limite" + ("INACTIVIDAD".equals(metrica) ? " (minutos)" : ""));
         String severidad = Selector.severidad();
         Integer envioId = Selector.envioOpcional();
         int id = reglas.alta(new Regla(nombre, metrica, operador, valor, severidad, envioId));
@@ -72,7 +72,7 @@ public class MenuIncidentes {
             throw new IllegalArgumentException("No existe esa regla.");
         }
         r.setNombre(Consola.texto("Nombre", r.getNombre()));
-        r.setValor(Consola.decimal("Valor límite", r.getValor()));
+        r.setValor(Consola.decimal("Valor limite", r.getValor()));
         if (Consola.confirmar("¿Cambiar la severidad (" + r.getSeveridad() + ")?")) {
             r.setSeveridad(Selector.severidad());
         }

@@ -10,7 +10,7 @@ public class PrediccionRiesgo {
     private Double probabilidadDemora; // 0 a 1
     private Double riesgoClimatico; // 0 a 1
     private Double riesgoOperativo; // 0 a 1
-    private String nivelRiesgo; // ALTO | MEDIO | BAJO
+    private String nivelRiesgo; // alto | medio | bajo
     private Double demoraActualHs; // factores usados
     private Integer incidentesRuta;
     private Integer anomaliasSensor;
@@ -101,7 +101,7 @@ public class PrediccionRiesgo {
 
     @Override
     public String toString() {
-        return "envío " + envioId + " - " + nivelRiesgo + " (prob. demora " + Math.round(probabilidadDemora * 100) + " %, demora actual " + demoraActualHs + " h, incidentes en la ruta " + incidentesRuta + ", anomalías " + anomaliasSensor + ")";
+        return "envio " + envioId + " - " + nivelRiesgo + " (prob. demora " + Math.round(probabilidadDemora * 100) + " %, demora actual " + demoraActualHs + " h, incidentes en la ruta " + incidentesRuta + ", anomalias " + anomaliasSensor + ")";
     }
 
 }

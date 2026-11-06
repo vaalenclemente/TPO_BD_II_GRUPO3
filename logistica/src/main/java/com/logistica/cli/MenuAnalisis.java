@@ -14,13 +14,13 @@ public class MenuAnalisis {
 
     public void mostrar() {
         while (true) {
-            int opcion = Consola.menu("Análisis y predicción (consultas internas, no se facturan)",
-                    "Envíos por país de destino", "Envíos por estado", "Envíos por cliente",
-                    "Ranking de clientes por volumen transportado", "Envíos demorados",
-                    "Tiempos de entrega (mín / máx / promedio) por cliente", "Promedio de incidentes",
-                    "Costos por tipo de transporte", "Desempeño histórico mensual",
-                    "Ranking de rutas con más incidentes", "Calcular predicción diaria de atrasos",
-                    "Últimas predicciones");
+            int opcion = Consola.menu("Analisis y prediccion (consultas internas, no se facturan)",
+                    "Envios por pais de destino", "Envios por estado", "Envios por cliente",
+                    "Ranking de clientes por volumen transportado", "Envios demorados",
+                    "Tiempos de entrega (min / max / promedio) por cliente", "Promedio de incidentes",
+                    "Costos por tipo de transporte", "Desempeño historico mensual",
+                    "Ranking de rutas con mas incidentes", "Calcular prediccion diaria de atrasos",
+                    "Ultimas predicciones");
             switch (opcion) {
                 case 0 -> {
                     return;
@@ -37,7 +37,7 @@ public class MenuAnalisis {
                 case 4 -> Consola.ejecutar(() -> {
                     LocalDate desde = desde();
                     LocalDate hasta = hasta();
-                    Consola.listar(estadisticas.rankingClientesPorVolumen(desde, hasta, Consola.entero("¿Cuántos?")));
+                    Consola.listar(estadisticas.rankingClientesPorVolumen(desde, hasta, Consola.entero("¿Cuantos?")));
                 });
                 case 5 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
@@ -51,12 +51,12 @@ public class MenuAnalisis {
                     Consola.mostrar("Total → " + estadisticas.tiempoPromedioEntrega(cliente, desde, hasta));
                 });
                 case 7 -> Consola.ejecutar(() -> {
-                    String agrupar = Consola.elegir("Agrupar por", "País de destino", "Estado del envío", "Cliente");
+                    String agrupar = Consola.elegir("Agrupar por", "Pais de destino", "Estado del envio", "Cliente");
                     LocalDate desde = desde();
                     LocalDate hasta = hasta();
                     switch (agrupar) {
-                        case "País de destino" -> Consola.listar(estadisticas.promedioIncidentesPorPais(null, desde, hasta));
-                        case "Estado del envío" -> Consola.listar(estadisticas.promedioIncidentesPorEstado(null, desde, hasta));
+                        case "Pais de destino" -> Consola.listar(estadisticas.promedioIncidentesPorPais(null, desde, hasta));
+                        case "Estado del envio" -> Consola.listar(estadisticas.promedioIncidentesPorEstado(null, desde, hasta));
                         default -> Consola.listar(estadisticas.promedioIncidentesPorCliente(desde, hasta));
                     }
                 });
@@ -75,7 +75,7 @@ public class MenuAnalisis {
                 });
                 case 11 -> Consola.ejecutar(() -> {
                     var calculadas = predicciones.calcularDiaria();
-                    Consola.mostrar(calculadas.size() + " envíos evaluados.");
+                    Consola.mostrar(calculadas.size() + " envios evaluados.");
                     Consola.listar(calculadas);
                 });
                 case 12 -> Consola.ejecutar(() -> {
@@ -87,11 +87,11 @@ public class MenuAnalisis {
     }
 
     private LocalDate desde() {
-        return Consola.fechaOpcional("Desde (Enter = sin límite)");
+        return Consola.fechaOpcional("Desde (Enter = sin limite)");
     }
 
     private LocalDate hasta() {
-        return Consola.fechaOpcional("Hasta (Enter = sin límite)");
+        return Consola.fechaOpcional("Hasta (Enter = sin limite)");
     }
 
 }

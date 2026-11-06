@@ -15,7 +15,7 @@ public class MenuActivos {
 
     public void mostrar() {
         while (true) {
-            int opcion = Consola.menu("Activos", "Contenedores", "Sensores", "Vehículos");
+            int opcion = Consola.menu("Activos", "Contenedores", "Sensores", "Vehiculos");
             switch (opcion) {
                 case 0 -> {
                     return;
@@ -38,7 +38,7 @@ public class MenuActivos {
                 case 1 -> Consola.ejecutar(() -> Consola.listar(contenedores.listar()));
                 case 2 -> Consola.ejecutar(() -> Consola.listar(contenedores.listarDisponibles()));
                 case 3 -> Consola.ejecutar(() -> {
-                    int id = contenedores.alta(new Contenedor(Consola.texto("Código internacional"),
+                    int id = contenedores.alta(new Contenedor(Consola.texto("Codigo internacional"),
                             Consola.texto("Tipo"), Consola.decimal("Capacidad (kg)")));
                     Consola.mostrar("Contenedor creado con id " + id + ".");
                 });
@@ -77,7 +77,7 @@ public class MenuActivos {
                 case 3 -> Consola.ejecutar(() -> {
                     String tipo = Consola.texto("Tipo");
                     String fabricante = Consola.texto("Fabricante");
-                    var fecha = Consola.fecha("Fecha de instalación");
+                    var fecha = Consola.fecha("Fecha de instalacion");
                     Integer contenedorId = Consola.confirmar("¿Instalarlo ya en un contenedor?") ? Selector.contenedor() : null;
                     int id = sensores.alta(new SensorIot(tipo, fabricante, fecha, contenedorId));
                     Consola.mostrar("Sensor creado con id " + id + ".");
@@ -116,7 +116,7 @@ public class MenuActivos {
 
     private void vehiculos() {
         while (true) {
-            int opcion = Consola.menu("Vehículos", "Listar", "Listar los de un operador", "Alta", "Modificar",
+            int opcion = Consola.menu("Vehiculos", "Listar", "Listar los de un operador", "Alta", "Modificar",
                     "Cambiar estado", "Dar de baja");
             switch (opcion) {
                 case 0 -> {
@@ -126,32 +126,32 @@ public class MenuActivos {
                 case 2 -> Consola.ejecutar(() -> Consola.listar(vehiculos.listarPorOperador(Selector.parte("OPERADOR"))));
                 case 3 -> Consola.ejecutar(() -> {
                     String tipo = Selector.medio();
-                    String identificacion = Consola.texto("Identificación (patente, matrícula)");
+                    String identificacion = Consola.texto("Identificacion (patente, matricula)");
                     var capacidad = Consola.decimal("Capacidad (kg)");
                     int operadorId = Selector.parte("OPERADOR");
                     int id = vehiculos.alta(new Vehiculo(tipo, identificacion, capacidad, operadorId));
-                    Consola.mostrar("Vehículo creado con id " + id + ".");
+                    Consola.mostrar("Vehiculo creado con id " + id + ".");
                 });
                 case 4 -> Consola.ejecutar(() -> {
                     Consola.listar(vehiculos.listar());
-                    Vehiculo v = vehiculos.buscarPorId(Consola.entero("Id del vehículo"));
+                    Vehiculo v = vehiculos.buscarPorId(Consola.entero("Id del vehiculo"));
                     if (v == null) {
-                        throw new IllegalArgumentException("No existe ese vehículo.");
+                        throw new IllegalArgumentException("No existe ese vehiculo.");
                     }
-                    v.setIdentificacion(Consola.texto("Identificación", v.getIdentificacion()));
+                    v.setIdentificacion(Consola.texto("Identificacion", v.getIdentificacion()));
                     v.setCapacidadKg(Consola.decimal("Capacidad (kg)", v.getCapacidadKg()));
                     vehiculos.modificar(v);
                     Consola.mostrar("Modificado.");
                 });
                 case 5 -> Consola.ejecutar(() -> {
                     Consola.listar(vehiculos.listar());
-                    int id = Consola.entero("Id del vehículo");
+                    int id = Consola.entero("Id del vehiculo");
                     vehiculos.cambiarEstado(id, Consola.elegir("Estado", "ACTIVO", "INACTIVO", "EN_MANTENIMIENTO"));
                     Consola.mostrar("Estado cambiado.");
                 });
                 case 6 -> Consola.ejecutar(() -> {
                     Consola.listar(vehiculos.listar());
-                    vehiculos.darDeBaja(Consola.entero("Id del vehículo"));
+                    vehiculos.darDeBaja(Consola.entero("Id del vehiculo"));
                     Consola.mostrar("Dado de baja.");
                 });
             }

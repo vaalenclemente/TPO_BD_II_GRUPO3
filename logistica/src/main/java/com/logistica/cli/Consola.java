@@ -27,12 +27,13 @@ public class Consola {
             System.out.println((i + 1) + ". " + opciones[i]);
         }
         System.out.println("0. Volver");
+        System.out.println("");
         while (true) {
-            Integer opcion = enteroOpcional("Opción");
+            Integer opcion = enteroOpcional("Opcion");
             if (opcion != null && opcion >= 0 && opcion <= opciones.length) {
                 return opcion;
             }
-            System.out.println("Opción inválida.");
+            System.out.println("Opcion invalida.");
         }
     }
 
@@ -41,10 +42,13 @@ public class Consola {
             accion.ejecutar();
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println("No se pudo: " + e.getMessage());
+            System.out.println("");
         } catch (SQLException e) {
             System.out.println("Error de MySQL: " + e.getMessage());
+            System.out.println("");
         } catch (Exception e) {
             System.out.println("Error inesperado: " + e.getMessage());
+            System.out.println("");
         }
     }
 
@@ -79,7 +83,7 @@ public class Consola {
             if (valor != null) {
                 return valor;
             }
-            System.out.println("Ingrese un número entero.");
+            System.out.println("Ingrese un numero entero.");
         }
     }
 
@@ -107,7 +111,7 @@ public class Consola {
                 }
                 return numeros;
             } catch (NumberFormatException e) {
-                System.out.println("Ingrese números separados por coma.");
+                System.out.println("Ingrese numeros separados por coma.");
             }
         }
     }
@@ -129,7 +133,7 @@ public class Consola {
             if (valor != null) {
                 return valor;
             }
-            System.out.println("Ingrese un número (con punto decimal).");
+            System.out.println("Ingrese un numero (con punto decimal).");
         }
     }
 
@@ -173,7 +177,7 @@ public class Consola {
         try {
             return LocalDate.parse(valor, FECHA);
         } catch (DateTimeParseException e) {
-            System.out.println("Fecha inválida, se omite.");
+            System.out.println("Fecha invalida, se omite.");
             return null;
         }
     }
@@ -197,7 +201,7 @@ public class Consola {
         try {
             return LocalDateTime.parse(valor, FECHA_HORA);
         } catch (DateTimeParseException e) {
-            System.out.println("Fecha inválida, se usa ahora.");
+            System.out.println("Fecha invalida, se usa ahora.");
             return LocalDateTime.now();
         }
     }
@@ -215,12 +219,13 @@ public class Consola {
         for (int i = 0; i < opciones.length; i++) {
             System.out.println("  " + (i + 1) + ". " + opciones[i]);
         }
+        System.out.println("");
         while (true) {
-            Integer opcion = enteroOpcional("Opción");
+            Integer opcion = enteroOpcional("Opcion");
             if (opcion != null && opcion >= 1 && opcion <= opciones.length) {
                 return opciones[opcion - 1];
             }
-            System.out.println("Opción inválida.");
+            System.out.println("Opcion invalida.");
         }
     }
 

@@ -40,7 +40,8 @@ public class RolService {
 
         int usuarios = repo.contarUsuarios(id);
         if (usuarios > 0) {
-            throw new IllegalArgumentException("El rol lo tienen " + usuarios + " usuarios: cámbieles el rol antes de eliminarlo.");
+            throw new IllegalArgumentException(
+                    "El rol lo tienen " + usuarios + " usuarios: cambieles el rol antes de eliminarlo.");
         }
 
         repo.borrar(id);
@@ -56,12 +57,12 @@ public class RolService {
 
     private void validarDatos(Rol r) {
         if (r.getDescripcion() == null || r.getDescripcion().isBlank()) {
-            throw new IllegalArgumentException("La descripción del rol es obligatoria.");
+            throw new IllegalArgumentException("La descripcion del rol es obligatoria.");
         }
         r.setDescripcion(r.getDescripcion().trim().toUpperCase());
 
         if (r.getNivelPermisos() == null || r.getNivelPermisos() < 1) {
-            throw new IllegalArgumentException("El nivel de permisos tiene que ser 1 o más.");
+            throw new IllegalArgumentException("El nivel de permisos tiene que ser 1 o mas.");
         }
     }
 

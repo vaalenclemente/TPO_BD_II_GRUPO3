@@ -8,7 +8,7 @@ public class MovimientoCuenta {
     private Integer id;
     private Integer cuentaId;
     private LocalDateTime fecha;
-    private String tipo; // DEBITO (suma al saldo), CREDITO (resta)
+    private String tipo; // debito (suma al saldo), credito (resta)
     private BigDecimal importe;
     private String concepto;
     private Integer facturaId;

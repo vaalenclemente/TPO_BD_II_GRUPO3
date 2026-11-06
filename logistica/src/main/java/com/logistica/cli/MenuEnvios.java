@@ -21,11 +21,11 @@ public class MenuEnvios {
 
     public void mostrar() {
         while (true) {
-            int opcion = Consola.menu("Envíos y tramos",
-                    "Listar envíos", "Ver un envío (contenedores, tramos y eventos)", "Crear envío",
-                    "Modificar envío", "Cambiar estado (preparación / aduana / tránsito)",
+            int opcion = Consola.menu("Envios y tramos",
+                    "Listar envios", "Ver un envio (contenedores, tramos y eventos)", "Crear envio",
+                    "Modificar envio", "Cambiar estado (preparacion / aduana / transito)",
                     "Asignar contenedor", "Quitar contenedor", "Agregar tramo", "Registrar salida de un tramo",
-                    "Registrar llegada de un tramo", "Registrar entrega", "Cancelar envío",
+                    "Registrar llegada de un tramo", "Registrar entrega", "Cancelar envio",
                     "Registrar evento manual");
             switch (opcion) {
                 case 0 -> {
@@ -70,16 +70,16 @@ public class MenuEnvios {
                 });
                 case 12 -> Consola.ejecutar(() -> {
                     int id = Selector.envio();
-                    if (Consola.confirmar("¿Seguro que quiere cancelar el envío " + id + "?")) {
+                    if (Consola.confirmar("¿Seguro que quiere cancelar el envio " + id + "?")) {
                         envios.cancelar(id);
-                        Consola.mostrar("Envío cancelado.");
+                        Consola.mostrar("Envio cancelado.");
                     }
                 });
                 case 13 -> Consola.ejecutar(() -> {
                     int id = Selector.envio();
                     String tipo = Consola.elegir("Tipo de evento", "DEMORA", "INSPECCION", "OTRO");
                     Integer ciudadId = Selector.ciudadOpcional("la ciudad");
-                    eventos.registrarManual(id, tipo, ciudadId, Consola.texto("Descripción"));
+                    eventos.registrarManual(id, tipo, ciudadId, Consola.texto("Descripcion"));
                     Consola.mostrar("Evento registrado.");
                 });
             }
@@ -100,7 +100,7 @@ public class MenuEnvios {
         int id = Selector.envio();
         Envio e = envios.buscarPorId(id);
         if (e == null) {
-            throw new IllegalArgumentException("No existe ese envío.");
+            throw new IllegalArgumentException("No existe ese envio.");
         }
         Consola.mostrar(e.toString());
         Consola.mostrar("-- Contenedores");
@@ -119,20 +119,20 @@ public class MenuEnvios {
         String prioridad = Consola.elegir("Prioridad", "ALTA", "MEDIA", "BAJA");
         var peso = Consola.decimal("Peso (kg)");
         var volumen = Consola.decimal("Volumen (m3)");
-        String descripcion = Consola.texto("Descripción de la carga");
+        String descripcion = Consola.texto("Descripcion de la carga");
         Consola.mostrar("Contenedores disponibles:");
         Consola.listar(contenedores.listarDisponibles());
         List<Integer> contenedorIds = Consola.enteros("Ids de los contenedores");
 
         Envio e = new Envio(clienteId, origen, destino, estimada, prioridad, peso, volumen, descripcion);
         int id = envios.crear(e, contenedorIds);
-        Consola.mostrar("Envío creado con id " + id + ".");
+        Consola.mostrar("Envio creado con id " + id + ".");
     }
 
     private void modificar() throws Exception {
         Envio e = envios.buscarPorId(Selector.envio());
         if (e == null) {
-            throw new IllegalArgumentException("No existe ese envío.");
+            throw new IllegalArgumentException("No existe ese envio.");
         }
         if (Consola.confirmar("¿Cambiar la fecha estimada de entrega (" + e.getFechaEntregaEstimada() + ")?")) {
             e.setFechaEntregaEstimada(Consola.fechaHora("Fecha estimada de entrega"));
@@ -142,7 +142,7 @@ public class MenuEnvios {
         }
         e.setPesoKg(Consola.decimal("Peso (kg)", e.getPesoKg()));
         e.setVolumenM3(Consola.decimal("Volumen (m3)", e.getVolumenM3()));
-        e.setDescripcionCarga(Consola.texto("Descripción de la carga", e.getDescripcionCarga()));
+        e.setDescripcionCarga(Consola.texto("Descripcion de la carga", e.getDescripcionCarga()));
         envios.modificar(e);
         Consola.mostrar("Modificado.");
     }
@@ -155,7 +155,7 @@ public class MenuEnvios {
         int origen = Selector.ciudad("Ciudad de origen del tramo");
         int destino = Selector.ciudad("Ciudad de destino del tramo");
         Consola.listar(vehiculos.listar());
-        int vehiculoId = Consola.entero("Id del vehículo (" + medio + ")");
+        int vehiculoId = Consola.entero("Id del vehiculo (" + medio + ")");
         LocalDateTime salida = Consola.fechaHora("Fecha de salida prevista");
         LocalDateTime llegada = Consola.fechaHora("Fecha de llegada estimada");
         var costo = Consola.decimal("Costo");

@@ -13,7 +13,7 @@ public class Reporte {
     private String codigo;
     private LocalDate desde;
     private LocalDate hasta;
-    private String estado; // SOLICITADO | GENERADO | ERROR
+    private String estado; // solicitado | generado | error
     private LocalDateTime fechaSolicitud;
     private LocalDateTime fechaGeneracion;
     private String contenido;

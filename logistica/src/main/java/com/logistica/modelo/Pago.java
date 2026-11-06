@@ -12,9 +12,9 @@ public class Pago {
     private Integer facturaId;
     private Integer parteId;
     private BigDecimal monto;
-    private String medioPago; // TRANSFERENCIA | EFECTIVO | CHEQUE | TARJETA
+    private String medioPago; // transferencia | efectivo | cheque | tarjeta
     private LocalDateTime fecha;
-    private String estado; // PENDIENTE | CONFIRMADO | RECHAZADO | ANULADO
+    private String estado; // pendiente | confirmado | rechazado | anulado
     private Integer movimientoId;
     private List<CambioEstado> historialEstados = new ArrayList<>();
 
@@ -107,7 +107,7 @@ public class Pago {
         this.historialEstados = historialEstados;
     }
 
-    // Un cambio de estado del pago: qué estado, cuándo y quién.
+    // un cambio de estado del pago: que estado, cuando y quien.
     public static class CambioEstado {
 
         private String estado;

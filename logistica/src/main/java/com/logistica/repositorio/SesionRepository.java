@@ -110,7 +110,7 @@ public class SesionRepository {
         }
     }
 
-    // Se llama en cada operacion del usuario
+    // se llama en cada operacion del usuario
     public void actualizarActividad(int id, LocalDateTime fecha) throws SQLException {
         String sql = """
                 UPDATE sesion SET fecha_ultima_actividad = ? WHERE id = ?

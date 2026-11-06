@@ -17,11 +17,11 @@ public class ContenedorService {
         validarDatos(c);
 
         if (c.getCodigoInternacional() == null || c.getCodigoInternacional().isBlank()) {
-            throw new IllegalArgumentException("El código internacional es obligatorio.");
+            throw new IllegalArgumentException("El codigo internacional es obligatorio.");
         }
 
         if (repo.buscarPorCodigo(c.getCodigoInternacional()) != null) {
-            throw new IllegalArgumentException("Ya existe un contenedor con ese código.");
+            throw new IllegalArgumentException("Ya existe un contenedor con ese codigo.");
         }
 
         // b) valores del sistema
@@ -43,7 +43,7 @@ public class ContenedorService {
         Contenedor c = buscarExistente(id);
 
         if ("EN_USO".equals(c.getEstado())) {
-            throw new IllegalArgumentException("No se puede dar de baja un contenedor que está en uso.");
+            throw new IllegalArgumentException("No se puede dar de baja un contenedor que esta en uso.");
         }
 
         repo.cambiarEstado(id, "BAJA");
@@ -53,7 +53,7 @@ public class ContenedorService {
         Contenedor c = buscarExistente(id);
 
         if (!"BAJA".equals(c.getEstado())) {
-            throw new IllegalArgumentException("El contenedor no está dado de baja.");
+            throw new IllegalArgumentException("El contenedor no esta dado de baja.");
         }
 
         repo.cambiarEstado(id, "DISPONIBLE");
@@ -63,7 +63,7 @@ public class ContenedorService {
         Contenedor c = buscarExistente(id);
 
         if (!"DISPONIBLE".equals(c.getEstado())) {
-            throw new IllegalArgumentException("El contenedor no está disponible.");
+            throw new IllegalArgumentException("El contenedor no esta disponible.");
         }
 
         repo.cambiarEstado(id, "EN_USO");

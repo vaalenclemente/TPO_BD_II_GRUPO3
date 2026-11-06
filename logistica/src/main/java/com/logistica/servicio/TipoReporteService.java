@@ -13,22 +13,22 @@ public class TipoReporteService {
 
     public int alta(TipoReporte t) throws SQLException {
 
-        // a) validaciones
+        // alidaciones
         if (t.getCodigo() == null || t.getCodigo().isBlank()) {
-            throw new IllegalArgumentException("El código es obligatorio.");
+            throw new IllegalArgumentException("El codigo es obligatorio.");
         }
         t.setCodigo(t.getCodigo().trim().toUpperCase());
 
         validarDatos(t);
 
         if (repo.buscarPorCodigo(t.getCodigo()) != null) {
-            throw new IllegalArgumentException("Ya existe un tipo de reporte con ese código.");
+            throw new IllegalArgumentException("Ya existe un tipo de reporte con ese codigo.");
         }
 
-        // b) valores del sistema
+        // valores del sistema
         t.setActivo(true);
 
-        // c) guardar
+        // guardar
         int id = repo.guardar(t);
         t.setId(id);
         return id;

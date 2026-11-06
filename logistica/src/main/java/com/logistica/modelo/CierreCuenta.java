@@ -9,7 +9,7 @@ public class CierreCuenta {
     private String id;
     private Integer cuentaId;
     private Integer parteId;
-    private String periodo; // AAAA-MM
+    private String periodo; // aaaa-mm
     private BigDecimal saldoInicial;
     private BigDecimal totalDebitos;
     private BigDecimal totalCreditos;
@@ -103,8 +103,8 @@ public class CierreCuenta {
 
     @Override
     public String toString() {
-        return periodo + " - cuenta " + cuentaId + " (parte " + parteId + "): inicial " + saldoInicial + " + débitos "
-                + totalDebitos + " - créditos " + totalCreditos + " = final " + saldoFinal;
+        return periodo + " - cuenta " + cuentaId + " (parte " + parteId + "): inicial " + saldoInicial + " + debitos "
+                + totalDebitos + " - creditos " + totalCreditos + " = final " + saldoFinal;
     }
 
 }

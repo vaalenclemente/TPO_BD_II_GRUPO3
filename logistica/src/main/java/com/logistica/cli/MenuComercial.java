@@ -20,7 +20,7 @@ public class MenuComercial {
     public void mostrar() {
         while (true) {
             int opcion = Consola.menu("Comercial",
-                    "Cuentas corrientes", "Movimientos de una parte", "Facturación automática del mes",
+                    "Cuentas corrientes", "Movimientos de una parte", "Facturacion automatica del mes",
                     "Cargar factura de un proveedor", "Facturas de una parte", "Facturas pendientes",
                     "Detalle de una factura", "Anular factura", "Registrar cobro / pago de una factura",
                     "Confirmar cobro / pago", "Rechazar cobro / pago", "Anular cobro / pago confirmado",
@@ -70,7 +70,7 @@ public class MenuComercial {
                 });
                 case 10 -> Consola.ejecutar(() -> {
                     pagos.confirmar(elegirPendiente());
-                    Consola.mostrar("Confirmado: la factura quedó PAGADA.");
+                    Consola.mostrar("Confirmado: la factura quedo PAGADA.");
                 });
                 case 11 -> Consola.ejecutar(() -> {
                     pagos.rechazar(elegirPendiente());
@@ -80,7 +80,7 @@ public class MenuComercial {
                     int facturaId = Consola.entero("Id de la factura");
                     Consola.listar(pagos.listarPorFactura(facturaId));
                     pagos.anular(Consola.texto("Id del cobro / pago"));
-                    Consola.mostrar("Anulado: la factura volvió a PENDIENTE.");
+                    Consola.mostrar("Anulado: la factura volvio a PENDIENTE.");
                 });
                 case 13 -> Consola.ejecutar(() -> Consola.listar(pagos.listarPendientes()));
                 case 14 -> Consola.ejecutar(() -> {
@@ -95,12 +95,12 @@ public class MenuComercial {
 
     private void facturaProveedor() throws Exception {
         int proveedorId = Selector.parte("PROVEEDOR");
-        String numero = Consola.texto("Número de la factura del proveedor");
-        var fecha = Consola.fecha("Fecha de emisión");
+        String numero = Consola.texto("Numero de la factura del proveedor");
+        var fecha = Consola.fecha("Fecha de emision");
         List<FacturaDetalle> lineas = new ArrayList<>();
         do {
             lineas.add(new FacturaDetalle(Consola.texto("Concepto"), Consola.decimal("Importe")));
-        } while (Consola.confirmar("¿Otra línea?"));
+        } while (Consola.confirmar("¿Otra linea?"));
 
         Factura f = facturas.registrarFacturaProveedor(proveedorId, numero, fecha, lineas);
         Consola.mostrar("Factura cargada: " + f);

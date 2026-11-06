@@ -39,7 +39,7 @@ public class EstadisticaService {
     public List<ResultadoAgrupado> rankingClientesPorVolumen(LocalDate desde, LocalDate hasta, int limite)
             throws SQLException {
         if (limite < 1) {
-            throw new IllegalArgumentException("La cantidad del ranking tiene que ser 1 o más.");
+            throw new IllegalArgumentException("La cantidad del ranking tiene que ser 1 o mas.");
         }
         return repo.rankingClientesPorVolumen(inicio(desde, hasta), fin(hasta), limite);
     }

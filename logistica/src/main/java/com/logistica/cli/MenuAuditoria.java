@@ -8,13 +8,13 @@ public class MenuAuditoria {
 
     public void mostrar() {
         while (true) {
-            int opcion = Consola.menu("Auditoría", "Últimos registros", "Registros de un usuario",
+            int opcion = Consola.menu("Auditoria", "Ultimos registros", "Registros de un usuario",
                     "Registros de una entidad");
             switch (opcion) {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(auditoria.listarUltimos(Consola.entero("¿Cuántos?"))));
+                case 1 -> Consola.ejecutar(() -> Consola.listar(auditoria.listarUltimos(Consola.entero("¿Cuantos?"))));
                 case 2 -> Consola.ejecutar(() -> Consola.listar(auditoria.listarPorUsuario(Selector.usuario())));
                 case 3 -> Consola.ejecutar(() -> {
                     String entidad = Consola.elegir("Entidad", "envio", "tramo", "incidente", "pago", "sensor", "sesion");

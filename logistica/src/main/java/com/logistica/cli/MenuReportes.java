@@ -14,7 +14,7 @@ public class MenuReportes {
         while (true) {
             int opcion = Consola.menu("Reportes facturables",
                     "Solicitar un reporte", "Reportes de un cliente", "Ver un reporte",
-                    "Tipos de reporte (catálogo)", "Alta de tipo de reporte", "Modificar tipo de reporte",
+                    "Tipos de reporte (catalogo)", "Alta de tipo de reporte", "Modificar tipo de reporte",
                     "Activar tipo de reporte", "Desactivar tipo de reporte");
             switch (opcion) {
                 case 0 -> {
@@ -32,10 +32,10 @@ public class MenuReportes {
                 });
                 case 4 -> Consola.ejecutar(() -> {
                     Consola.listar(tipos.listar());
-                    Consola.mostrar("Códigos que el sistema sabe generar: " + ReporteService.CODIGOS);
+                    Consola.mostrar("Codigos que el sistema sabe generar: " + ReporteService.CODIGOS);
                 });
                 case 5 -> Consola.ejecutar(() -> {
-                    int id = tipos.alta(new TipoReporte(Consola.texto("Código"), Consola.texto("Nombre"),
+                    int id = tipos.alta(new TipoReporte(Consola.texto("Codigo"), Consola.texto("Nombre"),
                             Consola.decimal("Precio")));
                     Consola.mostrar("Tipo de reporte creado con id " + id + ".");
                 });

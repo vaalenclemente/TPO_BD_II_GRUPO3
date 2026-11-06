@@ -235,7 +235,7 @@ public class FacturaRepository {
         }
     }
 
-    // Numeracion facturas propias: FE-00000001 (emitidas), FR-00000001 (recibidas).
+    // numeracion facturas propias: fe-00000001 (emitidas), fr-00000001 (recibidas).
     public int contarPorTipo(String tipo) throws SQLException {
         String sql = """
                 SELECT COUNT(*) AS cantidad FROM factura WHERE tipo = ?

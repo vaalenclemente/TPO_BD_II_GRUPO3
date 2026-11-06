@@ -19,10 +19,10 @@ import com.logistica.repositorio.LecturaSensorRepository;
 import com.logistica.repositorio.MonitoreoRedisRepository;
 import com.logistica.repositorio.SensorIotRepository;
 
-// Registro continuo de lecturas y detección de anomalias:
-//   lectura → se evaluan las reglas activas (MySQL) → lectura con/sin anomalia (Mongo)
-//           → una alerta por regla incumplida (Mongo)
-//           → si la alerta es ALTA y el contenedor viaja: incidente automatico (saga Mongo + MySQL)
+// registro continuo de lecturas y deteccion de anomalias:
+//   lectura → se evaluan las reglas activas (mysql) → lectura con/sin anomalia (mongo)
+//           → una alerta por regla incumplida (mongo)
+//           → si la alerta es alta y el contenedor viaja: incidente automatico (saga mongo + mysql)
 public class LecturaSensorService {
 
     private static final List<String> METRICAS = List.of("TEMPERATURA", "HUMEDAD", "VIBRACION", "BATERIA");
@@ -47,10 +47,10 @@ public class LecturaSensorService {
             throw new IllegalArgumentException("No existe un sensor con id " + l.getSensorId() + ".");
         }
         if ("BAJA".equals(sensor.getEstado())) {
-            throw new IllegalArgumentException("El sensor está dado de baja.");
+            throw new IllegalArgumentException("El sensor esta dado de baja.");
         }
         if (sensor.getContenedorId() == null) {
-            throw new IllegalArgumentException("El sensor no está instalado en ningún contenedor.");
+            throw new IllegalArgumentException("El sensor no esta instalado en ningun contenedor.");
         }
         validarMediciones(l);
 
@@ -91,7 +91,7 @@ public class LecturaSensorService {
 
         l.setId(repo.guardar(l));
 
-        RedisOpcional.escribir("la última lectura", () -> {
+        RedisOpcional.escribir("la ultima lectura", () -> {
             redis.guardarUltimaLectura(l);
             redis.guardarEstadoContenedor(l);
             if (l.getEnvioId() != null && l.getLatitud() != null) {
@@ -131,7 +131,7 @@ public class LecturaSensorService {
                 a.setIncidenteId(abierto.getId());
             } else {
                 String id = incidenteService.abrir(a.getEnvioId(), tipoIncidente, "ALTA",
-                        "Detectado automáticamente: " + a.getTipo() + " " + a.getValor() + " (límite " + a.getUmbral()
+                        "Detectado automaticamente: " + a.getTipo() + " " + a.getValor() + " (limite " + a.getUmbral()
                                 + ") en el sensor " + a.getSensorId(),
                         List.of(a.getId()));
                 a.setIncidenteId(id);
@@ -205,7 +205,7 @@ public class LecturaSensorService {
         return switch (metrica) {
             case "TEMPERATURA" -> "TEMP_FUERA_DE_RANGO";
             case "BATERIA" -> "BATERIA_BAJA";
-            default -> metrica; // HUMEDAD, VIBRACION
+            default -> metrica; // humedad, vibracion
         };
     }
 
@@ -228,17 +228,17 @@ public class LecturaSensorService {
     private void validarMediciones(LecturaSensor l) {
         if (l.getTemperatura() == null && l.getHumedad() == null && l.getVibracion() == null
                 && l.getNivelBateria() == null) {
-            throw new IllegalArgumentException("La lectura no tiene ninguna medición.");
+            throw new IllegalArgumentException("La lectura no tiene ninguna medicion.");
         }
         enRango(l.getHumedad(), 0, 100, "La humedad");
-        enRango(l.getNivelBateria(), 0, 100, "El nivel de batería");
+        enRango(l.getNivelBateria(), 0, 100, "El nivel de bateria");
         if (l.getVibracion() != null && l.getVibracion() < 0) {
-            throw new IllegalArgumentException("La vibración no puede ser negativa.");
+            throw new IllegalArgumentException("La vibracion no puede ser negativa.");
         }
         enRango(l.getLatitud(), -90, 90, "La latitud");
         enRango(l.getLongitud(), -180, 180, "La longitud");
         if ((l.getLatitud() == null) != (l.getLongitud() == null)) {
-            throw new IllegalArgumentException("La posición necesita latitud y longitud.");
+            throw new IllegalArgumentException("La posicion necesita latitud y longitud.");
         }
     }
 

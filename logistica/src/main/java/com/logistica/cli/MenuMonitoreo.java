@@ -17,9 +17,9 @@ public class MenuMonitoreo {
     public void mostrar() {
         while (true) {
             int opcion = Consola.menu("Monitoreo",
-                    "Registrar lectura de un sensor", "Última lectura de un sensor", "Estado actual de un contenedor",
-                    "Ubicación actual de un envío", "Historial de lecturas de un sensor",
-                    "Recorrido GPS de un contenedor", "Anomalías de temperatura", "Alertas activas",
+                    "Registrar lectura de un sensor", "Ultima lectura de un sensor", "Estado actual de un contenedor",
+                    "Ubicacion actual de un envio", "Historial de lecturas de un sensor",
+                    "Recorrido GPS de un contenedor", "Anomalias de temperatura", "Alertas activas",
                     "Reconocer una alerta", "Cerrar una alerta", "Detectar sensores inactivos",
                     "Reconstruir Redis desde MongoDB");
             switch (opcion) {
@@ -31,7 +31,7 @@ public class MenuMonitoreo {
                 case 3 -> Consola.ejecutar(() -> mostrarLectura(lecturas.estadoContenedor(Selector.contenedor())));
                 case 4 -> Consola.ejecutar(() -> {
                     LecturaSensor l = lecturas.ubicacionEnvio(Selector.envio());
-                    Consola.mostrar(l == null ? "Sin posición registrada."
+                    Consola.mostrar(l == null ? "Sin posicion registrada."
                             : "Lat " + l.getLatitud() + ", long " + l.getLongitud() + " (" + l.getFechaHora()
                                     + ", contenedor " + l.getContenedorId() + ")");
                 });
@@ -49,7 +49,7 @@ public class MenuMonitoreo {
                             Consola.finDelDia(hasta))) {
                         if (l.getLatitud() != null) {
                             Consola.mostrar(l.getFechaHora() + " | lat " + l.getLatitud() + ", long " + l.getLongitud()
-                                    + (l.getEnvioId() == null ? "" : " | envío " + l.getEnvioId()));
+                                    + (l.getEnvioId() == null ? "" : " | envio " + l.getEnvioId()));
                         }
                     }
                 });
@@ -81,8 +81,8 @@ public class MenuMonitoreo {
         int sensorId = Selector.sensor();
         Double temperatura = Consola.medicion("Temperatura (°C)");
         Double humedad = Consola.medicion("Humedad (%)");
-        Double vibracion = Consola.medicion("Vibración");
-        Double bateria = Consola.medicion("Batería (%)");
+        Double vibracion = Consola.medicion("Vibracion");
+        Double bateria = Consola.medicion("Bateria (%)");
         Double latitud = Consola.medicion("Latitud");
         Double longitud = (latitud == null) ? null : Consola.medicion("Longitud");
 
@@ -90,7 +90,7 @@ public class MenuMonitoreo {
         l.setFechaHora(Consola.fechaHoraOAhora("Fecha y hora de la lectura"));
 
         List<Alerta> nuevas = lecturas.registrar(l);
-        Consola.mostrar("Lectura registrada." + (l.getAnomaliaMetrica() == null ? "" : " ANOMALÍA de " + l.getAnomaliaMetrica() + "."));
+        Consola.mostrar("Lectura registrada." + (l.getAnomaliaMetrica() == null ? "" : " ANOMALIA de " + l.getAnomaliaMetrica() + "."));
         for (Alerta a : nuevas) {
             Consola.mostrar("ALERTA: " + a + (a.getIncidenteId() == null ? "" : " → incidente " + a.getIncidenteId()));
         }
@@ -99,7 +99,7 @@ public class MenuMonitoreo {
     private void mostrarLectura(LecturaSensor l) {
         Consola.mostrar(l == null ? "Sin lecturas." : l.toString()
                 + (l.getContenedorId() == null ? "" : " | contenedor " + l.getContenedorId())
-                + (l.getEnvioId() == null ? "" : " | envío " + l.getEnvioId()));
+                + (l.getEnvioId() == null ? "" : " | envio " + l.getEnvioId()));
     }
 
     private String elegirAlerta() {

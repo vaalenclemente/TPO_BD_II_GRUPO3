@@ -31,13 +31,13 @@ public class EventoService {
 
         Envio e = envioRepo.buscarPorId(envioId);
         if (e == null) {
-            throw new IllegalArgumentException("No existe un envío con id " + envioId + ".");
+            throw new IllegalArgumentException("No existe un envio con id " + envioId + ".");
         }
         if (!"DEMORA".equals(tipo) && !"INSPECCION".equals(tipo) && !"OTRO".equals(tipo)) {
             throw new IllegalArgumentException("El tipo de evento no es correcto (DEMORA, INSPECCION, OTRO).");
         }
         if (descripcion == null || descripcion.isBlank()) {
-            throw new IllegalArgumentException("La descripción es obligatoria.");
+            throw new IllegalArgumentException("La descripcion es obligatoria.");
         }
         if (ciudadId != null && ciudadRepo.buscarPorId(ciudadId) == null) {
             throw new IllegalArgumentException("No existe la ciudad " + ciudadId + ".");

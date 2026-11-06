@@ -77,7 +77,7 @@ public class CierreCuentaRepository {
         return aTexto(doc.getObjectId("_id"));
     }
 
-    // indice { cuentaId: 1, periodo: 1 }
+    // indice { cuentaid: 1, periodo: 1 }
     public boolean existe(int cuentaId, String periodo) {
         return coleccion().countDocuments(and(eq("cuentaId", cuentaId), eq("periodo", periodo))) > 0;
     }

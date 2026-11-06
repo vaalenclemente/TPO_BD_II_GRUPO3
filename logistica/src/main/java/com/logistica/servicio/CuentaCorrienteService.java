@@ -9,7 +9,7 @@ import com.logistica.modelo.Parte;
 import com.logistica.repositorio.CuentaCorrienteRepository;
 import com.logistica.repositorio.ParteRepository;
 
-// Saldo positivo = la parte nos debe; negativo = le debemos.
+// saldo positivo = la parte nos debe; negativo = le debemos.
 public class CuentaCorrienteService {
 
     private final CuentaCorrienteRepository repo = new CuentaCorrienteRepository();
