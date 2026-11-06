@@ -1,0 +1,5 @@
+logistica/target/
+logistica/dependency-reduced-pom.xml
+_to_delete/
+*.class
+subir_github.bat
