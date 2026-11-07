@@ -10,7 +10,7 @@ public class MongoInicializacion {
 
         MongoDatabase db = MongodbConexion.getDatabase();
 
-        // creo indices
+        // indices
 
         db.getCollection("lecturas_sensor").createIndex(new Document("sensor.sensorId", 1).append("fechaHora", -1));
 

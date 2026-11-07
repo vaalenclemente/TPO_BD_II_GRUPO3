@@ -18,7 +18,7 @@ public class SesionService {
     private final UsuarioRepository usuarioRepo = new UsuarioRepository();
     private final UsuarioService usuarioService = new UsuarioService();
 
-    // ---------- login ----------
+    // login
 
     public Sesion iniciarSesion(String email, String password) throws SQLException {
 
@@ -48,7 +48,7 @@ public class SesionService {
         return s;
     }
 
-    // ---------- uso de la sesion ----------
+    // uso de la sesion
 
     public void validar(String token) throws SQLException {
 
@@ -68,7 +68,7 @@ public class SesionService {
         repo.actualizarActividad(s.getId(), ahora);
     }
 
-    // ---------- logout ----------
+    // logout
 
     public void cerrarSesion(String token) throws SQLException {
 
