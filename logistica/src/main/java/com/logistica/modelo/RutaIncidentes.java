@@ -27,7 +27,7 @@ public class RutaIncidentes {
 
     @Override
     public String toString() {
-        return origen + " → " + destino + ": " + cantidad + " incidentes";
+        return origen + " -> " + destino + " | " + cantidad + " incidentes";
     }
 
 }

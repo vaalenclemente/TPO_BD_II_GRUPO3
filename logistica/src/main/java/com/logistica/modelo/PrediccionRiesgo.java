@@ -101,7 +101,9 @@ public class PrediccionRiesgo {
 
     @Override
     public String toString() {
-        return "envio " + envioId + " - " + nivelRiesgo + " (prob. demora " + Math.round(probabilidadDemora * 100) + " %, demora actual " + demoraActualHs + " h, incidentes en la ruta " + incidentesRuta + ", anomalias " + anomaliasSensor + ")";
+        return "Envio " + envioId + " | riesgo " + nivelRiesgo + " | prob. demora " + Math.round(probabilidadDemora * 100)
+                + " % | demora actual " + demoraActualHs + " h | incidentes en la ruta " + incidentesRuta
+                + " | anomalias " + anomaliasSensor + " | calculado " + Formato.fecha(fechaCalculo);
     }
 
 }

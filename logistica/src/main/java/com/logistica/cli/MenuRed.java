@@ -16,12 +16,12 @@ public class MenuRed {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(grafo.rutaEnvio(Selector.envio())));
-                case 2 -> Consola.ejecutar(() -> Consola.listar(grafo.recorridoContenedor(Selector.contenedor())));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(grafo.rutaEnvio(Selector.envio())));
+                case 2 -> Consola.ejecutar(() -> Vista.listar(grafo.recorridoContenedor(Selector.contenedor())));
                 case 3 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
                     Integer operador = Selector.parteOpcional("OPERADOR");
-                    Consola.listar(grafo.redRelaciones(cliente, operador));
+                    Vista.listar(grafo.redRelaciones(cliente, operador));
                 });
             }
         }

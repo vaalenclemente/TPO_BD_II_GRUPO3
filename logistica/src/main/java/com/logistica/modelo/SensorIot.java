@@ -73,7 +73,8 @@ public class SensorIot {
     @Override
     public String toString() {
         String ubicacion = (contenedorId == null) ? "sin contenedor" : "contenedor " + contenedorId;
-        return id + " - " + tipo + " " + fabricante + " - " + estado + " (" + ubicacion + ")";
+        return id + " | " + tipo + " " + fabricante + " | " + estado + " | " + ubicacion + " | instalado "
+                + Formato.fecha(fechaInstalacion);
     }
 
 }

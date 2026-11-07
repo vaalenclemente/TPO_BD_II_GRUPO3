@@ -62,7 +62,7 @@ public class Contenedor {
 
     @Override
     public String toString() {
-        return id + " - " + codigoInternacional + " (" + tipo + ", " + capacidadKg + " kg) - " + estado;
+        return id + " | " + codigoInternacional + " | " + tipo + " | " + Formato.kg(capacidadKg) + " | " + estado;
     }
 
 }

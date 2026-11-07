@@ -8,7 +8,7 @@ public class Mensaje {
     private String tipoConversacion; // parte | grupo
     private Integer parteId;
     private String parteTipo;
-    private String direccion; // saliente (interno → parte) entrante (parte → interno)
+    private String direccion; // saliente (interno -> parte) entrante (parte -> interno)
     private String grupoId;
     private Integer remitenteId;
     private String contenido;
@@ -101,7 +101,8 @@ public class Mensaje {
 
     @Override
     public String toString() {
-        return fechaHora + " [usuario " + remitenteId + (direccion == null ? "" : ", " + direccion) + "] " + contenido;
+        return Formato.fecha(fechaHora) + " | usuario " + remitenteId + (direccion == null ? "" : " | " + direccion)
+                + " | " + contenido;
     }
 
 }

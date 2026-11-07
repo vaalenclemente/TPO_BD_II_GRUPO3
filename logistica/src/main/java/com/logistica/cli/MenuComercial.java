@@ -29,33 +29,33 @@ public class MenuComercial {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(cuentas.listar()));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(cuentas.listar()));
                 case 2 -> Consola.ejecutar(() -> {
                     int parteId = Selector.cualquierParte();
-                    Consola.mostrar(cuentas.obtenerCuenta(parteId).toString());
-                    Consola.listar(cuentas.listarMovimientos(parteId));
+                    Vista.mostrar(cuentas.obtenerCuenta(parteId));
+                    Vista.listar(cuentas.listarMovimientos(parteId));
                 });
                 case 3 -> Consola.ejecutar(() -> {
                     List<Factura> nuevas = facturas.facturacionAutomatica(Selector.periodo());
                     Consola.mostrar(nuevas.size() + " facturas generadas.");
-                    Consola.listar(nuevas);
+                    Vista.listar(nuevas);
                 });
                 case 4 -> Consola.ejecutar(this::facturaProveedor);
-                case 5 -> Consola.ejecutar(() -> Consola.listar(facturas.listarPorParte(Selector.cualquierParte())));
-                case 6 -> Consola.ejecutar(() -> Consola.listar(facturas.listarPendientes(
+                case 5 -> Consola.ejecutar(() -> Vista.listar(facturas.listarPorParte(Selector.cualquierParte())));
+                case 6 -> Consola.ejecutar(() -> Vista.listar(facturas.listarPendientes(
                         Consola.elegir("Tipo", "EMITIDA", "RECIBIDA"))));
                 case 7 -> Consola.ejecutar(() -> {
-                    Factura f = facturas.buscarPorId(Consola.entero("Id de la factura"));
+                    Factura f = facturas.buscarPorId(elegirFactura());
                     if (f == null) {
                         throw new IllegalArgumentException("No existe esa factura.");
                     }
-                    Consola.mostrar(f.toString());
-                    Consola.listar(facturas.listarDetalle(f.getId()));
+                    Vista.mostrar(f);
+                    Vista.listar(facturas.listarDetalle(f.getId()));
                     Consola.mostrar("-- Cobros / pagos");
-                    Consola.listar(pagos.listarPorFactura(f.getId()));
+                    Vista.listar(pagos.listarPorFactura(f.getId()));
                 });
                 case 8 -> Consola.ejecutar(() -> {
-                    int id = Consola.entero("Id de la factura");
+                    int id = elegirFacturaPendiente();
                     if (Consola.confirmar("¿Seguro que quiere anular la factura " + id + "?")) {
                         facturas.anular(id);
                         Consola.mostrar("Factura anulada.");
@@ -63,7 +63,7 @@ public class MenuComercial {
                 });
                 case 9 -> Consola.ejecutar(() -> {
                     String tipo = Consola.elegir("Tipo de factura", "EMITIDA", "RECIBIDA");
-                    Consola.listar(facturas.listarPendientes(tipo));
+                    Vista.listar(facturas.listarPendientes(tipo));
                     int facturaId = Consola.entero("Id de la factura");
                     String medio = Consola.elegir("Medio de pago", "TRANSFERENCIA", "EFECTIVO", "CHEQUE", "TARJETA");
                     Consola.mostrar("Registrado (PENDIENTE) con id " + pagos.registrar(facturaId, medio) + ".");
@@ -77,18 +77,18 @@ public class MenuComercial {
                     Consola.mostrar("Rechazado.");
                 });
                 case 12 -> Consola.ejecutar(() -> {
-                    int facturaId = Consola.entero("Id de la factura");
-                    Consola.listar(pagos.listarPorFactura(facturaId));
+                    int facturaId = elegirFactura();
+                    Vista.listar(pagos.listarPorFactura(facturaId));
                     pagos.anular(Consola.texto("Id del cobro / pago"));
                     Consola.mostrar("Anulado: la factura volvio a PENDIENTE.");
                 });
-                case 13 -> Consola.ejecutar(() -> Consola.listar(pagos.listarPendientes()));
+                case 13 -> Consola.ejecutar(() -> Vista.listar(pagos.listarPendientes()));
                 case 14 -> Consola.ejecutar(() -> {
                     var nuevos = cierres.cerrarMes(Selector.periodo());
                     Consola.mostrar(nuevos.size() + " cuentas cerradas.");
-                    Consola.listar(nuevos);
+                    Vista.listar(nuevos);
                 });
-                case 15 -> Consola.ejecutar(() -> Consola.listar(cierres.listarPorParte(Selector.cualquierParte())));
+                case 15 -> Consola.ejecutar(() -> Vista.listar(cierres.listarPorParte(Selector.cualquierParte())));
             }
         }
     }
@@ -106,8 +106,18 @@ public class MenuComercial {
         Consola.mostrar("Factura cargada: " + f);
     }
 
-    private String elegirPendiente() {
-        Consola.listar(pagos.listarPendientes());
+    private int elegirFactura() throws Exception {
+        Vista.listar(facturas.listarPorParte(Selector.cualquierParte()));
+        return Consola.entero("Id de la factura");
+    }
+
+    private int elegirFacturaPendiente() throws Exception {
+        Vista.listar(facturas.listarPendientes(Consola.elegir("Tipo de factura", "EMITIDA", "RECIBIDA")));
+        return Consola.entero("Id de la factura");
+    }
+
+    private String elegirPendiente() throws Exception {
+        Vista.listar(pagos.listarPendientes());
         return Consola.texto("Id del cobro / pago");
     }
 

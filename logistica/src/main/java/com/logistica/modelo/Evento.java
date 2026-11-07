@@ -109,7 +109,8 @@ public class Evento {
 
     @Override
     public String toString() {
-        return fechaHora + " - " + tipo + (ciudad == null ? "" : " en " + ciudad + ", " + pais) + " - " + descripcion;
+        return Formato.fecha(fechaHora) + " | " + tipo + (ciudad == null ? "" : " | " + ciudad + ", " + pais)
+                + " | " + descripcion;
     }
 
 }

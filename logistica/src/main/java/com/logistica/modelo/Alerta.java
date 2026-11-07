@@ -119,8 +119,9 @@ public class Alerta {
 
     @Override
     public String toString() {
-        return id + " - " + tipo + " (" + severidad + ") sensor " + sensorId
-                + (envioId == null ? "" : ", envio " + envioId) + ": " + valor + " / limite " + umbral + " - " + estado;
+        return id + " | " + tipo + " " + severidad + " | sensor " + sensorId
+                + (envioId == null ? "" : " | envio " + envioId) + " | valor " + valor + " (limite " + umbral + ")"
+                + " | " + Formato.fecha(fecha) + " | " + estado + (incidenteId == null ? "" : " | incidente " + incidenteId);
     }
 
 }

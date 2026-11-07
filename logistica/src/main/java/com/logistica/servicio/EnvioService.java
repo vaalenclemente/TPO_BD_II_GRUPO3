@@ -85,7 +85,7 @@ public class EnvioService {
             }
 
             String eventoId = eventos.registrar(id, "CREADO", origen.getId(),
-                    "Envio creado: " + origen.getNombre() + " → " + destino.getNombre());
+                    "Envio creado: " + origen.getNombre() + " -> " + destino.getNombre());
             saga.paso("MONGO_EVENTO_CREADO", () -> eventos.borrar(eventoId));
 
             saga.completar();
@@ -149,7 +149,7 @@ public class EnvioService {
                     e.getPesoKg().doubleValue()));
 
             String eventoId = eventos.registrar(envioId, nuevoEstado, eventos.ciudadActual(e),
-                    "Cambio de estado: " + actual + " → " + nuevoEstado);
+                    "Cambio de estado: " + actual + " -> " + nuevoEstado);
             saga.paso("MONGO_EVENTO_" + nuevoEstado, () -> eventos.borrar(eventoId));
 
             saga.completar();

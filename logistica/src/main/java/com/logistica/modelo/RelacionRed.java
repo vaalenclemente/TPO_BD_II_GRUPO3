@@ -41,7 +41,7 @@ public class RelacionRed {
 
     @Override
     public String toString() {
-        return cliente + " → " + operador + ": " + envioIds.size() + " envios " + envioIds;
+        return cliente + " -> " + operador + " | " + envioIds.size() + " envios " + envioIds;
     }
 
 }

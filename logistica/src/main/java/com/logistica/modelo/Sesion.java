@@ -79,7 +79,8 @@ public class Sesion {
 
     @Override
     public String toString() {
-        return id + " - usuario " + usuarioId + " - " + estado + " (inicio " + fechaInicio + ")";
+        return id + " | usuario " + usuarioId + " | " + estado + " | inicio " + Formato.fecha(fechaInicio)
+                + " | ultima actividad " + Formato.fecha(fechaUltimaActividad);
     }
 
 }

@@ -15,7 +15,7 @@ public class MenuPartes {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(partes.listarPorTipo(tipo)));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(partes.listarPorTipo(tipo)));
                 case 2 -> Consola.ejecutar(() -> alta(tipo));
                 case 3 -> Consola.ejecutar(() -> modificar(tipo));
                 case 4 -> Consola.ejecutar(() -> {

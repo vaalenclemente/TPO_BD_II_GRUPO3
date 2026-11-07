@@ -91,8 +91,8 @@ public class EnvioGrafoRepository {
         }
     }
 
-    // relaciones pasa_por (envio → ciudad destino del tramo) y gestionado_por
-    // (envio → operador).
+    // relaciones pasa_por (envio -> ciudad destino del tramo) y gestionado_por
+    // (envio -> operador).
     public void agregarTramo(int envioId, int tramoId, int orden, String medio,
             int destinoId, String destinoNombre, String destinoPais,
             int operadorId, String operadorNombre,

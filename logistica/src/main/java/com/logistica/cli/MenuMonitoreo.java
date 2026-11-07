@@ -39,7 +39,7 @@ public class MenuMonitoreo {
                     int sensorId = Selector.sensor();
                     var desde = Consola.fechaOpcional("Desde");
                     var hasta = Consola.fechaOpcional("Hasta");
-                    Consola.listar(lecturas.historialSensor(sensorId, Consola.inicioDelDia(desde), Consola.finDelDia(hasta)));
+                    Vista.listar(lecturas.historialSensor(sensorId, Consola.inicioDelDia(desde), Consola.finDelDia(hasta)));
                 });
                 case 6 -> Consola.ejecutar(() -> {
                     int contenedorId = Selector.contenedor();
@@ -56,9 +56,9 @@ public class MenuMonitoreo {
                 case 7 -> Consola.ejecutar(() -> {
                     var desde = Consola.fechaOpcional("Desde");
                     var hasta = Consola.fechaOpcional("Hasta");
-                    Consola.listar(lecturas.anomalias("TEMPERATURA", Consola.inicioDelDia(desde), Consola.finDelDia(hasta)));
+                    Vista.listar(lecturas.anomalias("TEMPERATURA", Consola.inicioDelDia(desde), Consola.finDelDia(hasta)));
                 });
-                case 8 -> Consola.ejecutar(() -> Consola.listar(alertas.listarNoCerradas()));
+                case 8 -> Consola.ejecutar(() -> Vista.listar(alertas.listarNoCerradas()));
                 case 9 -> Consola.ejecutar(() -> {
                     alertas.reconocer(elegirAlerta());
                     Consola.mostrar("Alerta reconocida.");
@@ -70,7 +70,7 @@ public class MenuMonitoreo {
                 case 11 -> Consola.ejecutar(() -> {
                     List<Alerta> nuevas = monitoreo.detectarSensoresInactivos();
                     Consola.mostrar(nuevas.size() + " sensores inactivos nuevos.");
-                    Consola.listar(nuevas);
+                    Vista.listar(nuevas);
                 });
                 case 12 -> Consola.ejecutar(() -> Consola.mostrar(monitoreo.reconstruir()));
             }
@@ -92,7 +92,7 @@ public class MenuMonitoreo {
         List<Alerta> nuevas = lecturas.registrar(l);
         Consola.mostrar("Lectura registrada." + (l.getAnomaliaMetrica() == null ? "" : " ANOMALIA de " + l.getAnomaliaMetrica() + "."));
         for (Alerta a : nuevas) {
-            Consola.mostrar("ALERTA: " + a + (a.getIncidenteId() == null ? "" : " → incidente " + a.getIncidenteId()));
+            Consola.mostrar("ALERTA: " + a + (a.getIncidenteId() == null ? "" : " -> incidente " + a.getIncidenteId()));
         }
     }
 
@@ -102,8 +102,8 @@ public class MenuMonitoreo {
                 + (l.getEnvioId() == null ? "" : " | envio " + l.getEnvioId()));
     }
 
-    private String elegirAlerta() {
-        Consola.listar(alertas.listarNoCerradas());
+    private String elegirAlerta() throws Exception {
+        Vista.listar(alertas.listarNoCerradas());
         return Consola.texto("Id de la alerta");
     }
 

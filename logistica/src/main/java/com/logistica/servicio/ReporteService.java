@@ -44,12 +44,13 @@ public class ReporteService {
     private final LecturaSensorRepository lecturaRepo = new LecturaSensorRepository();
     private final PrediccionRiesgoRepository prediccionRepo = new PrediccionRiesgoRepository();
     private final EstadisticaRepository estadisticaRepo = new EstadisticaRepository();
+    private final AuditoriaService auditoria = new AuditoriaService();
 
     public Reporte solicitar(Reporte r) throws SQLException {
 
         Parte cliente = (r.getParteId() == null) ? null : parteRepo.buscarPorId(r.getParteId());
         if (cliente == null || !"CLIENTE".equals(cliente.getTipo())) {
-            throw new IllegalArgumentException("Los reportes los pide un cliente.");
+            throw new IllegalArgumentException("El reporte tiene que ser para un cliente.");
         }
         if (!"ACTIVO".equals(cliente.getEstado())) {
             throw new IllegalArgumentException("El cliente esta dado de baja.");
@@ -88,6 +89,7 @@ public class ReporteService {
             r.setError(ex.getMessage());
         }
         repo.guardarResultado(r.getId(), r.getEstado(), r.getContenido(), r.getFechaGeneracion(), r.getError());
+        auditoria.registrar("SOLICITAR_REPORTE", "reporte", r.getId(), "GENERADO".equals(r.getEstado()) ? "OK" : "ERROR");
         return r;
     }
 
@@ -152,7 +154,7 @@ public class ReporteService {
         String texto = "";
         List<EnvioDemorado> demorados = estadisticaRepo.enviosDemorados(clienteId, desde, hasta, LocalDateTime.now());
         for (EnvioDemorado d : demorados) {
-            texto += "Envio " + d.getEnvioId() + " → " + d.getDestino() + " | " + d.getEstado()
+            texto += "Envio " + d.getEnvioId() + " -> " + d.getDestino() + " | " + d.getEstado()
                     + " | estimada " + d.getFechaEntregaEstimada().format(FECHA_HORA)
                     + (d.getFechaEntregaReal() == null ? " | sin entregar" : " | entregado " + d.getFechaEntregaReal().format(FECHA_HORA))
                     + " | " + d.getHorasDemora() + " h de demora\n";
@@ -216,7 +218,7 @@ public class ReporteService {
             cantidad++;
             texto += i.getFechaApertura().format(FECHA_HORA) + " | envio " + i.getEnvioId() + " | " + i.getTipo()
                     + " (" + i.getSeveridad() + ")"
-                    + (i.getTramoId() == null ? "" : " | tramo " + i.getTramoOrigen() + " → " + i.getTramoDestino())
+                    + (i.getTramoId() == null ? "" : " | tramo " + i.getTramoOrigen() + " -> " + i.getTramoDestino())
                     + " | " + i.getDescripcion() + "\n";
         }
         return texto + "Total: " + cantidad + "\n";

@@ -1,19 +1,22 @@
 package com.logistica.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Rol {
 
     private Integer id;
     private String descripcion;
-    private Integer nivelPermisos;
+    // codigos de los permisos del rol (solo lectura: se cargan desde rol_permiso)
+    private List<String> permisos = new ArrayList<>();
 
     public Rol() {
 
     }
 
-    public Rol(Integer id, String descripcion, Integer nivelPermisos) {
+    public Rol(Integer id, String descripcion) {
         this.id = id;
         this.descripcion = descripcion;
-        this.nivelPermisos = nivelPermisos;
     }
 
     public Integer getId() {
@@ -32,17 +35,18 @@ public class Rol {
         this.descripcion = descripcion;
     }
 
-    public Integer getNivelPermisos() {
-        return nivelPermisos;
+    public List<String> getPermisos() {
+        return permisos;
     }
 
-    public void setNivelPermisos(Integer nivelPermisos) {
-        this.nivelPermisos = nivelPermisos;
+    public void setPermisos(List<String> permisos) {
+        this.permisos = permisos;
     }
 
     @Override
     public String toString() {
-        return id + " - " + descripcion;
+        String lista = permisos.isEmpty() ? "sin permisos" : String.join(", ", permisos);
+        return id + " - " + descripcion + " [" + lista + "]";
     }
 
 }

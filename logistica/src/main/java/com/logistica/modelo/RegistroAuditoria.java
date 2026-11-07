@@ -118,9 +118,10 @@ public class RegistroAuditoria {
 
     @Override
     public String toString() {
-        return fecha + " - usuario " + usuarioId + " - " + accion + " " + entidad + " " + entidadId
-                + (campo == null ? "" : " (" + campo + ": " + antes + " → " + despues + ")") + " - " + resultado
-                + (sagaId == null ? "" : " [saga " + sagaId + "]");
+        return Formato.fecha(fecha) + " | " + (usuarioId == null ? "sistema" : "usuario " + usuarioId) + " | " + accion
+                + " | " + entidad + " " + entidadId
+                + (campo == null ? "" : " | " + campo + ": " + antes + " -> " + despues) + " | " + resultado
+                + (sagaId == null ? "" : " | saga " + sagaId);
     }
 
 }

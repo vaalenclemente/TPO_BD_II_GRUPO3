@@ -52,7 +52,7 @@ public class CuentaCorriente {
 
     @Override
     public String toString() {
-        return "cuenta " + id + " - parte " + parteId + " - saldo $" + saldo;
+        return "Cuenta " + id + " | parte " + parteId + " | saldo " + Formato.dinero(saldo);
     }
 
 }

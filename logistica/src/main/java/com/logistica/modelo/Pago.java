@@ -134,13 +134,14 @@ public class Pago {
 
         @Override
         public String toString() {
-            return fecha + " " + estado + (usuarioId == null ? "" : " (usuario " + usuarioId + ")");
+            return Formato.fecha(fecha) + " " + estado + (usuarioId == null ? "" : " (usuario " + usuarioId + ")");
         }
     }
 
     @Override
     public String toString() {
-        return id + " - " + tipo + " factura " + facturaId + " - $" + monto + " (" + medioPago + ") - " + estado;
+        return id + " | " + tipo + " | factura " + facturaId + " | " + Formato.dinero(monto) + " | " + medioPago
+                + " | " + Formato.fecha(fecha) + " | " + estado;
     }
 
 }

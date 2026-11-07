@@ -118,10 +118,6 @@ public class GrupoService {
         if (u == null) {
             throw new IllegalArgumentException("No existe un usuario con id " + usuarioId + ".");
         }
-        if (!"INTERNO".equals(u.getTipoUsuario())) {
-            throw new IllegalArgumentException(
-                    "El usuario " + usuarioId + " no es interno: los grupos son solo internos.");
-        }
         if (!"ACTIVO".equals(u.getEstado())) {
             throw new IllegalArgumentException("El usuario " + usuarioId + " esta dado de baja.");
         }

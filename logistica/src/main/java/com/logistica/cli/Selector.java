@@ -24,7 +24,7 @@ public class Selector {
     private static final RolService roles = new RolService();
 
     public static int pais() throws SQLException {
-        Consola.listar(ubicaciones.listarPaises());
+        Vista.listar(ubicaciones.listarPaises());
         return Consola.entero("Id del pais");
     }
 
@@ -35,7 +35,7 @@ public class Selector {
         if (ciudades.isEmpty()) {
             throw new IllegalArgumentException("Ese pais no tiene ciudades cargadas.");
         }
-        Consola.listar(ciudades);
+        Vista.listar(ciudades);
         while (true) {
             int id = Consola.entero("Id de la ciudad");
             for (Ciudad c : ciudades) {
@@ -55,12 +55,12 @@ public class Selector {
     }
 
     public static int parte(String tipo) throws SQLException {
-        Consola.listar(partes.listarPorTipo(tipo));
+        Vista.listar(partes.listarPorTipo(tipo));
         return Consola.entero("Id del " + tipo.toLowerCase());
     }
 
     public static Integer parteOpcional(String tipo) throws SQLException {
-        Consola.listar(partes.listarPorTipo(tipo));
+        Vista.listar(partes.listarPorTipo(tipo));
         return Consola.enteroOpcional("Id del " + tipo.toLowerCase() + " (Enter = todos)");
     }
 
@@ -70,17 +70,17 @@ public class Selector {
     }
 
     public static int contenedor() throws SQLException {
-        Consola.listar(contenedores.listar());
+        Vista.listar(contenedores.listar());
         return Consola.entero("Id del contenedor");
     }
 
     public static int sensor() throws SQLException {
-        Consola.listar(sensores.listar());
+        Vista.listar(sensores.listar());
         return Consola.entero("Id del sensor");
     }
 
     public static int envio() throws SQLException {
-        Consola.listar(envios.listar());
+        Vista.listar(envios.listar());
         return Consola.entero("Id del envio");
     }
 
@@ -92,12 +92,12 @@ public class Selector {
     }
 
     public static int usuario() throws SQLException {
-        Consola.listar(usuarios.listar());
+        Vista.listar(usuarios.listar());
         return Consola.entero("Id del usuario");
     }
 
     public static int rol() throws SQLException {
-        Consola.listar(roles.listar());
+        Vista.listar(roles.listar());
         return Consola.entero("Id del rol");
     }
 

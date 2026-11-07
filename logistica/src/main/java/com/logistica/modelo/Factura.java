@@ -99,8 +99,8 @@ public class Factura {
 
     @Override
     public String toString() {
-        return id + " - " + numero + " (" + tipo + ", parte " + parteId + ", " + periodo + ") $" + importeTotal + " - "
-                + estado;
+        return id + " | " + numero + " | " + tipo + " | parte " + parteId + " | periodo " + periodo + " | vence "
+                + Formato.fecha(fechaVencimiento) + " | " + Formato.dinero(importeTotal) + " | " + estado;
     }
 
 }

@@ -31,6 +31,7 @@ public class Consola {
         while (true) {
             Integer opcion = enteroOpcional("Opcion");
             if (opcion != null && opcion >= 0 && opcion <= opciones.length) {
+                System.out.println();
                 return opcion;
             }
             System.out.println("Opcion invalida.");
@@ -42,14 +43,12 @@ public class Consola {
             accion.ejecutar();
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println("No se pudo: " + e.getMessage());
-            System.out.println("");
         } catch (SQLException e) {
             System.out.println("Error de MySQL: " + e.getMessage());
-            System.out.println("");
         } catch (Exception e) {
             System.out.println("Error inesperado: " + e.getMessage());
-            System.out.println("");
         }
+        System.out.println();
     }
 
     public static String leer(String etiqueta) {
@@ -215,6 +214,7 @@ public class Consola {
     }
 
     public static String elegir(String etiqueta, String... opciones) {
+        System.out.println();
         System.out.println(etiqueta + ":");
         for (int i = 0; i < opciones.length; i++) {
             System.out.println("  " + (i + 1) + ". " + opciones[i]);

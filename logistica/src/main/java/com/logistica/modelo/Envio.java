@@ -150,8 +150,9 @@ public class Envio {
 
     @Override
     public String toString() {
-        return id + " - cliente " + clienteId + " - " + estado + " (" + prioridad + ", " + pesoKg
-                + " kg) - entrega estimada " + fechaEntregaEstimada;
+        return "Envio " + id + " | cliente " + clienteId + " | ciudad " + origenCiudadId + " -> ciudad " + destinoCiudadId
+                + " | " + estado + " | prioridad " + prioridad + " | " + Formato.kg(pesoKg) + " | entrega estimada "
+                + Formato.fecha(fechaEntregaEstimada);
     }
 
 }

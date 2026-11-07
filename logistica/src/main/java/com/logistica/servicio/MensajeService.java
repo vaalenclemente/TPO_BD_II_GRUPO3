@@ -21,20 +21,22 @@ public class MensajeService {
     private final UsuarioRepository usuarioRepo = new UsuarioRepository();
     private final GrupoService grupoService = new GrupoService();
 
-    public String enviarAParte(int parteId, int remitenteId, String contenido) throws SQLException {
+    public String enviarAParte(int parteId, int remitenteId, String direccion, String contenido) throws SQLException {
 
         Parte p = parteRepo.buscarPorId(parteId);
         if (p == null) {
             throw new IllegalArgumentException("No existe una parte con id " + parteId + ".");
         }
-        Usuario remitente = buscarUsuarioActivo(remitenteId);
-        validarAcceso(remitente, parteId);
+        if (!"SALIENTE".equals(direccion) && !"ENTRANTE".equals(direccion)) {
+            throw new IllegalArgumentException("La direccion no es correcta (SALIENTE, ENTRANTE).");
+        }
+        buscarUsuarioActivo(remitenteId);
 
         Mensaje m = new Mensaje();
         m.setTipoConversacion("PARTE");
         m.setParteId(parteId);
         m.setParteTipo(p.getTipo());
-        m.setDireccion("INTERNO".equals(remitente.getTipoUsuario()) ? "SALIENTE" : "ENTRANTE");
+        m.setDireccion(direccion);
         return guardar(m, remitenteId, contenido);
     }
 
@@ -53,7 +55,7 @@ public class MensajeService {
     }
 
     public List<Mensaje> conversacionConParte(int parteId, int usuarioId) throws SQLException {
-        validarAcceso(buscarUsuarioActivo(usuarioId), parteId);
+        buscarUsuarioActivo(usuarioId);
         return repo.listarPorParte(parteId);
     }
 
@@ -83,19 +85,6 @@ public class MensajeService {
         String id = repo.guardar(m);
         m.setId(id);
         return id;
-    }
-
-    private void validarAcceso(Usuario u, int parteId) throws SQLException {
-        if (!"EXTERNO".equals(u.getTipoUsuario())) {
-            return;
-        }
-        if (u.getParteId() == null || u.getParteId() != parteId) {
-            throw new IllegalArgumentException("Un usuario externo solo accede a la conversacion de su empresa.");
-        }
-        Parte p = parteRepo.buscarPorId(parteId);
-        if (p == null || !"ACTIVO".equals(p.getEstado())) {
-            throw new IllegalArgumentException("La empresa del usuario esta dada de baja.");
-        }
     }
 
     private Usuario buscarUsuarioActivo(int usuarioId) throws SQLException {

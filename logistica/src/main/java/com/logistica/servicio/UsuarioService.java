@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 import java.util.HexFormat;
 import java.util.List;
 
-import com.logistica.modelo.Parte;
 import com.logistica.modelo.Usuario;
-import com.logistica.repositorio.ParteRepository;
 import com.logistica.repositorio.RolRepository;
 import com.logistica.repositorio.UsuarioRepository;
 
@@ -18,7 +16,6 @@ public class UsuarioService {
 
     private final UsuarioRepository repo = new UsuarioRepository();
     private final RolRepository rolRepo = new RolRepository();
-    private final ParteRepository parteRepo = new ParteRepository();
 
     public int alta(Usuario u, String password) throws SQLException {
 
@@ -46,10 +43,7 @@ public class UsuarioService {
 
     public void modificar(Usuario u) throws SQLException {
 
-        Usuario actual = buscarExistente(u.getId());
-        u.setTipoUsuario(actual.getTipoUsuario());
-        u.setParteId(actual.getParteId());
-
+        buscarExistente(u.getId());
         validarDatos(u);
 
         Usuario mismoEmail = repo.buscarPorEmail(u.getEmail());
@@ -92,34 +86,12 @@ public class UsuarioService {
             throw new IllegalArgumentException("El email es obligatorio.");
         }
 
-        if (!"INTERNO".equals(u.getTipoUsuario()) && !"EXTERNO".equals(u.getTipoUsuario())) {
-            throw new IllegalArgumentException("El tipo de usuario no es correcto (INTERNO, EXTERNO).");
-        }
-
         if (u.getRolId() == null) {
             throw new IllegalArgumentException("El rol es obligatorio.");
         }
 
         if (rolRepo.buscarPorId(u.getRolId()) == null) {
             throw new IllegalArgumentException("El rol elegido no existe.");
-        }
-
-        if ("EXTERNO".equals(u.getTipoUsuario())) {
-
-            if (u.getParteId() == null) {
-                throw new IllegalArgumentException("Un usuario externo tiene que pertenecer a una parte.");
-            }
-
-            Parte parte = parteRepo.buscarPorId(u.getParteId());
-            if (parte == null) {
-                throw new IllegalArgumentException("La parte elegida no existe.");
-            }
-            if (!"ACTIVO".equals(parte.getEstado())) {
-                throw new IllegalArgumentException("La parte elegida esta dada de baja.");
-            }
-
-        } else if (u.getParteId() != null) {
-            throw new IllegalArgumentException("Un usuario interno no pertenece a ninguna parte.");
         }
     }
 

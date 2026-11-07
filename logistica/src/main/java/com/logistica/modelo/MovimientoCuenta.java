@@ -94,7 +94,7 @@ public class MovimientoCuenta {
 
     @Override
     public String toString() {
-        return fecha + " - " + tipo + " $" + importe + " - " + concepto;
+        return Formato.fecha(fecha) + " | " + tipo + " | " + Formato.dinero(importe) + " | " + concepto;
     }
 
 }

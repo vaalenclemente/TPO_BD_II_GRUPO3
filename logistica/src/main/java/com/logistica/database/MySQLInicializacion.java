@@ -1,8 +1,14 @@
 package com.logistica.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.logistica.modelo.Permiso;
 
 public class MySQLInicializacion {
 
@@ -45,8 +51,25 @@ public class MySQLInicializacion {
         """
         CREATE TABLE IF NOT EXISTS rol (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            descripcion VARCHAR(100) UNIQUE,
-            nivel_permisos INT
+            descripcion VARCHAR(100) UNIQUE
+        )
+        """,
+
+        """
+        CREATE TABLE IF NOT EXISTS permiso (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            codigo VARCHAR(30) UNIQUE,
+            descripcion VARCHAR(150)
+        )
+        """,
+
+        """
+        CREATE TABLE IF NOT EXISTS rol_permiso (
+            rol_id INT,
+            permiso_id INT,
+            PRIMARY KEY (rol_id, permiso_id),
+            CONSTRAINT fk_rol_permiso_rol FOREIGN KEY (rol_id) REFERENCES rol(id),
+            CONSTRAINT fk_rol_permiso_permiso FOREIGN KEY (permiso_id) REFERENCES permiso(id)
         )
         """,
 
@@ -60,17 +83,7 @@ public class MySQLInicializacion {
             estado VARCHAR(20),
             fecha_registro DATETIME,
             rol_id INT,
-            tipo_usuario VARCHAR(20),
             CONSTRAINT fk_usuario_rol FOREIGN KEY (rol_id) REFERENCES rol(id)
-        )
-        """,
-
-        """
-        CREATE TABLE IF NOT EXISTS usuario_externo (
-            usuario_id INT PRIMARY KEY,
-            parte_id INT,
-            CONSTRAINT fk_usuario_externo_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
-            CONSTRAINT fk_usuario_externo_parte FOREIGN KEY (parte_id) REFERENCES parte(id)
         )
         """,
 
@@ -263,6 +276,127 @@ public class MySQLInicializacion {
 
             for (String sql : TABLAS) {
                 st.execute(sql);
+            }
+
+            quitarNivelPermisos(c, st);
+            quitarUsuariosExternos(st);
+            cargarPermisos(c);
+            completarPermisosAdmin(c);
+        }
+    }
+
+    // bases creadas antes de los permisos tienen la columna rol.nivel_permisos: se reemplazo por rol_permiso
+    private static void quitarNivelPermisos(Connection c, Statement st) throws SQLException {
+        String sql = """
+                SELECT COUNT(*) FROM information_schema.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'rol' AND COLUMN_NAME = 'nivel_permisos'
+                """;
+        try (ResultSet rs = st.executeQuery(sql)) {
+            rs.next();
+            if (rs.getInt(1) == 0) {
+                return;
+            }
+        }
+        st.execute("ALTER TABLE rol DROP COLUMN nivel_permisos");
+    }
+
+    private static void quitarUsuariosExternos(Statement st) throws SQLException {
+        String sqlTabla = """
+                SELECT COUNT(*) AS cantidad FROM information_schema.TABLES
+                WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuario_externo'
+                """;
+        String sqlColumna = """
+                SELECT COUNT(*) AS cantidad FROM information_schema.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuario' AND COLUMN_NAME = 'tipo_usuario'
+                """;
+
+        int tabla;
+        try (ResultSet rs = st.executeQuery(sqlTabla)) {
+            rs.next();
+            tabla = rs.getInt("cantidad");
+        }
+        if (tabla > 0) {
+            st.execute("DROP TABLE usuario_externo");
+        }
+
+        int columna;
+        try (ResultSet rs = st.executeQuery(sqlColumna)) {
+            rs.next();
+            columna = rs.getInt("cantidad");
+        }
+        if (columna > 0) {
+            st.execute("UPDATE usuario SET estado = 'INACTIVO' WHERE tipo_usuario = 'EXTERNO'");
+            st.execute("ALTER TABLE usuario DROP COLUMN tipo_usuario");
+        }
+    }
+
+    private static void cargarPermisos(Connection c) throws SQLException {
+        String sqlBuscar = """
+                SELECT COUNT(*) AS cantidad FROM permiso WHERE codigo = ?
+                """;
+        String sqlInsertar = """
+                INSERT INTO permiso (codigo, descripcion) VALUES (?, ?)
+                """;
+
+        try (PreparedStatement psBuscar = c.prepareStatement(sqlBuscar);
+                PreparedStatement psInsertar = c.prepareStatement(sqlInsertar)) {
+
+            for (String[] p : Permiso.CATALOGO) {
+                psBuscar.setString(1, p[0]);
+
+                int cantidad;
+                try (ResultSet rs = psBuscar.executeQuery()) {
+                    rs.next();
+                    cantidad = rs.getInt("cantidad");
+                }
+
+                if (cantidad == 0) {
+                    psInsertar.setString(1, p[0]);
+                    psInsertar.setString(2, p[1]);
+                    psInsertar.executeUpdate();
+                }
+            }
+        }
+    }
+
+    private static void completarPermisosAdmin(Connection c) throws SQLException {
+        String sqlAdmin = """
+                SELECT id FROM rol WHERE descripcion = 'ADMIN'
+                """;
+        String sqlFaltantes = """
+                SELECT id FROM permiso
+                WHERE id NOT IN (SELECT permiso_id FROM rol_permiso WHERE rol_id = ?)
+                """;
+        String sqlInsertar = """
+                INSERT INTO rol_permiso (rol_id, permiso_id) VALUES (?, ?)
+                """;
+
+        Integer adminId = null;
+        try (PreparedStatement ps = c.prepareStatement(sqlAdmin);
+                ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                adminId = rs.getInt("id");
+            }
+        }
+        if (adminId == null) {
+            return;
+        }
+
+        List<Integer> faltantes = new ArrayList<>();
+        try (PreparedStatement ps = c.prepareStatement(sqlFaltantes)) {
+            ps.setInt(1, adminId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    faltantes.add(rs.getInt("id"));
+                }
+            }
+        }
+
+        try (PreparedStatement ps = c.prepareStatement(sqlInsertar)) {
+            for (Integer permisoId : faltantes) {
+                ps.setInt(1, adminId);
+                ps.setInt(2, permisoId);
+                ps.executeUpdate();
             }
         }
     }

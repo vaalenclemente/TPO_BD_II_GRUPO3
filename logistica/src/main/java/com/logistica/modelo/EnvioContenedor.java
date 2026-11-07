@@ -52,8 +52,8 @@ public class EnvioContenedor {
 
     @Override
     public String toString() {
-        return "envio " + envioId + " - contenedor " + contenedorId
-                + (fechaLiberacion == null ? " (asignado)" : " (liberado " + fechaLiberacion + ")");
+        return "Contenedor " + contenedorId + " | asignado " + Formato.fecha(fechaAsignacion)
+                + (fechaLiberacion == null ? " | en el envio" : " | liberado " + Formato.fecha(fechaLiberacion));
     }
 
 }

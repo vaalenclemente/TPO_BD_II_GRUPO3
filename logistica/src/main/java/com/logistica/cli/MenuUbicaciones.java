@@ -15,7 +15,7 @@ public class MenuUbicaciones {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(ubicaciones.listarPaises()));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(ubicaciones.listarPaises()));
                 case 2 -> Consola.ejecutar(() -> {
                     int id = ubicaciones.altaPais(Consola.texto("Nombre del pais"));
                     Consola.mostrar("Pais creado con id " + id + ".");
@@ -29,7 +29,7 @@ public class MenuUbicaciones {
                     ubicaciones.eliminarPais(Selector.pais());
                     Consola.mostrar("Eliminado.");
                 });
-                case 5 -> Consola.ejecutar(() -> Consola.listar(ubicaciones.listarCiudades(Selector.pais())));
+                case 5 -> Consola.ejecutar(() -> Vista.listar(ubicaciones.listarCiudades(Selector.pais())));
                 case 6 -> Consola.ejecutar(() -> {
                     int paisId = Selector.pais();
                     int id = ubicaciones.altaCiudad(Consola.texto("Nombre de la ciudad"), paisId);

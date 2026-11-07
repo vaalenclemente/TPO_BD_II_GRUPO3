@@ -82,7 +82,7 @@ public class Grupo {
 
     @Override
     public String toString() {
-        return id + " - " + nombre + " " + integrantes + ("ACTIVO".equals(estado) ? "" : " [" + estado + "]");
+        return id + " | " + nombre + " | integrantes " + integrantes + ("ACTIVO".equals(estado) ? "" : " | " + estado);
     }
 
 }

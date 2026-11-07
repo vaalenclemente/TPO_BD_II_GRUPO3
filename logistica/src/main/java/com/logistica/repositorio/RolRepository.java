@@ -18,20 +18,18 @@ public class RolRepository {
         Rol r = new Rol();
         r.setId(rs.getInt("id"));
         r.setDescripcion(rs.getString("descripcion"));
-        r.setNivelPermisos(rs.getObject("nivel_permisos", Integer.class));
         return r;
     }
 
     public int guardar(Rol r) throws SQLException {
         String sql = """
-                INSERT INTO rol (descripcion, nivel_permisos) VALUES (?, ?)
+                INSERT INTO rol (descripcion) VALUES (?)
                 """;
 
         try (Connection c = MySQLConexion.getConexion();
                 PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, r.getDescripcion());
-            ps.setObject(2, r.getNivelPermisos());
 
             ps.executeUpdate();
 
@@ -120,30 +118,43 @@ public class RolRepository {
 
     public void actualizar(Rol r) throws SQLException {
         String sql = """
-                UPDATE rol SET descripcion = ?, nivel_permisos = ? WHERE id = ?
+                UPDATE rol SET descripcion = ? WHERE id = ?
                 """;
 
         try (Connection c = MySQLConexion.getConexion();
                 PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setString(1, r.getDescripcion());
-            ps.setObject(2, r.getNivelPermisos());
-            ps.setInt(3, r.getId());
+            ps.setInt(2, r.getId());
 
             ps.executeUpdate();
         }
     }
 
     public void borrar(int id) throws SQLException {
-        String sql = """
+        String sqlPermisos = """
+                DELETE FROM rol_permiso WHERE rol_id = ?
+                """;
+        String sqlRol = """
                 DELETE FROM rol WHERE id = ?
                 """;
 
-        try (Connection c = MySQLConexion.getConexion();
-                PreparedStatement ps = c.prepareStatement(sql)) {
+        try (Connection c = MySQLConexion.getConexion()) {
+            c.setAutoCommit(false);
+            try (PreparedStatement psPermisos = c.prepareStatement(sqlPermisos);
+                    PreparedStatement psRol = c.prepareStatement(sqlRol)) {
 
-            ps.setInt(1, id);
-            ps.executeUpdate();
+                psPermisos.setInt(1, id);
+                psPermisos.executeUpdate();
+
+                psRol.setInt(1, id);
+                psRol.executeUpdate();
+
+                c.commit();
+            } catch (SQLException e) {
+                c.rollback();
+                throw e;
+            }
         }
     }
 

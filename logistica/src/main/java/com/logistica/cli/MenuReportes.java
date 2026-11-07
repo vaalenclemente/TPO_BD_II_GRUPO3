@@ -21,8 +21,9 @@ public class MenuReportes {
                     return;
                 }
                 case 1 -> Consola.ejecutar(this::solicitar);
-                case 2 -> Consola.ejecutar(() -> Consola.listar(reportes.listarPorParte(Selector.parte("CLIENTE"))));
+                case 2 -> Consola.ejecutar(() -> Vista.listar(reportes.listarPorParte(Selector.parte("CLIENTE"))));
                 case 3 -> Consola.ejecutar(() -> {
+                    Vista.listar(reportes.listarPorParte(Selector.parte("CLIENTE")));
                     Reporte r = reportes.buscarPorId(Consola.texto("Id del reporte"));
                     if (r == null) {
                         throw new IllegalArgumentException("No existe ese reporte.");
@@ -31,7 +32,7 @@ public class MenuReportes {
                     Consola.mostrar(r.getContenido() == null ? "Error: " + r.getError() : r.getContenido());
                 });
                 case 4 -> Consola.ejecutar(() -> {
-                    Consola.listar(tipos.listar());
+                    Vista.listar(tipos.listar());
                     Consola.mostrar("Codigos que el sistema sabe generar: " + ReporteService.CODIGOS);
                 });
                 case 5 -> Consola.ejecutar(() -> {
@@ -64,7 +65,7 @@ public class MenuReportes {
     private void solicitar() throws Exception {
         int clienteId = Selector.parte("CLIENTE");
         String solicitante = Consola.texto("Nombre de quien lo pide");
-        Consola.listar(tipos.listarActivos());
+        Vista.listar(tipos.listarActivos());
         int tipoId = Consola.entero("Id del tipo de reporte");
         var desde = Consola.fecha("Desde");
         var hasta = Consola.fecha("Hasta");
@@ -75,7 +76,7 @@ public class MenuReportes {
     }
 
     private int elegirTipo() throws Exception {
-        Consola.listar(tipos.listar());
+        Vista.listar(tipos.listar());
         return Consola.entero("Id del tipo de reporte");
     }
 

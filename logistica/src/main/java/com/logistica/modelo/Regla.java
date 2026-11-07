@@ -94,8 +94,8 @@ public class Regla {
     @Override
     public String toString() {
         String alcance = (envioId == null) ? "general" : "envio " + envioId;
-        return id + " - " + nombre + ": " + metrica + " " + operador + " " + valor
-                + " (" + severidad + ", " + alcance + ")" + (Boolean.TRUE.equals(activa) ? "" : " [inactiva]");
+        return id + " | " + nombre + " | " + metrica + " " + operador + " " + valor + " | " + severidad + " | "
+                + alcance + " | " + (Boolean.TRUE.equals(activa) ? "activa" : "inactiva");
     }
 
 }

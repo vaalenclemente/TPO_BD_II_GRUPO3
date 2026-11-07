@@ -175,9 +175,19 @@ public class LecturaSensor {
 
     @Override
     public String toString() {
-        return fechaHora + " - sensor " + sensorId + " | T " + temperatura + " °C, H " + humedad + " %, V " + vibracion
-                + ", bat " + nivelBateria + " %"
-                + (anomaliaReglaId == null ? "" : " [ANOMALIA " + anomaliaMetrica + " limite " + anomaliaLimite + "]");
+        String medidas = medida("temp", temperatura, " C") + medida("hum", humedad, " %") + medida("vib", vibracion, "")
+                + medida("bat", nivelBateria, " %");
+        if (medidas.startsWith(", ")) {
+            medidas = medidas.substring(2);
+        }
+        return Formato.fecha(fechaHora) + " | sensor " + sensorId
+                + (contenedorId == null ? "" : " (contenedor " + contenedorId + ")") + " | " + medidas
+                + (latitud == null ? "" : " | posicion " + latitud + ", " + longitud)
+                + (anomaliaReglaId == null ? "" : " | ANOMALIA " + anomaliaMetrica + " (limite " + anomaliaLimite + ")");
+    }
+
+    private static String medida(String nombre, Double valor, String unidad) {
+        return (valor == null) ? "" : ", " + nombre + " " + valor + unidad;
     }
 
 }

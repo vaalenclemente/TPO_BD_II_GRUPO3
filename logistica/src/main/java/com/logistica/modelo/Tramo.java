@@ -132,8 +132,10 @@ public class Tramo {
 
     @Override
     public String toString() {
-        return id + " - envio " + envioId + " tramo " + orden + ": " + medioTransporte + " " + origenCiudadId + " -> "
-                + destinoCiudadId + " - " + estado;
+        return "Tramo " + orden + " (id " + id + ") | " + medioTransporte + " | ciudad " + origenCiudadId + " -> ciudad "
+                + destinoCiudadId + " | vehiculo " + vehiculoId + " | salida " + Formato.fecha(fechaSalida)
+                + " | llegada estimada " + Formato.fecha(fechaLlegadaEstimada) + " | llegada real "
+                + Formato.fecha(fechaLlegadaReal) + " | " + Formato.dinero(costo) + " | " + estado;
     }
 
 }

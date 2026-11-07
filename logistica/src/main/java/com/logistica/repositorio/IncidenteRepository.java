@@ -162,11 +162,11 @@ public class IncidenteRepository {
         coleccion().deleteOne(eq("_id", new ObjectId(id)));
     }
 
-    // ranking de rutas (tramo origen → destino) con mas incidentes.
-    // $match → solo incidentes que pasaron en un tramo (y del cliente / periodo, si
+    // ranking de rutas (tramo origen -> destino) con mas incidentes.
+    // $match -> solo incidentes que pasaron en un tramo (y del cliente / periodo, si
     // se piden)
-    // $group → un resultado por ruta, contando sus incidentes
-    // $sort → de mas a menos incidentes
+    // $group -> un resultado por ruta, contando sus incidentes
+    // $sort -> de mas a menos incidentes
     // clienteid, desde y hasta pueden ser null (= sin filtro).
     public List<RutaIncidentes> rankingRutas(Integer clienteId, LocalDateTime desde, LocalDateTime hasta, int limite) {
         List<Bson> condiciones = new ArrayList<>();

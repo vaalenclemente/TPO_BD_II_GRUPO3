@@ -74,7 +74,10 @@ public class EnvioDemorado {
 
     @Override
     public String toString() {
-        return "envio " + envioId + " (" + cliente + " → " + destino + ") " + estado + " | estimada " + fechaEntregaEstimada + (fechaEntregaReal == null ? " | sin entregar" : " | real " + fechaEntregaReal) + " | " + horasDemora + " h de demora";
+        return "Envio " + envioId + " | " + cliente + " -> " + destino + " | " + estado + " | estimada "
+                + Formato.fecha(fechaEntregaEstimada)
+                + (fechaEntregaReal == null ? " | sin entregar" : " | entregado " + Formato.fecha(fechaEntregaReal))
+                + " | " + horasDemora + " h de demora";
     }
 
 }

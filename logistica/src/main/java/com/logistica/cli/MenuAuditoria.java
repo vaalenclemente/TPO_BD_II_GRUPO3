@@ -14,11 +14,11 @@ public class MenuAuditoria {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(auditoria.listarUltimos(Consola.entero("¿Cuantos?"))));
-                case 2 -> Consola.ejecutar(() -> Consola.listar(auditoria.listarPorUsuario(Selector.usuario())));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(auditoria.listarUltimos(Consola.entero("¿Cuantos?"))));
+                case 2 -> Consola.ejecutar(() -> Vista.listar(auditoria.listarPorUsuario(Selector.usuario())));
                 case 3 -> Consola.ejecutar(() -> {
-                    String entidad = Consola.elegir("Entidad", "envio", "tramo", "incidente", "pago", "sensor", "sesion");
-                    Consola.listar(auditoria.listarPorEntidad(entidad, Consola.texto("Id")));
+                    String entidad = Consola.elegir("Entidad", "envio", "tramo", "incidente", "pago", "reporte", "sensor", "sesion");
+                    Vista.listar(auditoria.listarPorEntidad(entidad, Consola.texto("Id")));
                 });
             }
         }

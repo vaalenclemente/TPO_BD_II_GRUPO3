@@ -5,10 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import com.logistica.modelo.Parte;
 import com.logistica.modelo.Sesion;
 import com.logistica.modelo.Usuario;
-import com.logistica.repositorio.ParteRepository;
 import com.logistica.repositorio.SesionRepository;
 import com.logistica.repositorio.UsuarioRepository;
 
@@ -18,7 +16,6 @@ public class SesionService {
 
     private final SesionRepository repo = new SesionRepository();
     private final UsuarioRepository usuarioRepo = new UsuarioRepository();
-    private final ParteRepository parteRepo = new ParteRepository();
     private final UsuarioService usuarioService = new UsuarioService();
 
     // ---------- login ----------
@@ -37,13 +34,6 @@ public class SesionService {
 
         if (!"ACTIVO".equals(u.getEstado())) {
             throw new IllegalArgumentException("El usuario esta dado de baja.");
-        }
-
-        if ("EXTERNO".equals(u.getTipoUsuario())) {
-            Parte p = parteRepo.buscarPorId(u.getParteId());
-            if (p == null || !"ACTIVO".equals(p.getEstado())) {
-                throw new IllegalArgumentException("La empresa del usuario esta dada de baja.");
-            }
         }
 
         LocalDateTime ahora = LocalDateTime.now();

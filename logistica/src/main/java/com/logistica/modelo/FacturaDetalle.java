@@ -79,7 +79,7 @@ public class FacturaDetalle {
 
     @Override
     public String toString() {
-        return concepto + " $" + importe;
+        return concepto + " | " + Formato.dinero(importe);
     }
 
 }

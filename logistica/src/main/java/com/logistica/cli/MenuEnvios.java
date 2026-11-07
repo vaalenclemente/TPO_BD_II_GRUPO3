@@ -42,13 +42,13 @@ public class MenuEnvios {
                 });
                 case 6 -> Consola.ejecutar(() -> {
                     int id = Selector.envio();
-                    Consola.listar(contenedores.listarDisponibles());
+                    Vista.listar(contenedores.listarDisponibles());
                     envios.asignarContenedor(id, Consola.entero("Id del contenedor"));
                     Consola.mostrar("Contenedor asignado.");
                 });
                 case 7 -> Consola.ejecutar(() -> {
                     int id = Selector.envio();
-                    Consola.listar(envios.listarContenedores(id));
+                    Vista.listar(envios.listarContenedores(id));
                     envios.liberarContenedor(id, Consola.entero("Id del contenedor"));
                     Consola.mostrar("Contenedor quitado.");
                 });
@@ -89,10 +89,10 @@ public class MenuEnvios {
     private void listar() throws Exception {
         String filtro = Consola.elegir("Listar", "Todos", "Por estado", "Por cliente");
         switch (filtro) {
-            case "Todos" -> Consola.listar(envios.listar());
-            case "Por estado" -> Consola.listar(envios.listarPorEstado(Consola.elegir("Estado", "CREADO",
+            case "Todos" -> Vista.listar(envios.listar());
+            case "Por estado" -> Vista.listar(envios.listarPorEstado(Consola.elegir("Estado", "CREADO",
                     "EN_PREPARACION", "EN_TRANSITO", "EN_ADUANA", "ENTREGADO", "CANCELADO")));
-            default -> Consola.listar(envios.listarPorCliente(Selector.parte("CLIENTE")));
+            default -> Vista.listar(envios.listarPorCliente(Selector.parte("CLIENTE")));
         }
     }
 
@@ -102,13 +102,13 @@ public class MenuEnvios {
         if (e == null) {
             throw new IllegalArgumentException("No existe ese envio.");
         }
-        Consola.mostrar(e.toString());
+        Vista.mostrar(e);
         Consola.mostrar("-- Contenedores");
-        Consola.listar(envios.listarContenedores(id));
+        Vista.listar(envios.listarContenedores(id));
         Consola.mostrar("-- Tramos");
-        Consola.listar(tramos.listarPorEnvio(id));
+        Vista.listar(tramos.listarPorEnvio(id));
         Consola.mostrar("-- Eventos");
-        Consola.listar(eventos.listarPorEnvio(id));
+        Vista.listar(eventos.listarPorEnvio(id));
     }
 
     private void crear() throws Exception {
@@ -121,7 +121,7 @@ public class MenuEnvios {
         var volumen = Consola.decimal("Volumen (m3)");
         String descripcion = Consola.texto("Descripcion de la carga");
         Consola.mostrar("Contenedores disponibles:");
-        Consola.listar(contenedores.listarDisponibles());
+        Vista.listar(contenedores.listarDisponibles());
         List<Integer> contenedorIds = Consola.enteros("Ids de los contenedores");
 
         Envio e = new Envio(clienteId, origen, destino, estimada, prioridad, peso, volumen, descripcion);
@@ -150,11 +150,11 @@ public class MenuEnvios {
     private void agregarTramo() throws Exception {
         int envioId = Selector.envio();
         Consola.mostrar("Tramos actuales:");
-        Consola.listar(tramos.listarPorEnvio(envioId));
+        Vista.listar(tramos.listarPorEnvio(envioId));
         String medio = Selector.medio();
         int origen = Selector.ciudad("Ciudad de origen del tramo");
         int destino = Selector.ciudad("Ciudad de destino del tramo");
-        Consola.listar(vehiculos.listar());
+        Vista.listar(vehiculos.listar());
         int vehiculoId = Consola.entero("Id del vehiculo (" + medio + ")");
         LocalDateTime salida = Consola.fechaHora("Fecha de salida prevista");
         LocalDateTime llegada = Consola.fechaHora("Fecha de llegada estimada");
@@ -167,7 +167,7 @@ public class MenuEnvios {
     private int elegirTramo() throws Exception {
         int envioId = Selector.envio();
         List<Tramo> lista = tramos.listarPorEnvio(envioId);
-        Consola.listar(lista);
+        Vista.listar(lista);
         return Consola.entero("Id del tramo");
     }
 

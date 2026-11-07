@@ -35,8 +35,8 @@ public class MenuActivos {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(contenedores.listar()));
-                case 2 -> Consola.ejecutar(() -> Consola.listar(contenedores.listarDisponibles()));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(contenedores.listar()));
+                case 2 -> Consola.ejecutar(() -> Vista.listar(contenedores.listarDisponibles()));
                 case 3 -> Consola.ejecutar(() -> {
                     int id = contenedores.alta(new Contenedor(Consola.texto("Codigo internacional"),
                             Consola.texto("Tipo"), Consola.decimal("Capacidad (kg)")));
@@ -72,8 +72,8 @@ public class MenuActivos {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(sensores.listar()));
-                case 2 -> Consola.ejecutar(() -> Consola.listar(sensores.listarPorContenedor(Selector.contenedor())));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(sensores.listar()));
+                case 2 -> Consola.ejecutar(() -> Vista.listar(sensores.listarPorContenedor(Selector.contenedor())));
                 case 3 -> Consola.ejecutar(() -> {
                     String tipo = Consola.texto("Tipo");
                     String fabricante = Consola.texto("Fabricante");
@@ -122,8 +122,8 @@ public class MenuActivos {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(vehiculos.listar()));
-                case 2 -> Consola.ejecutar(() -> Consola.listar(vehiculos.listarPorOperador(Selector.parte("OPERADOR"))));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(vehiculos.listar()));
+                case 2 -> Consola.ejecutar(() -> Vista.listar(vehiculos.listarPorOperador(Selector.parte("OPERADOR"))));
                 case 3 -> Consola.ejecutar(() -> {
                     String tipo = Selector.medio();
                     String identificacion = Consola.texto("Identificacion (patente, matricula)");
@@ -133,7 +133,7 @@ public class MenuActivos {
                     Consola.mostrar("Vehiculo creado con id " + id + ".");
                 });
                 case 4 -> Consola.ejecutar(() -> {
-                    Consola.listar(vehiculos.listar());
+                    Vista.listar(vehiculos.listar());
                     Vehiculo v = vehiculos.buscarPorId(Consola.entero("Id del vehiculo"));
                     if (v == null) {
                         throw new IllegalArgumentException("No existe ese vehiculo.");
@@ -144,13 +144,13 @@ public class MenuActivos {
                     Consola.mostrar("Modificado.");
                 });
                 case 5 -> Consola.ejecutar(() -> {
-                    Consola.listar(vehiculos.listar());
+                    Vista.listar(vehiculos.listar());
                     int id = Consola.entero("Id del vehiculo");
                     vehiculos.cambiarEstado(id, Consola.elegir("Estado", "ACTIVO", "INACTIVO", "EN_MANTENIMIENTO"));
                     Consola.mostrar("Estado cambiado.");
                 });
                 case 6 -> Consola.ejecutar(() -> {
-                    Consola.listar(vehiculos.listar());
+                    Vista.listar(vehiculos.listar());
                     vehiculos.darDeBaja(Consola.entero("Id del vehiculo"));
                     Consola.mostrar("Dado de baja.");
                 });

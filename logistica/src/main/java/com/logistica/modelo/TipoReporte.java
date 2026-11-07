@@ -62,8 +62,8 @@ public class TipoReporte {
 
     @Override
     public String toString() {
-        return id + " - " + codigo + " - " + nombre + " ($" + precio + ")"
-                + (Boolean.TRUE.equals(activo) ? "" : " [inactivo]");
+        return id + " | " + codigo + " | " + nombre + " | " + Formato.dinero(precio)
+                + (Boolean.TRUE.equals(activo) ? "" : " | inactivo");
     }
 
 }

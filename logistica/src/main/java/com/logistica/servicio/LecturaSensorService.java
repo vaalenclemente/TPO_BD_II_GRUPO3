@@ -20,9 +20,9 @@ import com.logistica.repositorio.MonitoreoRedisRepository;
 import com.logistica.repositorio.SensorIotRepository;
 
 // registro continuo de lecturas y deteccion de anomalias:
-//   lectura → se evaluan las reglas activas (mysql) → lectura con/sin anomalia (mongo)
-//           → una alerta por regla incumplida (mongo)
-//           → si la alerta es alta y el contenedor viaja: incidente automatico (saga mongo + mysql)
+//   lectura -> se evaluan las reglas activas (mysql) -> lectura con/sin anomalia (mongo)
+//           -> una alerta por regla incumplida (mongo)
+//           -> si la alerta es alta y el contenedor viaja: incidente automatico (saga mongo + mysql)
 public class LecturaSensorService {
 
     private static final List<String> METRICAS = List.of("TEMPERATURA", "HUMEDAD", "VIBRACION", "BATERIA");

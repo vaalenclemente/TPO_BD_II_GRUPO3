@@ -27,60 +27,60 @@ public class MenuAnalisis {
                 }
                 case 1 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
-                    Consola.listar(estadisticas.enviosPorPais(cliente, desde(), hasta()));
+                    Vista.listar(estadisticas.enviosPorPais(cliente, desde(), hasta()));
                 });
                 case 2 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
-                    Consola.listar(estadisticas.enviosPorEstado(cliente, desde(), hasta()));
+                    Vista.listar(estadisticas.enviosPorEstado(cliente, desde(), hasta()));
                 });
-                case 3 -> Consola.ejecutar(() -> Consola.listar(estadisticas.enviosPorCliente(desde(), hasta())));
+                case 3 -> Consola.ejecutar(() -> Vista.listar(estadisticas.enviosPorCliente(desde(), hasta())));
                 case 4 -> Consola.ejecutar(() -> {
                     LocalDate desde = desde();
                     LocalDate hasta = hasta();
-                    Consola.listar(estadisticas.rankingClientesPorVolumen(desde, hasta, Consola.entero("¿Cuantos?")));
+                    Vista.listar(estadisticas.rankingClientesPorVolumen(desde, hasta, Consola.entero("¿Cuantos?")));
                 });
                 case 5 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
-                    Consola.listar(estadisticas.enviosDemorados(cliente, desde(), hasta()));
+                    Vista.listar(estadisticas.enviosDemorados(cliente, desde(), hasta()));
                 });
                 case 6 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
                     LocalDate desde = desde();
                     LocalDate hasta = hasta();
-                    Consola.listar(estadisticas.tiemposEntregaPorCliente(cliente, desde, hasta));
-                    Consola.mostrar("Total → " + estadisticas.tiempoPromedioEntrega(cliente, desde, hasta));
+                    Vista.listar(estadisticas.tiemposEntregaPorCliente(cliente, desde, hasta));
+                    Consola.mostrar("Total -> " + estadisticas.tiempoPromedioEntrega(cliente, desde, hasta));
                 });
                 case 7 -> Consola.ejecutar(() -> {
                     String agrupar = Consola.elegir("Agrupar por", "Pais de destino", "Estado del envio", "Cliente");
                     LocalDate desde = desde();
                     LocalDate hasta = hasta();
                     switch (agrupar) {
-                        case "Pais de destino" -> Consola.listar(estadisticas.promedioIncidentesPorPais(null, desde, hasta));
-                        case "Estado del envio" -> Consola.listar(estadisticas.promedioIncidentesPorEstado(null, desde, hasta));
-                        default -> Consola.listar(estadisticas.promedioIncidentesPorCliente(desde, hasta));
+                        case "Pais de destino" -> Vista.listar(estadisticas.promedioIncidentesPorPais(null, desde, hasta));
+                        case "Estado del envio" -> Vista.listar(estadisticas.promedioIncidentesPorEstado(null, desde, hasta));
+                        default -> Vista.listar(estadisticas.promedioIncidentesPorCliente(desde, hasta));
                     }
                 });
                 case 8 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
-                    Consola.listar(estadisticas.costosPorTransporte(cliente, desde(), hasta()));
+                    Vista.listar(estadisticas.costosPorTransporte(cliente, desde(), hasta()));
                 });
                 case 9 -> Consola.ejecutar(() -> {
                     Integer cliente = Selector.parteOpcional("CLIENTE");
-                    Consola.listar(estadisticas.desempenioMensual(cliente, desde(), hasta()));
+                    Vista.listar(estadisticas.desempenioMensual(cliente, desde(), hasta()));
                 });
                 case 10 -> Consola.ejecutar(() -> {
                     LocalDate desde = desde();
                     LocalDate hasta = hasta();
-                    Consola.listar(incidentes.rankingRutas(Consola.inicioDelDia(desde), Consola.finDelDia(hasta), 10));
+                    Vista.listar(incidentes.rankingRutas(Consola.inicioDelDia(desde), Consola.finDelDia(hasta), 10));
                 });
                 case 11 -> Consola.ejecutar(() -> {
                     var calculadas = predicciones.calcularDiaria();
                     Consola.mostrar(calculadas.size() + " envios evaluados.");
-                    Consola.listar(calculadas);
+                    Vista.listar(calculadas);
                 });
                 case 12 -> Consola.ejecutar(() -> {
                     String nivel = Consola.elegir("Nivel", "TODOS", "ALTO", "MEDIO", "BAJO");
-                    Consola.listar(predicciones.ultimas("TODOS".equals(nivel) ? null : nivel));
+                    Vista.listar(predicciones.ultimas("TODOS".equals(nivel) ? null : nivel));
                 });
             }
         }

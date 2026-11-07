@@ -1,6 +1,7 @@
 package com.logistica.cli;
 
 import com.logistica.modelo.Regla;
+import com.logistica.servicio.AlertaService;
 import com.logistica.servicio.IncidenteService;
 import com.logistica.servicio.ReglaService;
 
@@ -8,6 +9,7 @@ public class MenuIncidentes {
 
     private final ReglaService reglas = new ReglaService();
     private final IncidenteService incidentes = new IncidenteService();
+    private final AlertaService alertas = new AlertaService();
 
     public void mostrar() {
         while (true) {
@@ -19,7 +21,7 @@ public class MenuIncidentes {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(reglas.listar()));
+                case 1 -> Consola.ejecutar(() -> Vista.listar(reglas.listar()));
                 case 2 -> Consola.ejecutar(this::altaRegla);
                 case 3 -> Consola.ejecutar(this::modificarRegla);
                 case 4 -> Consola.ejecutar(() -> {
@@ -30,19 +32,23 @@ public class MenuIncidentes {
                     reglas.desactivar(elegirRegla());
                     Consola.mostrar("Regla desactivada.");
                 });
-                case 6 -> Consola.ejecutar(() -> Consola.listar(incidentes.listarAbiertos()));
-                case 7 -> Consola.ejecutar(() -> Consola.listar(incidentes.listarPorEnvio(Selector.envio())));
+                case 6 -> Consola.ejecutar(() -> Vista.listar(incidentes.listarAbiertos()));
+                case 7 -> Consola.ejecutar(() -> Vista.listar(incidentes.listarPorEnvio(Selector.envio())));
                 case 8 -> Consola.ejecutar(() -> {
                     int envioId = Selector.envio();
                     String tipo = Consola.elegir("Tipo", "TEMPERATURA", "HUMEDAD", "VIBRACION", "BATERIA", "DEMORA",
                             "DANIO", "ROBO", "ADUANA", "OTRO");
                     String severidad = Selector.severidad();
                     String descripcion = Consola.texto("Descripcion");
+                    Consola.mostrar("Alertas del envio:");
+                    Vista.listar(alertas.listarPorEnvio(envioId));
                     String id = incidentes.abrir(envioId, tipo, severidad, descripcion, Consola.textos("Ids de alertas"));
                     Consola.mostrar("Incidente abierto con id " + id + ".");
                 });
                 case 9 -> Consola.ejecutar(() -> {
                     String id = elegirIncidente();
+                    Consola.mostrar("Alertas sin cerrar:");
+                    Vista.listar(alertas.listarNoCerradas());
                     incidentes.sumarAlertas(id, Consola.textos("Ids de alertas"));
                     Consola.mostrar("Alertas sumadas.");
                 });
@@ -81,12 +87,12 @@ public class MenuIncidentes {
     }
 
     private int elegirRegla() throws Exception {
-        Consola.listar(reglas.listar());
+        Vista.listar(reglas.listar());
         return Consola.entero("Id de la regla");
     }
 
-    private String elegirIncidente() {
-        Consola.listar(incidentes.listarAbiertos());
+    private String elegirIncidente() throws Exception {
+        Vista.listar(incidentes.listarAbiertos());
         return Consola.texto("Id del incidente");
     }
 

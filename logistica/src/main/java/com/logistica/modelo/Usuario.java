@@ -12,22 +12,17 @@ public class Usuario {
     private String estado;
     private LocalDateTime fechaRegistro;
     private Integer rolId;
-    private String tipoUsuario;
-    private Integer parteId; // viene de usuario_externo, null para los internos
 
     public Usuario() {
 
     }
 
-    public Usuario(String nombre, String apellido, String email, String passwordHash, Integer rolId, String tipoUsuario,
-            Integer parteId) {
+    public Usuario(String nombre, String apellido, String email, String passwordHash, Integer rolId) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.passwordHash = passwordHash;
         this.rolId = rolId;
-        this.tipoUsuario = tipoUsuario;
-        this.parteId = parteId;
     }
 
     public Integer getId() {
@@ -94,25 +89,9 @@ public class Usuario {
         this.rolId = rolId;
     }
 
-    public String getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    public Integer getParteId() {
-        return parteId;
-    }
-
-    public void setParteId(Integer parteId) {
-        this.parteId = parteId;
-    }
-
     @Override
     public String toString() {
-        return id + " - " + nombre + " " + apellido + " (" + email + ")";
+        return id + " | " + nombre + " " + apellido + " | " + email + ("ACTIVO".equals(estado) ? "" : " | " + estado);
     }
 
 }

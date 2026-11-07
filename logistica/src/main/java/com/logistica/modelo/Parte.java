@@ -121,8 +121,8 @@ public class Parte {
 
     @Override
     public String toString() {
-        return id + " - " + razonSocial + " (" + tipo + ", CUIT " + cuit + ")"
-                + ("ACTIVO".equals(estado) ? "" : " [" + estado + "]");
+        return id + " | " + razonSocial + " | " + tipo + " | CUIT " + cuit + " | " + email
+                + (rubro == null ? "" : " | rubro " + rubro) + " | " + estado;
     }
 
 }

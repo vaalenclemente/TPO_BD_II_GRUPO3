@@ -147,8 +147,9 @@ public class Reporte {
 
     @Override
     public String toString() {
-        return id + " - " + codigo + " (" + desde + " a " + hasta + ") - " + estado + " - $" + costo
-                + (facturaId == null ? "" : " - factura " + facturaId);
+        return id + " | " + codigo + " | " + Formato.fecha(desde) + " a " + Formato.fecha(hasta) + " | pedido por "
+                + nombreSolicitante + " | " + estado + " | " + Formato.dinero(costo)
+                + (facturaId == null ? "" : " | factura " + facturaId);
     }
 
 }

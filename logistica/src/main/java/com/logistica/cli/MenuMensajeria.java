@@ -23,23 +23,26 @@ public class MenuMensajeria {
                 case 0 -> {
                     return;
                 }
-                case 1 -> Consola.ejecutar(() -> Consola.listar(mensajes.conversacionConParte(Selector.cualquierParte(), yo)));
+                case 1 -> Consola
+                        .ejecutar(() -> Vista.listar(mensajes.conversacionConParte(Selector.cualquierParte(), yo)));
                 case 2 -> Consola.ejecutar(() -> {
                     int parteId = Selector.cualquierParte();
-                    mensajes.enviarAParte(parteId, yo, Consola.texto("Mensaje"));
+                    String direccion = Consola.elegir("Tipo de mensaje (SALIENTE, ENTRANTE )",
+                            "SALIENTE", "ENTRANTE");
+                    mensajes.enviarAParte(parteId, yo, direccion, Consola.texto("Mensaje"));
                     Consola.mostrar("Enviado.");
                 });
-                case 3 -> Consola.ejecutar(() -> Consola.listar(grupos.listarPorUsuario(yo)));
-                case 4 -> Consola.ejecutar(() -> Consola.listar(grupos.listar()));
+                case 3 -> Consola.ejecutar(() -> Vista.listar(grupos.listarPorUsuario(yo)));
+                case 4 -> Consola.ejecutar(() -> Vista.listar(grupos.listar()));
                 case 5 -> Consola.ejecutar(() -> {
                     String nombre = Consola.texto("Nombre del grupo");
                     String descripcion = Consola.textoOpcional("Descripcion");
-                    Consola.listar(usuarios.listar());
+                    Vista.listar(usuarios.listar());
                     var integrantes = Consola.enteros("Ids de los integrantes (usted se agrega solo)");
                     String id = grupos.crear(new Grupo(nombre, descripcion, integrantes, yo));
                     Consola.mostrar("Grupo creado con id " + id + ".");
                 });
-                case 6 -> Consola.ejecutar(() -> Consola.listar(mensajes.conversacionDeGrupo(elegirGrupo(yo), yo)));
+                case 6 -> Consola.ejecutar(() -> Vista.listar(mensajes.conversacionDeGrupo(elegirGrupo(yo), yo)));
                 case 7 -> Consola.ejecutar(() -> {
                     String grupoId = elegirGrupo(yo);
                     mensajes.enviarAGrupo(grupoId, yo, Consola.texto("Mensaje"));
@@ -63,8 +66,8 @@ public class MenuMensajeria {
         }
     }
 
-    private String elegirGrupo(int usuarioId) {
-        Consola.listar(grupos.listarPorUsuario(usuarioId));
+    private String elegirGrupo(int usuarioId) throws Exception {
+        Vista.listar(grupos.listarPorUsuario(usuarioId));
         return Consola.texto("Id del grupo");
     }
 

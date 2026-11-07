@@ -2,10 +2,12 @@ package com.logistica.cli;
 
 import java.sql.SQLException;
 
+import com.logistica.modelo.Permiso;
 import com.logistica.modelo.Rol;
 import com.logistica.modelo.Sesion;
 import com.logistica.modelo.Usuario;
 import com.logistica.servicio.AuditoriaService;
+import com.logistica.servicio.PermisoService;
 import com.logistica.servicio.RolService;
 import com.logistica.servicio.SesionService;
 import com.logistica.servicio.UsuarioActual;
@@ -20,6 +22,7 @@ public class MenuPrincipal {
     private final UsuarioService usuarios = new UsuarioService();
     private final RolService roles = new RolService();
     private final AuditoriaService auditoria = new AuditoriaService();
+    private final PermisoService permisos = new PermisoService();
 
     public void iniciar() {
         Consola.ejecutar(this::crearAdministradorSiNoHayUsuarios);
@@ -56,6 +59,7 @@ public class MenuPrincipal {
                 auditoria.registrar("LOGIN", "sesion", s.getId(), "OK");
                 Usuario u = usuarios.buscarPorId(s.getUsuarioId());
                 Consola.mostrar("Bienvenido, " + u.getNombre() + ".");
+                Consola.mostrar("Tus permisos: " + String.join(", ", permisos.delUsuarioActual()));
                 return s;
             } catch (IllegalArgumentException e) {
                 Consola.mostrar(e.getMessage());
@@ -73,7 +77,6 @@ public class MenuPrincipal {
                     "Reglas e incidentes", "Comercial (facturas, cobros, pagos, cuentas)", "Reportes facturables",
                     "Analisis y prediccion", "Red y recorridos (Neo4j)", "Mensajeria", "Auditoria",
                     "Paises y ciudades", "Cerrar sesion");
-            System.out.println("");
             if (opcion == 0) {
                 return true;
             }
@@ -82,6 +85,14 @@ public class MenuPrincipal {
             }
             try {
                 sesiones.validar(sesion.getToken());
+
+                // cada opcion del menu pide el permiso del mismo numero en Permiso.CATALOGO
+                String permiso = Permiso.CATALOGO[opcion - 1][0];
+                if (!permisos.puede(permiso)) {
+                    Consola.mostrar("Tu rol no tiene el permiso " + permiso + ": no podes entrar a este menu.");
+                    Consola.ejecutar(() -> auditoria.registrar("ACCESO_DENEGADO", "permiso", permiso, "RECHAZADO"));
+                    continue;
+                }
             } catch (IllegalArgumentException e) {
                 Consola.mostrar(e.getMessage());
                 return false;
@@ -114,15 +125,15 @@ public class MenuPrincipal {
 
         Integer rolId = null;
         for (Rol r : roles.listar()) {
-            if ("ADMIN".equals(r.getDescripcion())) {
+            if (RolService.ROL_ADMIN.equals(r.getDescripcion())) {
                 rolId = r.getId();
             }
         }
         if (rolId == null) {
-            rolId = roles.alta(new Rol(null, "ADMIN", 10));
+            rolId = roles.alta(new Rol(null, RolService.ROL_ADMIN)); // ADMIN recibe todos los permisos
         }
 
-        usuarios.alta(new Usuario("Administrador", "Sistema", EMAIL_ADMIN, null, rolId, "INTERNO", null),
+        usuarios.alta(new Usuario("Administrador", "Sistema", EMAIL_ADMIN, null, rolId),
                 PASSWORD_ADMIN);
         Consola.mostrar("No habia usuarios: se creo " + EMAIL_ADMIN + " con contraseña " + PASSWORD_ADMIN + ".");
     }

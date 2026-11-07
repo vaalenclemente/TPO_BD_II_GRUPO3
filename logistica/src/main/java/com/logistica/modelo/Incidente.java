@@ -181,8 +181,10 @@ public class Incidente {
 
     @Override
     public String toString() {
-        return id + " - envio " + envioId + " (" + clienteNombre + ") " + tipo + " " + severidad + " - " + estado
-                + (tramoId == null ? "" : " | tramo " + tramoOrigen + " → " + tramoDestino + " (" + tramoMedio + ")");
+        return id + " | envio " + envioId + " (" + clienteNombre + ") | " + tipo + " " + severidad + " | " + estado
+                + (tramoId == null ? "" : " | tramo " + tramoOrigen + " -> " + tramoDestino + " (" + tramoMedio + ")")
+                + " | abierto " + Formato.fecha(fechaApertura)
+                + (fechaCierre == null ? "" : " | cerrado " + Formato.fecha(fechaCierre));
     }
 
 }

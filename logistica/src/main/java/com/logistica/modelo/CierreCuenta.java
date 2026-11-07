@@ -103,8 +103,9 @@ public class CierreCuenta {
 
     @Override
     public String toString() {
-        return periodo + " - cuenta " + cuentaId + " (parte " + parteId + "): inicial " + saldoInicial + " + debitos "
-                + totalDebitos + " - creditos " + totalCreditos + " = final " + saldoFinal;
+        return "Cierre " + periodo + " | cuenta " + cuentaId + " (parte " + parteId + ") | saldo inicial "
+                + Formato.dinero(saldoInicial) + " | debitos " + Formato.dinero(totalDebitos) + " | creditos "
+                + Formato.dinero(totalCreditos) + " | saldo final " + Formato.dinero(saldoFinal);
     }
 
 }

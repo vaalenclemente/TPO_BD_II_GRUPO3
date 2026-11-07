@@ -72,8 +72,8 @@ public class Vehiculo {
 
     @Override
     public String toString() {
-        return id + " - " + tipo + " " + identificacion + " (" + capacidadKg + " kg, operador "
-                + operadorId + ") - " + estado;
+        return id + " | " + tipo + " " + identificacion + " | " + Formato.kg(capacidadKg) + " | operador " + operadorId
+                + " | " + estado;
     }
 
 }
