@@ -7,9 +7,11 @@ import java.util.List;
 import com.logistica.modelo.Grupo;
 import com.logistica.modelo.Mensaje;
 import com.logistica.modelo.Parte;
+import com.logistica.modelo.Rol;
 import com.logistica.modelo.Usuario;
 import com.logistica.repositorio.MensajeRepository;
 import com.logistica.repositorio.ParteRepository;
+import com.logistica.repositorio.RolRepository;
 import com.logistica.repositorio.UsuarioRepository;
 
 public class MensajeService {
@@ -19,6 +21,7 @@ public class MensajeService {
     private final MensajeRepository repo = new MensajeRepository();
     private final ParteRepository parteRepo = new ParteRepository();
     private final UsuarioRepository usuarioRepo = new UsuarioRepository();
+    private final RolRepository rolRepo = new RolRepository();
     private final GrupoService grupoService = new GrupoService();
 
     public String enviarAParte(int parteId, int remitenteId, String direccion, String contenido) throws SQLException {
@@ -55,8 +58,19 @@ public class MensajeService {
     }
 
     public List<Mensaje> conversacionConParte(int parteId, int usuarioId) throws SQLException {
-        buscarUsuarioActivo(usuarioId);
-        return repo.listarPorParte(parteId);
+        Usuario u = buscarUsuarioActivo(usuarioId);
+        if (esAdmin(u)) {
+            return repo.listarPorParte(parteId);
+        }
+        return repo.listarPorParteYRemitente(parteId, usuarioId);
+    }
+
+    private boolean esAdmin(Usuario u) throws SQLException {
+        if (u.getRolId() == null) {
+            return false;
+        }
+        Rol r = rolRepo.buscarPorId(u.getRolId());
+        return r != null && RolService.ROL_ADMIN.equals(r.getDescripcion());
     }
 
     public List<Mensaje> conversacionDeGrupo(String grupoId, int usuarioId) {

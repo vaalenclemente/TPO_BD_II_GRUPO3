@@ -35,6 +35,8 @@ public class MongoInicializacion {
         db.getCollection("grupos").createIndex(new Document("integrantes", 1));
 
         db.getCollection("mensajes").createIndex(new Document("parteId", 1).append("fechaHora", 1));
+        db.getCollection("mensajes").createIndex(
+                new Document("parteId", 1).append("remitenteId", 1).append("fechaHora", 1));
 
         db.getCollection("mensajes").createIndex(new Document("grupoId", 1).append("fechaHora", 1));
 

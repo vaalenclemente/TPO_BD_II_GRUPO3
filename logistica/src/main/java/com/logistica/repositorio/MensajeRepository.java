@@ -61,6 +61,10 @@ public class MensajeRepository {
         return listar(and(eq("tipoConversacion", "PARTE"), eq("parteId", parteId)));
     }
 
+    public List<Mensaje> listarPorParteYRemitente(int parteId, int remitenteId) {
+        return listar(and(eq("tipoConversacion", "PARTE"), eq("parteId", parteId), eq("remitenteId", remitenteId)));
+    }
+
     // indice { grupoid: 1, fechahora: 1 }
     public List<Mensaje> listarPorGrupo(String grupoId) {
         return listar(and(eq("tipoConversacion", "GRUPO"), eq("grupoId", grupoId)));
